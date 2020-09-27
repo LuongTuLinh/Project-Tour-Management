@@ -37,9 +37,10 @@ public class Tour_Management extends JFrame{
         private JPanel panelMain;
         private JPanel panelHeader;
         private JPanel panelMenu;
+        private JPanel panelProcessFunction;
     /***********END DECLARE JPANE*************/
         
-    /***********DECLARE JPANE HEADER*************/
+    /***********DECLARE COMPONENT JPANE HEADER*************/
         private JLabel lbTitle;
         private JLabel lbiconSetting;
         private JLabel lbiconUser;
@@ -50,13 +51,14 @@ public class Tour_Management extends JFrame{
         private JSeparator sptUnderLeftInHeader;
         private JSeparator sptAboveRightInHeader;
         private JSeparator sptUnderRightInHeader;
-    /***********END DECLARE JPANE HEADER*************/
+    /***********END DECLARE COMPONENT JPANE HEADER*************/
         
-    /***********DECLARE JPANE MENU*************/
+    /***********DECLARE COMPONENT JPANE MENU*************/
         private JLabel lbLogoBanana;
         private JSeparator sptUnderLogo;
         private JLabel labelMenu;
         private JButton btnTourManagement;
+        private JButton btnTours;
         
         private JLabel labelSetting;
         private JButton btnUser;
@@ -68,7 +70,7 @@ public class Tour_Management extends JFrame{
         private JLabel lbMessenger;
         private JLabel lbFollowUs;
         private JSeparator sptBelowMenu;
-    /***********END DECLARE JPANE MENU*************/
+    /***********END DECLARE COMPONENT JPANE MENU*************/
     
     public Tour_Management(){
         init();
@@ -86,7 +88,6 @@ public class Tour_Management extends JFrame{
         panelMain = new JPanel() ;
         panelMain.setLayout(null);
         panelMain.setBounds(new Rectangle(0,0,1200,650));
-//        panelMain.setBackground(Color.WHITE);
         
         /*------------------------PANEL HEADER OF JPANEL MAIN------------------------*/
             panelHeader = new JPanel();
@@ -210,9 +211,21 @@ public class Tour_Management extends JFrame{
                 btnTourManagement.setFocusPainted(false);
                 btnTourManagement.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 
-                /********** TINH NANG THEM *********/
-                /********** TINH NANG THEM *********/
+                btnTours = new JButton("  Chi Tiết Tour       ");
+                btnTours.setBackground(new Color(12, 109, 102));
+                btnTours.setBounds(5,230,190,30);
+                btnTours.setForeground(new Color(255,255,255));
+                btnTours.setIcon(new ImageIcon(getClass().getResource("/image/icons8_around_the_globe_filled_20px.png")));
+                btnTours.setFont(new Font("Times New Roman",1,14));
+                btnTours.setHorizontalAlignment(SwingConstants.CENTER);
+                btnTours.setBorder(null);
+                btnTours.setFocusPainted(false);
+                btnTours.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 
+                /********** TINH NANG THEM *********/
+                /********** TINH NANG THEM *********/
+                /********** TINH NANG THEM *********/
+                /********** TINH NANG THEM *********/
                 
                 labelSetting = new JLabel("CMS Setting");
                 labelSetting.setBounds(5,460,200,14);
@@ -265,7 +278,7 @@ public class Tour_Management extends JFrame{
                 lbGmail.setBounds(135,580,20,20);
                 lbGmail.setIcon(new ImageIcon(getClass().getResource("/image/icons8_google_plus_20px.png")));
 
-                lbDesign = new JLabel("---Design by LiH in SGU---",JLabel.CENTER);
+                lbDesign = new JLabel("---Design by Banana Team---",JLabel.CENTER);
                 lbDesign.setBounds(0,610,200,30);
                 //lbDesign.setFont(new Font("Times New Roman",1,12));
                 lbDesign.setForeground(Color.WHITE);
@@ -275,6 +288,7 @@ public class Tour_Management extends JFrame{
                 panelMenu.add(sptUnderLogo);
                 panelMenu.add(labelMenu);
                 panelMenu.add(btnTourManagement);
+                panelMenu.add(btnTours);
                 
                 panelMenu.add(labelSetting);
                 panelMenu.add(btnSetUp);
@@ -290,9 +304,17 @@ public class Tour_Management extends JFrame{
                 
         /*----------------------PANEL MENU OF JPANEL MAIN------------------------*/
         
+        /*----------------------PANEL PROCESSING FUNCTIONS OF JPANEL MAIN------------------------*/
+            panelProcessFunction = new JPanel();
+            panelProcessFunction.setLayout(null);
+            panelProcessFunction.setBounds(205, 50, 990, 590);
+            panelProcessFunction.setBackground(Color.white);
+        /*----------------------END PANEL PROCESSING FUNCTIONS OF JPANEL MAIN------------------------*/
+        
         /********** ADD FOR JPANEL MAIN ************/
             panelMain.add(panelHeader);
             panelMain.add(panelMenu);
+            panelMain.add(panelProcessFunction);
         /********** ADD FOR JPANEL MAIN ************/
       /*------------------------END PANEL MAIN OF JFRAME------------------------*/
         
@@ -302,6 +324,42 @@ public class Tour_Management extends JFrame{
         setVisible(true);
         
       /*------------------------HANDLE EVENT ONCLICK MOUSE------------------------*/
+        /********** HANDLE SET COLOR FOR BUTTON ************/
+            btnTourManagement.addMouseListener(new MouseAdapter(){
+                @Override
+                public void mouseEntered(MouseEvent e){
+                    btnTourManagement.setBackground(new Color(19, 113, 106));
+                }
+                @Override
+                public void mouseExited(MouseEvent e){
+                    btnTourManagement.setBackground(new Color(12, 109, 102));
+                }
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    panelProcessFunction.removeAll();
+                    panelProcessFunction.add(new Handle_Tour_Management());
+                    repaint();
+                }
+            });
+            
+            btnTours.addMouseListener(new MouseAdapter(){
+                @Override
+                public void mouseEntered(MouseEvent e){
+                    btnTours.setBackground(new Color(19, 113, 106));
+                }
+                @Override
+                public void mouseExited(MouseEvent e){
+                    btnTours.setBackground(new Color(12, 109, 102));
+                }
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    panelProcessFunction.removeAll();
+                    panelProcessFunction.add(new Handle_Tour());
+                    repaint();
+                }
+            });
+        /********** END HANDLE SET COLOR FOR BUTTON ************/
+        
         /********** HANDLE ONCLICK CLOSE AND MINIMIZE PROGRAME ************/
             lbiconClose.addMouseListener(new MouseAdapter() {
                 @Override
