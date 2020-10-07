@@ -27,12 +27,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import project.tour.management_DTO.User_DTO;
 
 /**
  *
  * @author BANANA_TEAM
  */
 public class Tour_Management extends JFrame{
+    private User_DTO user;
     /***********DECLARE JPANE*************/
         private JPanel panelMain;
         private JPanel panelHeader;
@@ -109,6 +111,7 @@ public class Tour_Management extends JFrame{
                 lbiconUser.setIcon(new ImageIcon(getClass().getResource("/image/icons8_user_male_circle_filled_25px.png")));
 
                 lbUserName = new JLabel("LinhLee");
+                lbUserName.setText(user.getFirstName()+" "+user.getLastName());
                 lbUserName.setBounds(820,7,50,25);
                 lbUserName.setForeground(new Color(102,102,102));
 
@@ -211,16 +214,16 @@ public class Tour_Management extends JFrame{
                 btnTourManagement.setFocusPainted(false);
                 btnTourManagement.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 
-                btnTours = new JButton("  Chi Tiết Tour       ");
-                btnTours.setBackground(new Color(12, 109, 102));
-                btnTours.setBounds(5,230,190,30);
-                btnTours.setForeground(new Color(255,255,255));
-                btnTours.setIcon(new ImageIcon(getClass().getResource("/image/icons8_around_the_globe_filled_20px.png")));
-                btnTours.setFont(new Font("Times New Roman",1,14));
-                btnTours.setHorizontalAlignment(SwingConstants.CENTER);
-                btnTours.setBorder(null);
-                btnTours.setFocusPainted(false);
-                btnTours.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//                btnTours = new JButton("  Thể Loại Tour       ");
+//                btnTours.setBackground(new Color(12, 109, 102));
+//                btnTours.setBounds(5,230,190,30);
+//                btnTours.setForeground(new Color(255,255,255));
+//                btnTours.setIcon(new ImageIcon(getClass().getResource("/image/icons8_around_the_globe_filled_20px.png")));
+//                btnTours.setFont(new Font("Times New Roman",1,14));
+//                btnTours.setHorizontalAlignment(SwingConstants.CENTER);
+//                btnTours.setBorder(null);
+//                btnTours.setFocusPainted(false);
+//                btnTours.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 
                 /********** TINH NANG THEM *********/
                 /********** TINH NANG THEM *********/
@@ -288,7 +291,7 @@ public class Tour_Management extends JFrame{
                 panelMenu.add(sptUnderLogo);
                 panelMenu.add(labelMenu);
                 panelMenu.add(btnTourManagement);
-                panelMenu.add(btnTours);
+//                panelMenu.add(btnTours);
                 
                 panelMenu.add(labelSetting);
                 panelMenu.add(btnSetUp);
@@ -342,22 +345,6 @@ public class Tour_Management extends JFrame{
                 }
             });
             
-            btnTours.addMouseListener(new MouseAdapter(){
-                @Override
-                public void mouseEntered(MouseEvent e){
-                    btnTours.setBackground(new Color(19, 113, 106));
-                }
-                @Override
-                public void mouseExited(MouseEvent e){
-                    btnTours.setBackground(new Color(12, 109, 102));
-                }
-                @Override
-                public void mouseClicked(MouseEvent e){
-                    panelProcessFunction.removeAll();
-                    panelProcessFunction.add(new Handle_Tour());
-                    repaint();
-                }
-            });
         /********** END HANDLE SET COLOR FOR BUTTON ************/
         
         /********** HANDLE ONCLICK CLOSE AND MINIMIZE PROGRAME ************/

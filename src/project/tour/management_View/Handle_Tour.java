@@ -56,11 +56,15 @@ public class Handle_Tour extends JPanel{
         
         private JLabel labelCategoryTour;
         private JComboBox<String> comboBoxCategoryTour;
+        
+        private JButton btnSaveTour;
+        private JButton btnBack;
     /***************END DECLARE COMPONENT FOR PANEL HEADER********************/
     
     /***************DECLARE COMPONENT FOR PANEL CONTENT********************/
         private JPanel panelPriceTour;
         private JPanel panelPlaceTour;
+        private JPanel panelCategoryTour;
         
         /*---------DECLARE PANEL PLACE TOUR-----------*/
             private JLabel labelSearch;
@@ -82,6 +86,16 @@ public class Handle_Tour extends JPanel{
             private DefaultTableModel tableModelPriceTour;
             private JScrollPane scrollPanePriceTour;
         /*---------END DECLARE PANEL PRICE TOUR-----------*/
+            
+        /*---------DECLARE PANEL CATEGORY TOUR-----------*/
+            private JTable tableCategoryTour;
+            private JLabel labelCategoryId;
+            private JTextField txtCategoryId;
+            private JSeparator sptCategoryId;
+            private JLabel labelCategoryName;
+            private JTextField txtCategoryName;
+            private JSeparator sptCategoryName;
+        /*---------END DECLARE PANEL CATEGORY TOUR-----------*/
     /***************END DECLARE COMPONENT FOR PANEL CONTENT********************/
     
     public Handle_Tour(){
@@ -130,59 +144,73 @@ public class Handle_Tour extends JPanel{
                    //**************TEXTFIELD TOUR TEST 1*******************//
                     labelTest1 = new JLabel("ABC DEFG:",JLabel.CENTER);
                     labelTest1.setFont(new Font("Segoe",Font.BOLD,12));
-                    labelTest1.setBounds(400,25,80,30);
+                    labelTest1.setBounds(320,25,80,30);
 
                     txtTest1 = new JTextField();
-                    txtTest1.setBounds(480,23,120,30);
+                    txtTest1.setBounds(400,23,120,30);
                     txtTest1.setBorder(null);
                     txtTest1.setFont(new Font(Font.SERIF, Font.BOLD, 14));
 
                     sptTest1 = new JSeparator();
-                    sptTest1.setBounds(480,53,120,10);
+                    sptTest1.setBounds(400,53,120,10);
                     sptTest1.setBackground(new Color(0,0,0));
                    //**************END TEXTFIELD TOUR TEST 1*******************//
                    
                    //**************TEXTFIELD TOUR TEST 2*******************//
                     labelTest2 = new JLabel("NOW ABCD:",JLabel.CENTER);
                     labelTest2.setFont(new Font("Segoe",Font.BOLD,12));
-                    labelTest2.setBounds(400,73,80,30);
+                    labelTest2.setBounds(320,73,80,30);
 
                     txtTest2 = new JTextField();
-                    txtTest2.setBounds(480,71,120,30);
+                    txtTest2.setBounds(400,71,120,30);
                     txtTest2.setBorder(null);
                     txtTest2.setFont(new Font(Font.SERIF, Font.BOLD, 14));
 
                     sptTest2 = new JSeparator();
-                    sptTest2.setBounds(480,101,120,10);
+                    sptTest2.setBounds(400,101,120,10);
                     sptTest2.setBackground(new Color(0,0,0));
                    //**************END TEXTFIELD TOUR TEST 2*******************//
                    
                    //**************TEXTFIELD TOUR TEST 3*******************//
                     labelTest3 = new JLabel("ABC DEFG:",JLabel.CENTER);
                     labelTest3.setFont(new Font("Segoe",Font.BOLD,12));
-                    labelTest3.setBounds(720,25,80,30);
+                    labelTest3.setBounds(600,25,80,30);
 
                     txtTest3 = new JTextField();
-                    txtTest3.setBounds(800,23,120,30);
+                    txtTest3.setBounds(680,23,120,30);
                     txtTest3.setBorder(null);
                     txtTest3.setFont(new Font(Font.SERIF, Font.BOLD, 14));
 
                     sptTest3 = new JSeparator();
-                    sptTest3.setBounds(800,53,120,10);
+                    sptTest3.setBounds(680,53,120,10);
                     sptTest3.setBackground(new Color(0,0,0));
                    //**************END TEXTFIELD TOUR TEST 3*******************//
                    
                    //**************COMBOBOX CATEGORY TOUR*******************//
                     labelCategoryTour = new JLabel("THỂ LOẠI:",JLabel.CENTER);
                     labelCategoryTour.setFont(new Font("Segoe",Font.BOLD,12));
-                    labelCategoryTour.setBounds(720,87,80,30);
+                    labelCategoryTour.setBounds(600,87,80,30);
                    
                     comboBoxCategoryTour = new JComboBox<>();
                     comboBoxCategoryTour.setModel(new DefaultComboBoxModel<>(new String [] {
-                        "-Tình trạng phòng-","Còn trống","Đã cho thuê"}));
-                    comboBoxCategoryTour.setBounds(800,80,130,30);
+                        "Tour trong nước","Tour nước ngoài"}));
+                    comboBoxCategoryTour.setBounds(680,80,130,30);
                     comboBoxCategoryTour.setFont(new Font("Segoe",Font.BOLD,13));
                    //**************END COMBOBOX CATEGORY TOUR*******************//
+                   
+                    btnSaveTour = new JButton("Lưu");
+                    btnSaveTour.setBackground(new Color(32, 171, 214));
+                    btnSaveTour.setFont(new Font("Segoe",Font.BOLD,13));
+                    btnSaveTour.setForeground(Color.WHITE);
+                    btnSaveTour.setBounds(850,30,115,30); 
+                    btnSaveTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                   
+                    btnBack = new JButton("Trờ lại");
+                    btnBack.setBackground(new Color(239, 198, 74));
+                    btnBack.setFont(new Font("Segoe",Font.BOLD,13));
+                    btnBack.setForeground(Color.WHITE);
+                    btnBack.setBounds(850,80,115,30); 
+                    btnBack.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 
                 /************ADD COMPONENT FOR PANEL HEADER*****************/
                     panelHeader.add(labelTourId);
@@ -204,6 +232,9 @@ public class Handle_Tour extends JPanel{
                     
                     panelHeader.add(comboBoxCategoryTour);
                     panelHeader.add(labelCategoryTour);
+                    
+                    panelHeader.add(btnSaveTour);
+                    panelHeader.add(btnBack);
                 /**********END ADD COMPONENT FOR PANEL HEADER*****************/
             /*------------------------END PANEL HEADER------------------------------*/
             
@@ -376,9 +407,56 @@ public class Handle_Tour extends JPanel{
                         /**********END ADD COMPONENT FOR PANEL PLACE TOUR***************/
                     /*------------------------END PANEL PLACE TOUR------------------------------*/
                     
+                    /*------------------------PANEL CATEGORY TOUR------------------------------*/
+                        panelCategoryTour = new JPanel();
+                        panelCategoryTour.setLayout(null);
+                        panelCategoryTour.setBackground(Color.white);
+                        panelCategoryTour.setBounds(5,5,980,470);
+                            
+                            //**************TEXTFIELD CATEGORY ID*******************//
+                            labelCategoryId = new JLabel("MÃ THỂ LOẠI:",JLabel.CENTER);
+                            labelCategoryId.setFont(new Font("Segoe",Font.BOLD,12));
+                            labelCategoryId.setBounds(35,25,80,30);
+
+                            txtCategoryId = new JTextField();
+                            txtCategoryId.setBounds(115,23,120,30);
+                            txtCategoryId.setBorder(null);
+                            txtCategoryId.setFont(new Font(Font.SERIF, Font.BOLD, 14));
+
+                            sptCategoryId = new JSeparator();
+                            sptCategoryId.setBounds(115,53,120,10);
+                            sptCategoryId.setBackground(new Color(0,0,0));
+                           //**************END TEXTFIELD CATEGORY ID*******************//
+
+                           //**************TEXTFIELD CATEGORY NAME*******************//
+                            labelCategoryName = new JLabel("TÊN THỂ LOẠI:",JLabel.CENTER);
+                            labelCategoryName.setFont(new Font("Segoe",Font.BOLD,12));
+                            labelCategoryName.setBounds(400,25,80,30);
+
+                            txtCategoryName = new JTextField();
+                            txtCategoryName.setBounds(480,23,120,30);
+                            txtCategoryName.setBorder(null);
+                            txtCategoryName.setFont(new Font(Font.SERIF, Font.BOLD, 14));
+
+                            sptCategoryName = new JSeparator();
+                            sptCategoryName.setBounds(480,53,120,10);
+                            sptCategoryName.setBackground(new Color(0,0,0));
+                           //**************END TEXTFIELD CATEGORY NAME*******************//
+
+                        /**********ADD COMPONENT FOR PANEL CATEGORY TOUR***************/
+                            panelCategoryTour.add(labelCategoryId);
+                            panelCategoryTour.add(txtCategoryId);
+                            panelCategoryTour.add(sptCategoryId);
+                            panelCategoryTour.add(labelCategoryName);
+                            panelCategoryTour.add(txtCategoryName);
+                            panelCategoryTour.add(sptCategoryName);
+                        /**********END ADD COMPONENT FOR PANEL CATEGORY TOUR***************/
+                    /*------------------------PANEL CATEGORY TOUR------------------------------*/
+                    
                 /**********ADD COMPONENT FOR PANEL CONTENT*****************/
                     tabbedPaneContent.addTab("--Địa Điểm Tour--", panelPlaceTour);
                     tabbedPaneContent.addTab("--Giá Tour--", panelPriceTour);
+                    tabbedPaneContent.addTab("--Thể Loại Tour--", panelCategoryTour);
                 /**********END ADD COMPONENT FOR PANEL CONTENT*****************/
             /*------------------------END PANEL CONTENT------------------------------*/
         
