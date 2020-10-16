@@ -13,6 +13,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -31,8 +32,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
-import org.json.simple.parser.ParseException;
-import project.tour.management_API.APIRequester;
 import project.tour.management_DTO.User_DTO;
 import project.tour.management_Handle_API.Handle_API_Login;
 
@@ -47,7 +46,9 @@ public class Login_Tour_Management extends JFrame {
     private JLabel lbIconMinimize;
 
     private JLabel lbLogoAirplane;
-    private JLabel lbImageAir;
+    private JLabel lbImageTour_1;
+    private JLabel lbImageTour_2;
+    private JLabel lbImageTour_3;
 
     private JLabel lbUsername;
     private JLabel lbPassword;
@@ -175,16 +176,37 @@ public class Login_Tour_Management extends JFrame {
 
         //---------------------Panel Form Login ------------------------//
         //---------------------Panel Form Login ------------------------//
-//        lbImageAir = new JLabel("",JLabel.CENTER);
-//            lbImageAir.setBounds(18,18,352,524);
-//            BufferedImage imageAir;
-//                try {
-//                    imageAir = ImageIO.read(new File("airplane.png"));
-//                    ImageIcon iconAir = new ImageIcon(imageAir.getScaledInstance(352, 524, imageAir.SCALE_SMOOTH));
-//                        lbImageAir.setIcon(iconAir);
-//                } catch (IOException ex) {
-//                    Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
-//                }
+        lbImageTour_1 = new JLabel("", JLabel.CENTER);
+        lbImageTour_1.setBounds(18, 18, 352, 170); //524
+        BufferedImage imageTour1;
+        try {
+            imageTour1 = ImageIO.read(new File("image_panel_login.jpg"));
+            ImageIcon iconAir = new ImageIcon(imageTour1.getScaledInstance(352, 170, imageTour1.SCALE_SMOOTH));
+            lbImageTour_1.setIcon(iconAir);
+        } catch (IOException ex) {
+            Logger.getLogger(Login_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        lbImageTour_2 = new JLabel("", JLabel.CENTER);
+        lbImageTour_2.setBounds(38, 180, 300, 175); //524
+        BufferedImage imageTour2;
+        try {
+            imageTour2 = ImageIO.read(new File("image_panel_login_1.jpg"));
+            ImageIcon iconAir = new ImageIcon(imageTour2.getScaledInstance(300, 170, imageTour2.SCALE_SMOOTH));
+            lbImageTour_2.setIcon(iconAir);
+        } catch (IOException ex) {
+            Logger.getLogger(Login_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        lbImageTour_3 = new JLabel("", JLabel.CENTER);
+        lbImageTour_3.setBounds(18, 355, 352, 185); //524
+        BufferedImage imageTour3;
+        try {
+            imageTour3 = ImageIO.read(new File("image_panel_login_2.jpg"));
+            ImageIcon iconAir = new ImageIcon(imageTour3.getScaledInstance(352, 183, imageTour3.SCALE_SMOOTH));
+            lbImageTour_3.setIcon(iconAir);
+        } catch (IOException ex) {
+            Logger.getLogger(Login_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //---------------------Panel Form Login ------------------------//
         panelLogin.add(lbIconClose);
         panelLogin.add(lbIconMinimize);
@@ -198,7 +220,9 @@ public class Login_Tour_Management extends JFrame {
         panelLogin.add(btnLogin);
         panelLogin.add(btnSignup);
 
-        //panelLogin.add(lbImageAir);
+        panelLogin.add(lbImageTour_1);
+        panelLogin.add(lbImageTour_2);
+        panelLogin.add(lbImageTour_3);
 //------------------End Panel Contains All Element------------------------//
         add(panelLogin);
         setVisible(true);
@@ -223,23 +247,21 @@ public class Login_Tour_Management extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 String email = txtUsername.getText();
                 String password = txtPassword.getText();
-                
+
                 String input = "{\"email\": \"" + email + "\",\"password\":\"" + password + "\"} ";
-                    //String input = "{\"email\":\"luongtulinh@gmail.com\",\"password\":\"12345678\"}";
-                    Handle_API_Login login = new Handle_API_Login();
-                    Handle_API_Login.Login(input, "auth/login");
-                    User_DTO user = new User_DTO();
-                    if (user.getToken()!=null) {
-                        JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
-                        JOptionPane.showMessageDialog(null, "Xin chào "+user.getFirstName()+" "+user.getLastName());
-                        
-                        Tour_Management tour_Management = new Tour_Management();
-                        dispose();
-                    }
-                    else {
-                        JOptionPane.showMessageDialog(null, "Đăng nhập thất bại, vui lòng thử lại");
-                    }
-                
+                //String input = "{\"email\":\"luongtulinh@gmail.com\",\"password\":\"12345678\"}";
+                Handle_API_Login login = new Handle_API_Login();
+                Handle_API_Login.Login(input, "auth/login", "");
+                User_DTO user = new User_DTO();
+                if (user.getToken() != null) {
+                    JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
+                    JOptionPane.showMessageDialog(null, "Xin chào " + user.getFirstName() + " " + user.getLastName());
+
+                    Tour_Management tour_Management = new Tour_Management();
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Đăng nhập thất bại, vui lòng thử lại");
+                }
 
             }
         });
@@ -248,6 +270,30 @@ public class Login_Tour_Management extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 JOptionPane.showMessageDialog(null, "Chức năng sắp hoàn thành ");
 
+            }
+        });
+        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String email = txtUsername.getText();
+                    String password = txtPassword.getText();
+
+                    String input = "{\"email\": \"" + email + "\",\"password\":\"" + password + "\"} ";
+                    //String input = "{\"email\":\"luongtulinh@gmail.com\",\"password\":\"12345678\"}";
+                    Handle_API_Login login = new Handle_API_Login();
+                    Handle_API_Login.Login(input, "auth/login","");
+                    User_DTO user = new User_DTO();
+                    if (user.getToken() != null) {
+                        JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
+                        JOptionPane.showMessageDialog(null, "Xin chào " + user.getFirstName() + " " + user.getLastName());
+
+                        Tour_Management tour_Management = new Tour_Management();
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Đăng nhập thất bại, vui lòng thử lại");
+                    }
+                }
             }
         });
 //---------------------------FUNCTION HANDLER BUTTON---------------------//    

@@ -34,7 +34,8 @@ import project.tour.management_DTO.User_DTO;
  * @author BANANA_TEAM
  */
 public class Tour_Management extends JFrame{
-    private User_DTO user;
+    private User_DTO user = new User_DTO();
+    private JLabel labelImageLoading;
     /***********DECLARE JPANE*************/
         private JPanel panelMain;
         private JPanel panelHeader;
@@ -60,7 +61,7 @@ public class Tour_Management extends JFrame{
         private JSeparator sptUnderLogo;
         private JLabel labelMenu;
         private JButton btnTourManagement;
-        private JButton btnTours;
+        private JButton btnAdd;
         
         private JLabel labelSetting;
         private JButton btnUser;
@@ -76,6 +77,7 @@ public class Tour_Management extends JFrame{
     
     public Tour_Management(){
         init();
+        
     }
     public void init(){
       /*------------------------SETUP JFRAME------------------------*/
@@ -111,7 +113,7 @@ public class Tour_Management extends JFrame{
                 lbiconUser.setIcon(new ImageIcon(getClass().getResource("/image/icons8_user_male_circle_filled_25px.png")));
 
                 lbUserName = new JLabel("LinhLee");
-                lbUserName.setText(user.getFirstName()+" "+user.getLastName());
+                lbUserName.setText(user.getFirstName().toUpperCase()+" "+user.getLastName().toUpperCase());
                 lbUserName.setBounds(820,7,50,25);
                 lbUserName.setForeground(new Color(102,102,102));
 
@@ -214,16 +216,16 @@ public class Tour_Management extends JFrame{
                 btnTourManagement.setFocusPainted(false);
                 btnTourManagement.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 
-//                btnTours = new JButton("  Thể Loại Tour       ");
-//                btnTours.setBackground(new Color(12, 109, 102));
-//                btnTours.setBounds(5,230,190,30);
-//                btnTours.setForeground(new Color(255,255,255));
-//                btnTours.setIcon(new ImageIcon(getClass().getResource("/image/icons8_around_the_globe_filled_20px.png")));
-//                btnTours.setFont(new Font("Times New Roman",1,14));
-//                btnTours.setHorizontalAlignment(SwingConstants.CENTER);
-//                btnTours.setBorder(null);
-//                btnTours.setFocusPainted(false);
-//                btnTours.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnAdd = new JButton(" Thêm ");
+                btnAdd.setBackground(new Color(12, 109, 102));
+                btnAdd.setBounds(5,230,190,30);
+                btnAdd.setForeground(new Color(255,255,255));
+                btnAdd.setIcon(new ImageIcon(getClass().getResource("/image/icons8_add_20px.png")));
+                btnAdd.setFont(new Font("Times New Roman",1,14));
+                btnAdd.setHorizontalAlignment(SwingConstants.CENTER);
+                btnAdd.setBorder(null);
+                btnAdd.setFocusPainted(false);
+                btnAdd.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 
                 /********** TINH NANG THEM *********/
                 /********** TINH NANG THEM *********/
@@ -291,7 +293,7 @@ public class Tour_Management extends JFrame{
                 panelMenu.add(sptUnderLogo);
                 panelMenu.add(labelMenu);
                 panelMenu.add(btnTourManagement);
-//                panelMenu.add(btnTours);
+                panelMenu.add(btnAdd);
                 
                 panelMenu.add(labelSetting);
                 panelMenu.add(btnSetUp);
@@ -312,6 +314,12 @@ public class Tour_Management extends JFrame{
             panelProcessFunction.setLayout(null);
             panelProcessFunction.setBounds(205, 50, 990, 590);
             panelProcessFunction.setBackground(Color.white);
+                labelImageLoading = new JLabel("",JLabel.CENTER);
+                labelImageLoading.setBounds(340,120,250,250);
+                ImageIcon imageIconLoading =
+                new ImageIcon(Tour_Management.this.getClass().getResource("/image/Loading.gif"));
+                labelImageLoading.setIcon(imageIconLoading);
+            
         /*----------------------END PANEL PROCESSING FUNCTIONS OF JPANEL MAIN------------------------*/
         
         /********** ADD FOR JPANEL MAIN ************/
@@ -342,6 +350,35 @@ public class Tour_Management extends JFrame{
                     panelProcessFunction.removeAll();
                     panelProcessFunction.add(new Handle_Tour_Management());
                     repaint();
+//                    try {
+//                        for(int i = 0; i <= 100; i++){
+//                            Thread.sleep(40);
+//                            if(i == 100){
+//                                panelProcessFunction.removeAll();
+//                                panelProcessFunction.add(new Handle_Tour_Management());
+//                                repaint();
+//                            }
+//                        }
+//                    } catch (InterruptedException ex) {
+//                        Logger.getLogger(Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+                }
+            });
+            
+            btnAdd.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    panelProcessFunction.removeAll();
+                    panelProcessFunction.add(new Handle_Add_Attraction_and_Category_Tour());
+                    repaint();
+                }
+                 @Override
+                public void mouseEntered(MouseEvent e){
+                    btnAdd.setBackground(new Color(19, 113, 106));
+                }
+                @Override
+                public void mouseExited(MouseEvent e){
+                    btnAdd.setBackground(new Color(12, 109, 102));
                 }
             });
             

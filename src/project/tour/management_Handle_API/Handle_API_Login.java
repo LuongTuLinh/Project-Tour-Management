@@ -20,11 +20,11 @@ import project.tour.management_DTO.User_DTO;
  */
 public class Handle_API_Login {
     
-    public static void Login(String parameter, String endpoint){
+    public static void Login(String parameter, String endpoint, String token){
         JSONParser parser = new JSONParser();
             JSONObject myObject;
         try {
-            myObject = (JSONObject) parser.parse(APIRequester.sendPOST(parameter, endpoint));
+            myObject = (JSONObject) parser.parse(APIRequester.sendPOST(parameter, endpoint, token));
 
             JSONObject data = (JSONObject) myObject.get("data");
             

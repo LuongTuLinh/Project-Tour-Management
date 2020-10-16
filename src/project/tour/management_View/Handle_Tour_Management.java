@@ -10,7 +10,6 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,17 +19,22 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import project.tour.management_API.APIRequester;
+import project.tour.management_DTO.User_DTO;
+import project.tour.management_Handle_API.Handle_API_Tour;
+import project.tour.management_Handle_API.Handle_API_Tour_Id;
 
 /**
  *
@@ -93,19 +97,19 @@ public class Handle_Tour_Management extends JPanel{
                 
                 comboBoxCategoryTour = new JComboBox<>();
                 comboBoxCategoryTour.setModel(new DefaultComboBoxModel<>(new String [] {
-                    "Tour trong nước","Tour nước ngoài"}));
+                    "Tour nước ngoài","Tên Tour"}));
                 comboBoxCategoryTour.setBounds(420,16,130,30);
                 comboBoxCategoryTour.setFont(new Font("Segoe",Font.BOLD,13));
                 
                 comboBoxCharacteristicsTour = new JComboBox<>();
                 comboBoxCharacteristicsTour.setModel(new DefaultComboBoxModel<>(new String [] {
-                    "Tour trong nước","Tour nước ngoài"}));
+                    "Tour nước ngoài","Tour nước ngoài"}));
                 comboBoxCharacteristicsTour.setBounds(620,16,130,30);
                 comboBoxCharacteristicsTour.setFont(new Font("Segoe",Font.BOLD,13));
                 
                 comboBoxPriceTour = new JComboBox<>();
                 comboBoxPriceTour.setModel(new DefaultComboBoxModel<>(new String [] {
-                    "Tour trong nước","Tour nước ngoài"}));
+                    "Tour nước ngoài","Đang Mở"}));
                 comboBoxPriceTour.setBounds(810,16,130,30);
                 comboBoxPriceTour.setFont(new Font("Segoe",Font.BOLD,13));
             /****************ADD ELEMENT FOR PANEL HEADER***********************/
@@ -139,14 +143,14 @@ public class Handle_Tour_Management extends JPanel{
                 btnDeleteTour.setBackground(new Color(219, 50, 54));
                 btnDeleteTour.setFont(new Font("Segoe",Font.BOLD,13));
                 btnDeleteTour.setForeground(Color.WHITE);
-                btnDeleteTour.setBounds(150,20,115,30); 
+                btnDeleteTour.setBounds(160,20,115,30); 
                 btnDeleteTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                 btnAddTour = new JButton("Thêm Tour");
                 btnAddTour.setBackground(new Color(41, 149, 85));
                 btnAddTour.setFont(new Font("Segoe",Font.BOLD,13));
                 btnAddTour.setForeground(Color.WHITE);
-                btnAddTour.setBounds(320,20,115,30); 
+                btnAddTour.setBounds(310,20,115,30); 
                 btnAddTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                 btnSaveTour = new JButton("Làm mới");
@@ -169,17 +173,8 @@ public class Handle_Tour_Management extends JPanel{
             panelContent.setBackground(Color.white);
             panelContent.setBounds(0, 175, 990, 420);
                 
-//            ModelTable();
-                Vector header = new Vector();
-                header.add("Mã Tour");
-                header.add("Tên Tour");
-                header.add("Đặc Điểm");
-                header.add("Trạng Thái");
-                header.add("Loại Tour");
-                header.add("Giá Tour");
-                modelTable = new DefaultTableModel(header, ABORT);
-
-                tableTour = new JTable(modelTable);
+            LoadDataTable();
+            
                 tableTour.setRowHeight(25);
                 tableTour.setSelectionBackground(new java.awt.Color(0,105,92, 180));
                 tableTour.getTableHeader().setReorderingAllowed(false);
@@ -187,6 +182,19 @@ public class Handle_Tour_Management extends JPanel{
                 tableTour.getTableHeader().setOpaque(false);
                 tableTour.getTableHeader().setBackground(new Color(0,77,64));
                 tableTour.getTableHeader().setForeground(new Color(255,255,255));
+                tableTour.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                
+                DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+                rightRenderer.setHorizontalAlignment(JLabel.CENTER);
+                
+                /****************SET SIZE COLUMN OF TABLE***********************/
+                tableTour.getColumnModel().getColumn(0).setPreferredWidth(100);
+                tableTour.getColumnModel().getColumn(1).setPreferredWidth(550);
+                tableTour.getColumnModel().getColumn(2).setPreferredWidth(130);
+                tableTour.getColumnModel().getColumn(3).setPreferredWidth(80);
+                tableTour.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+                tableTour.getColumnModel().getColumn(4).setPreferredWidth(95);
+                /****************SET SIZE COLUMN OF TABLE***********************/
 
                 tableTour.setFont(new Font("Times New Roman",Font.PLAIN,15));
 
@@ -197,7 +205,7 @@ public class Handle_Tour_Management extends JPanel{
                         this.thumbColor = new Color(19, 113, 106);
                     }
                 });
-                scrollPane.setBounds(30,0,935,400);
+                scrollPane.setBounds(20,0,955,400);
                 
             /****************ADD ELEMENT FOR PANEL CONTENT**************************/
                 panelContent.add(scrollPane);
@@ -215,54 +223,74 @@ public class Handle_Tour_Management extends JPanel{
             btnEditTour.addMouseListener(new MouseAdapter() {
                 @Override
                     public void mouseClicked(MouseEvent e){
-                        removeAll();
-                        add(new Handle_Tour());
-                        repaint();
+                        int row = tableTour.getSelectedRow();
+
+                        if(row == -1)
+                        {
+                            JOptionPane.showMessageDialog(null, "Vui lòng chọn Tour cần sửa");
+                        }
+                        else
+                        {
+                            String tourId = (tableTour.getModel().getValueAt(row, 0).toString());
+                            Handle_API_Tour_Id tour = new Handle_API_Tour_Id();
+                            User_DTO user = new User_DTO();
+                            Handle_API_Tour_Id.Fetch_API_Tour_Id("tours/"+tourId, user.getToken());
+                            removeAll();
+                            add(new Handle_Edit_Tour());
+                            repaint();
+                        }
                     }
+            });
+            
+            btnSaveTour.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    LoadDataTable();
+                }
+            });
+            
+            btnAddTour.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    removeAll();
+                    add(new Handle_Add_Tour());
+                    repaint();
+                }
             });
         /*------------------------END HANDLE EVENT ONCLICK MOUSE BUTTON-----------------------------*/
     }
     
-//    public void ModelTable(){
-//              APIRequester apiRequester = new APIRequester("/users");
-//            JSONArray json;
-//            try {
-//                json = new JSONArray(APIRequester.fetchAPI());
-////                System.out.println(json.toString());
-////                System.out.println("OUT PUT");
-////                System.out.println(json.get(1));
-//                Vector<Vector<String>> dataList = new Vector<>();
-//                for (int i = 0; i < json.length(); i++) {
-//
-//                    JSONObject jsonObj = json.getJSONObject(i);
-//                    Vector<String> data = new Vector<>();
-//
-//                    data.add(jsonObj.getString("id"));
-//                    data.add(jsonObj.getString("createdAt"));
-//                    data.add(jsonObj.getString("name"));
-//                    data.add(jsonObj.getString("avatar"));
-//                    data.add(jsonObj.getString("ngaysinh"));
-//                    data.add(jsonObj.getString("ngaymat"));
-//                    data.add(jsonObj.getString("gioitinh"));
-//
-//                    dataList.add(data);
-////                    modelTable.addRow(data);
-//                }
-//                Vector<String> columnNames = new Vector<>();
-//                columnNames.add("Banana Team");
-//                columnNames.add("Team Banana");
-//                columnNames.add("Banana Team");
-//                columnNames.add("Team Banana");
-//                columnNames.add("Banana Team");
-//                columnNames.add("Team Banana");
-//                columnNames.add("Banana Team");
-//                columnNames.add("Team Banana");
-//
-//                 tableTour = new JTable(dataList, columnNames);
-//            } catch (IOException ex) {
-//                Logger.getLogger(Handle_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
-//            } catch (JSONException ex) {
-//                Logger.getLogger(Handle_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//          }
+    public void LoadDataTable(){
+                Handle_API_Tour api_tour = new Handle_API_Tour();
+                User_DTO user = new User_DTO();
+                JSONArray json = new JSONArray(Handle_API_Tour.Fetch_API_Tour("tours?Page=1&Limit=20", user.getToken()));
+                Vector<Vector<String>> dataList = new Vector<>();
+                for (int i = 0; i < json.length(); i++) {
+
+                    JSONObject jsonObj;
+                    try {
+                        jsonObj = json.getJSONObject(i);
+                        Vector<String> data = new Vector<>();
+
+                        data.add(jsonObj.getString("id"));
+                        data.add(jsonObj.getString("name"));
+                        data.add(jsonObj.getString("tourCategoryId"));
+                        data.add(jsonObj.get("status").toString());
+                        data.add(jsonObj.get("price").toString());
+
+                        dataList.add(data);
+                    } catch (JSONException ex) {
+                        Logger.getLogger(Handle_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+                Vector<String> columnNames = new Vector<>();
+                columnNames.add("Mã Tour");
+                columnNames.add("Tên Tour");
+                columnNames.add("Loại Tour");
+                columnNames.add("Trạng Thái");
+                columnNames.add("Giá Tour");
+
+                 tableTour = new JTable(dataList, columnNames);
+          }
 }
