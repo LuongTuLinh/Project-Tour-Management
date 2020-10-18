@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Project-Tour-Management">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/gson-2.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/json-simple-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/java-json.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jcalendar-1.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

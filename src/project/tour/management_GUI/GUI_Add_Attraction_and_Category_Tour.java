@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package project.tour.management_View;
+package project.tour.management_GUI;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -34,15 +34,16 @@ import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
 import project.tour.management_API.APIRequester;
 import project.tour.management_DTO.Tour_Attraction_DTO;
+import project.tour.management_DTO.Tour_Category_DTO;
 import project.tour.management_DTO.User_DTO;
-import project.tour.management_Handle_API.Handle_API_Tour;
 import project.tour.management_Handle_API.Handle_API_Tour_Attractions;
+import project.tour.management_Handle_API.Handle_API_Tour_Category;
 
 /**
  *
  * @author DELL
  */
-public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
+public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
     private JTabbedPane tabbedPane;
     /*************************DECLARE OF TABBED PANEL*********************************/
         /*-----------------DECLARE PANEL ATTRACTION TOUR-------------------------*/
@@ -58,10 +59,10 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                 private JTextArea textAreaDescription;
                 
                 private JButton buttonAddAttraction;
-                private JButton buttonClear;
+                private JButton buttonClearFieldAttraction;
                 
                 private JButton buttonSaveAttraction;
-                private JButton buttonCancel;
+                private JButton buttonCancelAttraction;
                 
                 private JTable tableAttractionTour;
                 private JScrollPane scrollPane;
@@ -73,7 +74,7 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                 private JButton buttonEditAttraction;
                 private JButton buttonDeleteAttraction;
         /*---------------END DECLARE PANEL ATTRACTION TOUR----------------------*/
-  
+
         /*---------------DECLARE PANEL CATEGORY TOUR--------------------*/
             private JPanel panelCategoryTour;
             private JPanel panelFieldCategory;
@@ -101,7 +102,7 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
         /*--------------END DECLARE PANEL CATEGORY TOUR-----------------------*/
     /************************END DECLARE OF TABBED PANEL******************************/
     
-    public Handle_Add_Attraction_and_Category_Tour(){
+    public GUI_Add_Attraction_and_Category_Tour(){
         init();
     }
     public void init(){
@@ -148,14 +149,6 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                             textAreaDescription.setLineWrap(true);
                             textAreaDescription.setWrapStyleWord(true);
                             textAreaDescription.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-//                            txtDescriptionAttraction = new JTextField();
-//                            txtDescriptionAttraction.setBounds(105,178,290,30);
-//                            txtDescriptionAttraction.setBorder(null);
-//                            txtDescriptionAttraction.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
-//
-//                            sptDescriptionAttraction = new JSeparator();
-//                            sptDescriptionAttraction.setBounds(105,208,290,10);
-//                            sptDescriptionAttraction.setBackground(new Color(0,0,0));
                            //**************END TEXTFIELD TEXTFIELD DESCRIPTION ATTRACTION*******************//
                            
                             buttonAddAttraction = new JButton("Thêm Địa Điểm");
@@ -165,12 +158,12 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                             buttonAddAttraction.setBounds(50,405,150,30); 
                             buttonAddAttraction.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                            buttonClear = new JButton("Xoá");
-                            buttonClear.setBackground(new Color(239, 198, 74));
-                            buttonClear.setFont(new Font("Segoe",Font.BOLD,13));
-                            buttonClear.setForeground(Color.WHITE);
-                            buttonClear.setBounds(250,405,105,30); 
-                            buttonClear.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                            buttonClearFieldAttraction = new JButton("Xoá");
+                            buttonClearFieldAttraction.setBackground(new Color(239, 198, 74));
+                            buttonClearFieldAttraction.setFont(new Font("Segoe",Font.BOLD,13));
+                            buttonClearFieldAttraction.setForeground(Color.WHITE);
+                            buttonClearFieldAttraction.setBounds(250,405,105,30);
+                            buttonClearFieldAttraction.setCursor(new Cursor(Cursor.HAND_CURSOR));
                             
                             buttonSaveAttraction = new JButton("Lưu");
                             buttonSaveAttraction.setBackground(new Color(41, 149, 85));
@@ -179,12 +172,12 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                             buttonSaveAttraction.setBounds(50,405,105,30); 
                             buttonSaveAttraction.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                            buttonCancel = new JButton("Huỷ Bỏ");
-                            buttonCancel.setBackground(new Color(239, 198, 74));
-                            buttonCancel.setFont(new Font("Segoe",Font.BOLD,13));
-                            buttonCancel.setForeground(Color.WHITE);
-                            buttonCancel.setBounds(250,405,105,30); 
-                            buttonCancel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                            buttonCancelAttraction = new JButton("Huỷ Bỏ");
+                            buttonCancelAttraction.setBackground(new Color(239, 198, 74));
+                            buttonCancelAttraction.setFont(new Font("Segoe",Font.BOLD,13));
+                            buttonCancelAttraction.setForeground(Color.WHITE);
+                            buttonCancelAttraction.setBounds(250,405,105,30);
+                            buttonCancelAttraction.setCursor(new Cursor(Cursor.HAND_CURSOR));
                         /**************ADD ELEMENT FOR PANEL FIELD ATTRACTION TOUR*********************/
                         panelField.add(labelNameAttraction);
                         panelField.add(txtNameAttraction);
@@ -192,11 +185,14 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                         
                         panelField.add(labelDescriptionAttraction);
                         panelField.add(textAreaDescription);
-//                        panelField.add(txtDescriptionAttraction);
-//                        panelField.add(sptDescriptionAttraction);
                         
                         panelField.add(buttonAddAttraction);
-                        panelField.add(buttonClear);
+                        panelField.add(buttonClearFieldAttraction);
+
+                        panelField.add(buttonSaveAttraction);
+                        panelField.add(buttonCancelAttraction);
+                        buttonSaveAttraction.setVisible(false);
+                        buttonCancelAttraction.setVisible(false);
                         /**************END ADD ELEMENT FOR PANEL FIELD ATTRACTION TOUR*******************/
                     /*===================END PANEL FIELD ATTRACTION TOUR========================*/
                     
@@ -340,6 +336,11 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                         
                         panelFieldCategory.add(buttonAddCategory);
                         panelFieldCategory.add(buttonClearFieldCategory);
+
+                        panelFieldCategory.add(buttonSaveCategory);
+                        panelFieldCategory.add(buttonCancelCategory);
+                        buttonSaveCategory.setVisible(false);
+                        buttonCancelCategory.setVisible(false);
                         /**************END ADD ELEMENT FOR PANEL FIELD CATEGORY TOUR*******************/
                     /*===================END PANEL FIELD CATEGORY TOUR========================*/
                     
@@ -358,9 +359,9 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                             labelIconSearchCategory = new JLabel();
                             labelIconSearchCategory.setBounds(410,20,25,25);
                             labelIconSearchCategory.setIcon(new ImageIcon(getClass().getResource("/image/icons8_search_property_25px.png")));
-                        
-                            LoadDataTableAttraction();
-            
+
+                            LoadDataTableCategory();
+
                             tableCategoryTour.setRowHeight(25);
                             tableCategoryTour.setSelectionBackground(new java.awt.Color(0,105,92, 180));
                             tableCategoryTour.getTableHeader().setReorderingAllowed(false);
@@ -374,9 +375,8 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
 //                            rightRenderer.setHorizontalAlignment(JLabel.CENTER);
 
                             /****************SET SIZE COLUMN OF TABLE***********************/
-                            tableCategoryTour.getColumnModel().getColumn(0).setPreferredWidth(60);
-                            tableCategoryTour.getColumnModel().getColumn(1).setPreferredWidth(120);
-                            tableCategoryTour.getColumnModel().getColumn(2).setPreferredWidth(380);
+                            tableCategoryTour.getColumnModel().getColumn(0).setPreferredWidth(100);
+                            tableCategoryTour.getColumnModel().getColumn(1).setPreferredWidth(460);
                             /****************SET SIZE COLUMN OF TABLE***********************/
                             
 
@@ -399,7 +399,7 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                             buttonEditCategory.setBounds(100,485,150,30); 
                             buttonEditCategory.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                            buttonDeleteCategory = new JButton("Xoá Địa Điểm");
+                            buttonDeleteCategory = new JButton("Xoá Thể Loại");
                             buttonDeleteCategory.setBackground(new Color(214, 38, 53));
                             buttonDeleteCategory.setFont(new Font("Segoe",Font.BOLD,13));
                             buttonDeleteCategory.setForeground(Color.WHITE);
@@ -429,12 +429,11 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
         /*======================================== END TABBED PANEL =================================================*/
         add(tabbedPane);
         
-        /*========================HANDLE CLICK BUTTON====================================*/
-            buttonClear.addMouseListener(new MouseAdapter() {
+        /*========================HANDLE CLICK BUTTON OF ATTRACTION====================================*/
+            buttonClearFieldAttraction.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    textAreaDescription.setText("");
-                    txtNameAttraction.setText("");
+                    clearTextFieldAttraction();
                 }
             });
             
@@ -450,10 +449,9 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                             APIRequester.sendPOST(parameter, "touristAttractions", user.getToken());
                             LoadDataTableAttraction();
                             JOptionPane.showMessageDialog(null, "Thêm thành công");
-                            textAreaDescription.setText("");
-                            txtNameAttraction.setText("");
+                            clearTextFieldAttraction();
                         } catch (IOException | ParseException ex) {
-                            Logger.getLogger(Handle_Add_Attraction_and_Category_Tour.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(GUI_Add_Attraction_and_Category_Tour.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }else {
                         JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng nhập đầy đủ thông tin");
@@ -490,26 +488,25 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                         String name = (tableAttractionTour.getModel().getValueAt(row, 1).toString());
                         String description = (tableAttractionTour.getModel().getValueAt(row, 2).toString());
                         buttonAddAttraction.setVisible(false);
-                        buttonClear.setVisible(false);
-                        panelField.add(buttonSaveAttraction);
-                        panelField.add(buttonCancel);
+                        buttonClearFieldAttraction.setVisible(false);
+                        buttonSaveAttraction.setVisible(true);
+                        buttonCancelAttraction.setVisible(true);
                         txtNameAttraction.setText(name);
                         textAreaDescription.setText(description);
                         Tour_Attraction_DTO attraction = new Tour_Attraction_DTO(tourId, name, description);
                     }
                 }
             });
-            buttonCancel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    textAreaDescription.setText("");
-                    txtNameAttraction.setText("");
-                    buttonSaveAttraction.setVisible(false);
-                    buttonCancel.setVisible(false);
-                    panelField.add(buttonAddAttraction);
-                    panelField.add(buttonClear);
-                }
-            });
+            buttonCancelAttraction.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        clearTextFieldAttraction();
+                        buttonSaveAttraction.setVisible(false);
+                        buttonCancelAttraction.setVisible(false);
+                        buttonAddAttraction.setVisible(true);
+                        buttonClearFieldAttraction.setVisible(true);
+                    }
+                });
             buttonSaveAttraction.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -519,22 +516,117 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                         User_DTO user = new User_DTO();
                         String parameter = "{\"id\":\""+Tour_Attraction_DTO.getAttractionsId()+"\",\"name\":\""+name+"\",\"description\":\""+description+"\"}";
                         APIRequester.sendPUT(parameter, "touristAttractions/"+Tour_Attraction_DTO.getAttractionsId(), user.getToken());
-                        textAreaDescription.setText("");
-                        txtNameAttraction.setText("");
+                        clearTextFieldAttraction();
                         buttonSaveAttraction.setVisible(false);
-                        buttonCancel.setVisible(false);
-                        panelField.add(buttonAddAttraction);
-                        panelField.add(buttonClear);
+                        buttonCancelAttraction.setVisible(false);
+                        buttonAddAttraction.setVisible(true);
+                        buttonClearFieldAttraction.setVisible(true);
                         JOptionPane.showMessageDialog(null, "Sửa thành công");
                     }else {
                         JOptionPane.showMessageDialog(null, "Địa điểm không có thay đổi");
                     }
                 }
             });
-        /*========================END HANDLE CLICK BUTTON====================================*/
+        /*========================END HANDLE CLICK BUTTON OF ATTRACTION====================================*/
+
+        /*========================HANDLE CLICK BUTTON OF CATEGORY====================================*/
+            buttonClearFieldCategory.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    clearTextFieldCategory();
+                }
+            });
+
+            buttonAddCategory.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    String nameCategory = txtNameCategory.getText();
+                    if(!empty( nameCategory ) ) {
+                        try {
+                            User_DTO user = new User_DTO();
+
+                            String parameter = "{\"name\":\""+nameCategory+"\"}";
+                            APIRequester.sendPOST(parameter, "tourCategories", user.getToken());
+                            LoadDataTableCategory();
+                            JOptionPane.showMessageDialog(null, "Thêm thành công");
+                            clearTextFieldCategory();
+                        } catch (IOException | ParseException ex) {
+                            Logger.getLogger(GUI_Add_Attraction_and_Category_Tour.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }else {
+                        JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng nhập đầy đủ thông tin");
+                    }
+
+                }
+            });
+            buttonDeleteCategory.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    int row = tableCategoryTour.getSelectedRow();
+                    if( row == -1 ){
+                        JOptionPane.showMessageDialog(null, "Vui lòng chọn thể loại cần xoá");
+                    } else {
+                        User_DTO user = new User_DTO();
+                        String tourId = (tableCategoryTour.getModel().getValueAt(row, 0).toString());
+                        APIRequester.sendDelete("tourCategories/"+tourId, user.getToken());
+                        LoadDataTableAttraction();
+                        JOptionPane.showMessageDialog(null, "Xoá thể loại thành công");
+                    }
+
+                }
+            });
+
+            buttonEditCategory.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    int row = tableCategoryTour.getSelectedRow();
+                    if( row == -1 ){
+                        JOptionPane.showMessageDialog(null, "Vui lòng chọn thể loại cần sửa");
+                    }else {
+                        String tourId = (tableCategoryTour.getModel().getValueAt(row, 0).toString());
+                        String name = (tableCategoryTour.getModel().getValueAt(row, 1).toString());
+                        buttonAddCategory.setVisible(false);
+                        buttonClearFieldCategory.setVisible(false);
+                        buttonSaveCategory.setVisible(true);
+                        buttonCancelCategory.setVisible(true);
+                        txtNameCategory.setText(name);
+                        Tour_Category_DTO category_dto = new Tour_Category_DTO(tourId, name);
+                    }
+                }
+            });
+            buttonCancelCategory.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    clearTextFieldCategory();
+                    buttonSaveCategory.setVisible(false);
+                    buttonCancelCategory.setVisible(false);
+                    buttonAddCategory.setVisible(true);
+                    buttonClearFieldCategory.setVisible(true);
+                }
+            });
+
+            buttonSaveCategory.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    String name = txtNameCategory.getText();
+                    if(checkDifferent(name)==false){
+                        User_DTO user = new User_DTO();
+                        String parameter = "{\"id\":\""+Tour_Category_DTO.getCategoryId()+",\"name\":\""+Tour_Category_DTO.getCategoryName()+"\"}";
+                        APIRequester.sendPUT(parameter, "touristAttractions/"+Tour_Category_DTO.getCategoryId(), user.getToken());
+                        clearTextFieldCategory();
+                        buttonSaveCategory.setVisible(false);
+                        buttonCancelCategory.setVisible(false);
+                        buttonAddCategory.setVisible(true);
+                        buttonClearFieldCategory.setVisible(true);
+                        JOptionPane.showMessageDialog(null, "Sửa thành công");
+                    }else {
+                        JOptionPane.showMessageDialog(null, "Thể loại không có thay đổi");
+                    }
+                }
+            });
+        /*========================END HANDLE CLICK BUTTON OF CATEGORY====================================*/
     }
     public void LoadDataTableAttraction(){
-        Handle_API_Tour api_tour = new Handle_API_Tour();
         User_DTO user = new User_DTO();
         JSONArray json = new JSONArray(Handle_API_Tour_Attractions.Fetch_API_Tour_Attraction("touristAttractions?Page=1&Limit=100", user.getToken()));
         Vector<Vector<String>> dataList = new Vector<>();
@@ -545,13 +637,13 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                 jsonObj = json.getJSONObject(i);
                 Vector<String> data = new Vector<>();
 
-                data.add(jsonObj.getString("id"));
-                data.add(jsonObj.getString("name"));
-                data.add(jsonObj.getString("description"));
+                data.add(jsonObj.get("id").toString());
+                data.add(jsonObj.get("name").toString());
+                data.add(jsonObj.get("description").toString());
 
                 dataList.add(data);
             } catch (JSONException ex) {
-                Logger.getLogger(Handle_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -563,9 +655,8 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
          tableAttractionTour = new JTable(dataList, columnNames);
     }
     public void LoadDataTableCategory(){
-        Handle_API_Tour api_tour = new Handle_API_Tour();
         User_DTO user = new User_DTO();
-        JSONArray json = new JSONArray(Handle_API_Tour_Attractions.Fetch_API_Tour_Attraction("tourCategories?Page=1&Limit=100", user.getToken()));
+        JSONArray json = new JSONArray(Handle_API_Tour_Category.Fetch_API_Tour_Category("tourCategories?Page=1&Limit=100", user.getToken()));
         Vector<Vector<String>> dataList = new Vector<>();
         for (int i = 0; i < json.length(); i++) {
 
@@ -574,12 +665,12 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
                 jsonObj = json.getJSONObject(i);
                 Vector<String> data = new Vector<>();
 
-                data.add(jsonObj.getString("id"));
-                data.add(jsonObj.getString("name"));
+                data.add(jsonObj.get("id").toString());
+                data.add(jsonObj.get("name").toString());
 
                 dataList.add(data);
             } catch (JSONException ex) {
-                Logger.getLogger(Handle_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -587,7 +678,7 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
         columnNames.add("Mã Thể Loại");
         columnNames.add("Tên Thể Loại");
 
-         tableAttractionTour = new JTable(dataList, columnNames);
+        tableCategoryTour = new JTable(dataList, columnNames);
     }
     public static boolean empty( final String s ) {
         // Null-safe, short-circuit evaluation.
@@ -598,5 +689,20 @@ public class Handle_Add_Attraction_and_Category_Tour extends JPanel{
             return true;
         }
         return false;
+    }
+
+    public static boolean checkDifferent(String name){
+        if(name.equals(Tour_Attraction_DTO.getAttractionsName())== true ){
+            return true;
+        }
+        return false;
+    }
+
+    public void clearTextFieldAttraction(){
+        txtNameAttraction.setText("");
+        textAreaDescription.setText("");
+    }
+    public void clearTextFieldCategory(){
+        txtNameCategory.setText("");
     }
 }

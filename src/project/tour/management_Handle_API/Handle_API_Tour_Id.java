@@ -5,17 +5,15 @@
  */
 package project.tour.management_Handle_API;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.json.JSONException;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import project.tour.management_API.APIRequester;
 import project.tour.management_DTO.Tour_DTO;
-import project.tour.management_View.Handle_Edit_Tour;
 
 /**
  *

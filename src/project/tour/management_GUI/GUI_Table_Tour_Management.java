@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package project.tour.management_View;
+package project.tour.management_GUI;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -33,14 +33,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import project.tour.management_DTO.User_DTO;
-import project.tour.management_Handle_API.Handle_API_Tour;
+import project.tour.management_Handle_API.Handle_API_Get_Tour;
 import project.tour.management_Handle_API.Handle_API_Tour_Id;
 
 /**
  *
  * @author DELL
  */
-public class Handle_Tour_Management extends JPanel{
+public class GUI_Table_Tour_Management extends JPanel{
     /*************DECLARE JPANEL********************/
         private JPanel panelHeader;
         private JPanel panelContent;
@@ -69,7 +69,7 @@ public class Handle_Tour_Management extends JPanel{
         private DefaultTableModel modelTable;
         private JScrollPane scrollPane;
     /*************DECLARE ELEMENT JPANEL CONTENT********************/
-    public Handle_Tour_Management(){
+    public GUI_Table_Tour_Management(){
         init();
     }
     public void init(){
@@ -236,7 +236,7 @@ public class Handle_Tour_Management extends JPanel{
                             User_DTO user = new User_DTO();
                             Handle_API_Tour_Id.Fetch_API_Tour_Id("tours/"+tourId, user.getToken());
                             removeAll();
-                            add(new Handle_Edit_Tour());
+                            add(new GUI_Edit_Tour());
                             repaint();
                         }
                     }
@@ -253,7 +253,7 @@ public class Handle_Tour_Management extends JPanel{
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     removeAll();
-                    add(new Handle_Add_Tour());
+                    add(new GUI_Add_Tour());
                     repaint();
                 }
             });
@@ -261,9 +261,9 @@ public class Handle_Tour_Management extends JPanel{
     }
     
     public void LoadDataTable(){
-                Handle_API_Tour api_tour = new Handle_API_Tour();
+                Handle_API_Get_Tour api_tour = new Handle_API_Get_Tour();
                 User_DTO user = new User_DTO();
-                JSONArray json = new JSONArray(Handle_API_Tour.Fetch_API_Tour("tours?Page=1&Limit=20", user.getToken()));
+                JSONArray json = new JSONArray(Handle_API_Get_Tour.Fetch_API_Tour("tours?Page=1&Limit=100", user.getToken()));
                 Vector<Vector<String>> dataList = new Vector<>();
                 for (int i = 0; i < json.length(); i++) {
 
@@ -272,15 +272,15 @@ public class Handle_Tour_Management extends JPanel{
                         jsonObj = json.getJSONObject(i);
                         Vector<String> data = new Vector<>();
 
-                        data.add(jsonObj.getString("id"));
-                        data.add(jsonObj.getString("name"));
-                        data.add(jsonObj.getString("tourCategoryId"));
+                        data.add(jsonObj.get("id").toString());
+                        data.add(jsonObj.get("name").toString());
+                        data.add(jsonObj.get("tourCategoryId").toString());
                         data.add(jsonObj.get("status").toString());
                         data.add(jsonObj.get("price").toString());
 
                         dataList.add(data);
                     } catch (JSONException ex) {
-                        Logger.getLogger(Handle_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
                 }

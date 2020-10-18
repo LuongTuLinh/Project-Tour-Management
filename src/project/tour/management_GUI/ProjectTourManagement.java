@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package project.tour.management_View;
+package project.tour.management_GUI;
 
 
 /**
@@ -16,8 +16,7 @@ public class ProjectTourManagement {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-            Login_Tour_Management login_tour = new Login_Tour_Management();
-
+            GUI_Login_Tour_Management login_tour = new GUI_Login_Tour_Management();
     }
     
 }

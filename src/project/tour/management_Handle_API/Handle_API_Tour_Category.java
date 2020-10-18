@@ -1,25 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package project.tour.management_Handle_API;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import project.tour.management_API.APIRequester;
 
-/**
- *
- * @author DELL
- */
-public class Handle_API_Tour_Attractions {
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-    public static JSONArray Fetch_API_Tour_Attraction(String endpoint, String token) {
+public class Handle_API_Tour_Category {
+    public static JSONArray Fetch_API_Tour_Category(String endpoint, String token) {
         JSONParser parser = new JSONParser();
         JSONObject myObject;
         try {
@@ -27,9 +18,9 @@ public class Handle_API_Tour_Attractions {
 
             JSONObject data = (JSONObject) myObject.get("data");
 
-            JSONArray tourAttraction = (JSONArray) data.get("data");
+            JSONArray tourCategory = (JSONArray) data.get("data");
 
-            return tourAttraction;
+            return tourCategory;
         } catch (ParseException ex) {
             Logger.getLogger(Handle_API_Get_Tour.class.getName()).log(Level.SEVERE, null, ex);
         }

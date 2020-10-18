@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package project.tour.management_View;
+package project.tour.management_GUI;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -39,7 +39,7 @@ import project.tour.management_Handle_API.Handle_API_Login;
  *
  * @author LinhLee
  */
-public class Login_Tour_Management extends JFrame {
+public class GUI_Login_Tour_Management extends JFrame {
 
     private JPanel panelLogin;
     private JLabel lbIconClose;
@@ -62,7 +62,7 @@ public class Login_Tour_Management extends JFrame {
     private JButton btnLogin;
     private JButton btnSignup;
 
-    Login_Tour_Management() {
+    GUI_Login_Tour_Management() {
         GUI();
     }
 
@@ -82,6 +82,7 @@ public class Login_Tour_Management extends JFrame {
                             = new GradientPaint(0.0f, 0.0f, new Color(0, 77, 64, 250),
                                     getWidth(), getHeight(), new Color(0, 105, 92, 180), true);
                     Graphics2D g2d = graphics2D;
+                    Graphics2D d = (Graphics2D) g;
                     g2d.setPaint(p);
                     g2d.fillRect(0, 0, getWidth(), getHeight());
 
@@ -121,7 +122,7 @@ public class Login_Tour_Management extends JFrame {
             ImageIcon icon = new ImageIcon(imageLogo.getScaledInstance(250, 190, BufferedImage.SCALE_SMOOTH));
             lbLogoAirplane.setIcon(icon);
         } catch (IOException ex) {
-            Logger.getLogger(Login_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GUI_Login_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         //--------------------USERNAME---------------------//
@@ -184,7 +185,7 @@ public class Login_Tour_Management extends JFrame {
             ImageIcon iconAir = new ImageIcon(imageTour1.getScaledInstance(352, 170, imageTour1.SCALE_SMOOTH));
             lbImageTour_1.setIcon(iconAir);
         } catch (IOException ex) {
-            Logger.getLogger(Login_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GUI_Login_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         lbImageTour_2 = new JLabel("", JLabel.CENTER);
@@ -195,7 +196,7 @@ public class Login_Tour_Management extends JFrame {
             ImageIcon iconAir = new ImageIcon(imageTour2.getScaledInstance(300, 170, imageTour2.SCALE_SMOOTH));
             lbImageTour_2.setIcon(iconAir);
         } catch (IOException ex) {
-            Logger.getLogger(Login_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GUI_Login_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
         }
         lbImageTour_3 = new JLabel("", JLabel.CENTER);
         lbImageTour_3.setBounds(18, 355, 352, 185); //524
@@ -205,7 +206,7 @@ public class Login_Tour_Management extends JFrame {
             ImageIcon iconAir = new ImageIcon(imageTour3.getScaledInstance(352, 183, imageTour3.SCALE_SMOOTH));
             lbImageTour_3.setIcon(iconAir);
         } catch (IOException ex) {
-            Logger.getLogger(Login_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GUI_Login_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
         }
         //---------------------Panel Form Login ------------------------//
         panelLogin.add(lbIconClose);
@@ -257,7 +258,7 @@ public class Login_Tour_Management extends JFrame {
                     JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
                     JOptionPane.showMessageDialog(null, "Xin chào " + user.getFirstName() + " " + user.getLastName());
 
-                    Tour_Management tour_Management = new Tour_Management();
+                    GUI_Tour_Management tour_Management = new GUI_Tour_Management();
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Đăng nhập thất bại, vui lòng thử lại");
@@ -288,7 +289,7 @@ public class Login_Tour_Management extends JFrame {
                         JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
                         JOptionPane.showMessageDialog(null, "Xin chào " + user.getFirstName() + " " + user.getLastName());
 
-                        Tour_Management tour_Management = new Tour_Management();
+                        GUI_Tour_Management tour_Management = new GUI_Tour_Management();
                         dispose();
                     } else {
                         JOptionPane.showMessageDialog(null, "Đăng nhập thất bại, vui lòng thử lại");

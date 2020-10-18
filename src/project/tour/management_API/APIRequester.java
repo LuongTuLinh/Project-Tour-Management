@@ -24,6 +24,7 @@ public class APIRequester {
     public static String fetchAPI(String endpoint, String token) {
         try {
             URL urlForGetRequest = new URL(url + "/" + endpoint);
+            System.out.println(urlForGetRequest);
             trustCertificateBeforeRequest();
             String readLine = null;
 
@@ -100,6 +101,7 @@ public class APIRequester {
         URL obj;
         try {
             obj = new URL(url + "/" + endpoint);
+            System.out.println(obj);
             trustCertificateBeforeRequest();
 
             HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();

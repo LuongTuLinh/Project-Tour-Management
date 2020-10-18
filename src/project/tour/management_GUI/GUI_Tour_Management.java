@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package project.tour.management_View;
+package project.tour.management_GUI;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -33,7 +33,7 @@ import project.tour.management_DTO.User_DTO;
  *
  * @author BANANA_TEAM
  */
-public class Tour_Management extends JFrame{
+public class GUI_Tour_Management extends JFrame{
     private User_DTO user = new User_DTO();
     private JLabel labelImageLoading;
     /***********DECLARE JPANE*************/
@@ -75,7 +75,7 @@ public class Tour_Management extends JFrame{
         private JSeparator sptBelowMenu;
     /***********END DECLARE COMPONENT JPANE MENU*************/
     
-    public Tour_Management(){
+    public GUI_Tour_Management(){
         init();
         
     }
@@ -194,7 +194,7 @@ public class Tour_Management extends JFrame{
                         ImageIcon icon = new ImageIcon(image.getScaledInstance(150, 200, image.SCALE_SMOOTH));
                         lbLogoBanana.setIcon(icon);
                     } catch (IOException ex) {
-                        java.util.logging.Logger.getLogger(Tour_Management.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                        java.util.logging.Logger.getLogger(GUI_Tour_Management.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
                     }
                 
                 sptUnderLogo = new JSeparator();
@@ -317,7 +317,7 @@ public class Tour_Management extends JFrame{
                 labelImageLoading = new JLabel("",JLabel.CENTER);
                 labelImageLoading.setBounds(340,120,250,250);
                 ImageIcon imageIconLoading =
-                new ImageIcon(Tour_Management.this.getClass().getResource("/image/Loading.gif"));
+                new ImageIcon(GUI_Tour_Management.this.getClass().getResource("/image/Loading.gif"));
                 labelImageLoading.setIcon(imageIconLoading);
             
         /*----------------------END PANEL PROCESSING FUNCTIONS OF JPANEL MAIN------------------------*/
@@ -348,7 +348,7 @@ public class Tour_Management extends JFrame{
                 @Override
                 public void mouseClicked(MouseEvent e){
                     panelProcessFunction.removeAll();
-                    panelProcessFunction.add(new Handle_Tour_Management());
+                    panelProcessFunction.add(new GUI_Table_Tour_Management());
                     repaint();
 //                    try {
 //                        for(int i = 0; i <= 100; i++){
@@ -369,7 +369,7 @@ public class Tour_Management extends JFrame{
                 @Override
                 public void mouseClicked(MouseEvent e){
                     panelProcessFunction.removeAll();
-                    panelProcessFunction.add(new Handle_Add_Attraction_and_Category_Tour());
+                    panelProcessFunction.add(new GUI_Add_Attraction_and_Category_Tour());
                     repaint();
                 }
                  @Override

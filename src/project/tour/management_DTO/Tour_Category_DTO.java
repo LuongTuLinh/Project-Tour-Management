@@ -18,7 +18,22 @@ public class Tour_Category_DTO {
     public Tour_Category_DTO(String id, String name){
         Tour_Category_DTO.categoryId = id;
         Tour_Category_DTO.categoryName = name;
-        
+    }
+
+    public static String getCategoryId() {
+        return categoryId;
+    }
+
+    public static void setCategoryId(String categoryId) {
+        Tour_Category_DTO.categoryId = categoryId;
+    }
+
+    public static String getCategoryName() {
+        return categoryName;
+    }
+
+    public static void setCategoryName(String categoryName) {
+        Tour_Category_DTO.categoryName = categoryName;
     }
 }
 

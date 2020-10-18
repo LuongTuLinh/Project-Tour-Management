@@ -17,7 +17,7 @@ import project.tour.management_API.APIRequester;
  *
  * @author DELL
  */
-public class Handle_API_Tour {
+public class Handle_API_Get_Tour {
     
     public static JSONArray Fetch_API_Tour(String endpoint, String token){
         JSONParser parser = new JSONParser();
@@ -31,7 +31,7 @@ public class Handle_API_Tour {
             
             return userRepsonse;
         } catch (ParseException ex) {
-            Logger.getLogger(Handle_API_Tour.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Handle_API_Get_Tour.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
             
