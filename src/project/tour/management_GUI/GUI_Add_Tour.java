@@ -358,12 +358,10 @@ public class GUI_Add_Tour extends JPanel{
                             JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng kiểm giá tour");
                         } else {
                             String input = "{\"name\":\"" + tourName + "\",\"specification\":\""+specification+"\",\"tourCategoryId\":\""+tourCategoryId+"\",\"price\":"+tourPrice+"}";
-                            try {
+
                                 APIRequester.sendPOST(input, "tours", user.getToken());
                                 JOptionPane.showMessageDialog(null, "Thêm thành công");
-                            } catch (IOException | ParseException ex) {
-                                Logger.getLogger(GUI_Add_Tour.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+
                          }
                      } else {
                          JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng nhập đầy đủ thông tin");

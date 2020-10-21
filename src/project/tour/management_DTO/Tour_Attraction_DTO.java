@@ -22,6 +22,10 @@ public class Tour_Attraction_DTO {
         this.attractionsName = name;
         this.description = description;
     }
+
+    public Tour_Attraction_DTO(String id){
+        this.attractionsId = id;
+    }
     
     public static String getAttractionsId() {
         return attractionsId;

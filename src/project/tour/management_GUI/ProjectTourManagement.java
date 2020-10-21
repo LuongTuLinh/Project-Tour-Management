@@ -6,6 +6,8 @@
 package project.tour.management_GUI;
 
 
+import javax.swing.*;
+
 /**
  *
  * @author DELL
@@ -16,7 +18,11 @@ public class ProjectTourManagement {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-            GUI_Login_Tour_Management login_tour = new GUI_Login_Tour_Management();
+//            try {
+//                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//            } catch(Exception ignored){}
+
+        GUI_Login_Tour_Management login_tour = new GUI_Login_Tour_Management();
     }
     
 }

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.cert.X509Certificate;
@@ -22,13 +23,15 @@ public class APIRequester {
     private static final String url = "https://localhost:5001/api/v1";
 
     public static String fetchAPI(String endpoint, String token) {
+        HttpURLConnection connection ;
+        BufferedReader in;
         try {
             URL urlForGetRequest = new URL(url + "/" + endpoint);
             System.out.println(urlForGetRequest);
             trustCertificateBeforeRequest();
             String readLine = null;
 
-            HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
+             connection = (HttpURLConnection) urlForGetRequest.openConnection();
             connection.setAllowUserInteraction(true);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Authorization", "Bearer " + token);
@@ -36,75 +39,108 @@ public class APIRequester {
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 StringBuilder response;
-                try ( BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream()))) {
+                 in = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
                     response = new StringBuilder();
                     while ((readLine = in.readLine()) != null) {
                         response.append(readLine);
                     }
-                }
+
                 // print result
                 System.out.println("JSON String Result " + response.toString());
                 return response.toString();
-                //GetAndPost.POSTRequest(response.toString());
-            } else {
-                System.out.println("GET NOT WORKED");
-                return "GET NOT WORKED";
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+            else {
+                in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                System.out.println(response.toString());
+                return response.toString();
+            }
 
-        return "GET NOT WORKED";
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+
+        }
+        return "{\"ApiErr\": \"Error\"}";
     }
 
-    public static String sendPOST(String parameter, String endpoint, String token) throws IOException, ParseException {
-        URL obj = new URL(url + "/" + endpoint);
-        System.out.println(obj);
-        trustCertificateBeforeRequest();
-
-        HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
-        httpURLConnection.setAllowUserInteraction(true);
-        httpURLConnection.setRequestMethod("POST");
-        httpURLConnection.setRequestProperty("Content-Type", "application/json; utf-8");
-        httpURLConnection.setRequestProperty("Authorization", "Bearer " + token);
-
-        // For POST only - START
-        httpURLConnection.setDoOutput(true);
-        OutputStream os = httpURLConnection.getOutputStream();
-        os.write(parameter.getBytes());
-        os.flush();
-        os.close();
-
-        int responseCode = httpURLConnection.getResponseCode();
-        System.out.println("POST Response Code :: " + responseCode);
-
-        if (responseCode == HttpURLConnection.HTTP_OK || responseCode == 201) { // success
-            BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            return response.toString();
-        } else {
-            System.out.println("POST request not worked");
-            return "POST request not worked";
-        }
-
-    }
-
-    public static String sendPUT(String parameter, String endpoint, String token) {
-        URL obj;
+    public static String sendPOST(String parameter, String endpoint, String token) {
+        URL obj = null;
+        HttpURLConnection httpURLConnection = null;
+        BufferedReader in;
         try {
             obj = new URL(url + "/" + endpoint);
             System.out.println(obj);
             trustCertificateBeforeRequest();
 
-            HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
+            httpURLConnection = (HttpURLConnection) obj.openConnection();
+            httpURLConnection.setAllowUserInteraction(true);
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setRequestProperty("Content-Type", "application/json; utf-8");
+            httpURLConnection.setRequestProperty("Authorization", "Bearer " + token);
+
+            // For POST only - START
+            httpURLConnection.setDoOutput(true);
+            OutputStream os = httpURLConnection.getOutputStream();
+            os.write(parameter.getBytes());
+            os.flush();
+            os.close();
+
+            int responseCode = httpURLConnection.getResponseCode();
+            System.out.println("POST Response Code :: " + responseCode);
+
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == 201) { // success
+                in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                return response.toString();
+            } else {
+                in = new BufferedReader(new InputStreamReader(httpURLConnection.getErrorStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                System.out.println(response.toString());
+                return response.toString();
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+
+        }
+        return "{\"ApiErr\": \"Error\"}";
+
+    }
+
+    public static String sendPUT(String parameter, String endpoint, String token) {
+        URL obj;
+        HttpURLConnection httpURLConnection;
+        BufferedReader in;
+        try {
+            obj = new URL(url + "/" + endpoint);
+            System.out.println(obj);
+            trustCertificateBeforeRequest();
+
+            httpURLConnection = (HttpURLConnection) obj.openConnection();
             httpURLConnection.setAllowUserInteraction(true);
             httpURLConnection.setRequestMethod("PUT");
             httpURLConnection.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -121,7 +157,7 @@ public class APIRequester {
             System.out.println("PUT Response Code :: " + responseCode);
 
             if (responseCode == HttpURLConnection.HTTP_OK || responseCode == 204) { // success
-                BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+                in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
                 String inputLine;
                 StringBuffer response = new StringBuffer();
 
@@ -130,27 +166,40 @@ public class APIRequester {
                 }
                 in.close();
 
-                return response.toString();
+                return "{\"ApiSuccess\": \"Success\"}";
             } else {
-                System.out.println("PUT request not worked");
-                return "PUT request not worked";
+                in = new BufferedReader(new InputStreamReader(httpURLConnection.getErrorStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                System.out.println(response.toString());
+                return response.toString();
             }
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(APIRequester.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(APIRequester.class.getName()).log(Level.SEVERE, null, ex);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+
         }
-        return "PUT request not worked";
+        return null;
 
     }
     
-    public static String sendDelete(String endpoint, String token) {
+    public static String sendDelete(String parameter, String endpoint, String token) {
         URL obj;
+        BufferedReader in;
+        HttpURLConnection httpURLConnection;
         try {
             obj = new URL(url + "/" + endpoint);
+            System.out.println(obj);
             trustCertificateBeforeRequest();
 
-            HttpURLConnection httpURLConnection = (HttpURLConnection) obj.openConnection();
+             httpURLConnection = (HttpURLConnection) obj.openConnection();
             httpURLConnection.setAllowUserInteraction(true);
             httpURLConnection.setRequestMethod("DELETE");
             httpURLConnection.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -158,12 +207,16 @@ public class APIRequester {
 
             // For POST only - START
             httpURLConnection.setDoOutput(true);
+            OutputStream os = httpURLConnection.getOutputStream();
+            os.write(parameter.getBytes());
+            os.flush();
+            os.close();
 
             int responseCode = httpURLConnection.getResponseCode();
-            System.out.println("PUT Response Code :: " + responseCode);
+            System.out.println(" Response Code :: " + responseCode);
 
             if (responseCode == HttpURLConnection.HTTP_OK || responseCode == 204) { // success
-                BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+                in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
                 String inputLine;
                 StringBuffer response = new StringBuffer();
 
@@ -172,17 +225,27 @@ public class APIRequester {
                 }
                 in.close();
 
-                return response.toString();
+                return "{\"ApiSuccess\": \"Success\"}";
             } else {
-                System.out.println("DELETE request not worked");
-                return "DELETE request not worked";
+                in = new BufferedReader(new InputStreamReader(httpURLConnection.getErrorStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                System.out.println(response.toString());
+                return response.toString();
             }
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(APIRequester.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(APIRequester.class.getName()).log(Level.SEVERE, null, ex);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+
         }
-        return "DELETE request not worked";
+        return "{\"ApiErr\": \"Error\"}";
 
     }
 

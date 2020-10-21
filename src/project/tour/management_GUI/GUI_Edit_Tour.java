@@ -10,15 +10,11 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Vector;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,21 +30,20 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+
 
 import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JDayChooser;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.simple.parser.ParseException;
 import project.tour.management_API.APIRequester;
-import project.tour.management_DTO.Tour_Category_DTO;
-import project.tour.management_DTO.Tour_DTO;
-import project.tour.management_DTO.Tour_Price_DTO;
-import project.tour.management_DTO.User_DTO;
+import project.tour.management_DTO.*;
 import project.tour.management_Handle_API.Handle_API_Tour_Attractions;
 import project.tour.management_Handle_API.Handle_API_Tour_Category;
 import project.tour.management_Handle_API.Handle_API_Tour_Id;
@@ -59,6 +54,14 @@ import project.tour.management_Handle_API.Handle_API_Tour_Price;
  * @author DELL
  */
 public class GUI_Edit_Tour extends JPanel{
+    public static HashMap<String, String> dataAttraction ;
+    public static DefaultListModel<String> modelAttractionTour;
+    public JList<String> listPlaceTour  ;
+
+    public static HashMap<String, String> dataAttractionisSelected ;
+    public static DefaultListModel<String> modelAttractionTourisSelected;
+    public JList<String> listPlaceTourisSelected  ;
+
     private Tour_DTO tour = new Tour_DTO();
     /***************DECLARE JPANEL********************/
         private JPanel panelHeader;
@@ -78,8 +81,7 @@ public class GUI_Edit_Tour extends JPanel{
         private JSeparator sptPriceTour;
 
         private JLabel labelStatusTour;
-        private JTextField txtStatusTour;
-        private JSeparator sptStatusTour;
+        private JComboBox<String> comboBoxStatusTour;
 
         private JLabel labelSpecification;
         private JTextField txtSpecification;
@@ -95,17 +97,15 @@ public class GUI_Edit_Tour extends JPanel{
     /***************DECLARE COMPONENT FOR PANEL CONTENT********************/
         private JPanel panelPriceTour;
         private JPanel panelPlaceTour;
+        private JPanel panelGroupTour;
 
         /*---------DECLARE PANEL PLACE TOUR-----------*/
             private JLabel labelSearch;
             private JTextField txtSearch;
             private JLabel labelIconSearch;
             private JScrollPane scrollPaneAllPlace;
-            private JList<String> listPlaceTour;
-            DefaultListModel<String> model;
             private JLabel labelAllPlaceTour;
             private JScrollPane scrollPanePlaceSeleted;
-            private JList listPlaceSeleted;
             private JLabel labelPlaceSeleted;
             private JButton btnAddPlaceTour;
             private JButton btnRemovePlaceTour;
@@ -123,12 +123,10 @@ public class GUI_Edit_Tour extends JPanel{
             private JSeparator sptPrice;
 
             private JLabel labelStartDate;
-//            private JTextField txtStartDate;
             private JDateChooser dateChooserStartDate;
             private JSeparator sptStartDate;
 
             private JLabel labelEndDate;
-//            private JTextField txtEndDate;
             private JDateChooser dateChooserEndDate;
             private JSeparator sptEndDate;
 
@@ -140,7 +138,8 @@ public class GUI_Edit_Tour extends JPanel{
             private JButton buttonCancelPrice;
 
             private JScrollPane scrollPaneTablePrice;
-            private JTable tableTourPrice;
+            public JTable tableTourPrice;
+            public DefaultTableModel modelTablePriceTour;
 
         /*---------END DECLARE PANEL PRICE TOUR-----------*/
 
@@ -197,15 +196,11 @@ public class GUI_Edit_Tour extends JPanel{
                     labelStatusTour.setFont(new Font("Segoe",Font.BOLD,12));
                     labelStatusTour.setBounds(365,10,80,30);
 
-                    txtStatusTour = new JTextField();
-                    txtStatusTour.setBounds(445,8,80,30);
-                    txtStatusTour.setBorder(null);
-                    txtStatusTour.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
-                    txtStatusTour.setText(Tour_DTO.getStatus());
+                    comboBoxStatusTour = new JComboBox<>();
 
-                    sptStatusTour = new JSeparator();
-                    sptStatusTour.setBounds(445,38,80,10);
-                    sptStatusTour.setBackground(new Color(0,0,0));
+                    comboBoxStatusTour.setBounds(445,9,110,30);
+                    comboBoxStatusTour.setFont(new Font("Segoe",Font.BOLD,13));
+                    selectedComboBoxStatusTour();
                    //**************END TEXTFIELD TOUR STATUS*******************//
 
                    //**************TEXTFIELD TOUR PRICE*******************//
@@ -246,10 +241,13 @@ public class GUI_Edit_Tour extends JPanel{
                     labelCategoryTour.setBounds(600,20,80,30);
 
                     comboBoxCategoryTour = new JComboBox<>();
-                    comboBoxCategoryTour.setModel(new DefaultComboBoxModel<>(new String [] {
-                        "Du lịch văn hóa", "Du lịch MICE", "Teambuilding", "Du lịch xanh", "Du lịch ẩm thực", "Du lịch tham quan"}));
+                    getCategoryComboBox();
+//                    comboBoxCategoryTour.setModel(new DefaultComboBoxModel<>(new String [] {
+//                        "Du lịch văn hóa", "Du lịch MICE", "Teambuilding", "Du lịch xanh", "Du lịch ẩm thực", "Du lịch tham quan"}));
                     comboBoxCategoryTour.setBounds(680,13,130,30);
                     comboBoxCategoryTour.setFont(new Font("Segoe",Font.BOLD,13));
+//                    comboBoxCategoryTour.setSelectedIndex(index);
+
                    //**************END COMBOBOX CATEGORY TOUR*******************//
 
                     btnSaveTour = new JButton("Lưu");
@@ -278,8 +276,7 @@ public class GUI_Edit_Tour extends JPanel{
                     panelHeader.add(txtPriceTour);
                     panelHeader.add(sptPriceTour);
                     panelHeader.add(labelStatusTour);
-                    panelHeader.add(txtStatusTour);
-                    panelHeader.add(sptStatusTour);
+                    panelHeader.add(comboBoxStatusTour);
                     panelHeader.add(labelSpecification);
                     panelHeader.add(txtSpecification);
                     panelHeader.add(sptSpecification);
@@ -303,7 +300,7 @@ public class GUI_Edit_Tour extends JPanel{
                         panelPriceTour.setLayout(null);
                         panelPriceTour.setBackground(Color.white);
                         panelPriceTour.setBounds(5,5,980,430);
-                            /*===================PANEL FIELD CATEGORY TOUR========================*/
+                                //**************TEXTFIELD TOUR ID*******************//
                                 labelTourID = new JLabel("MÃ TOUR :",JLabel.CENTER);
                                 labelTourID.setFont(new Font("Segoe",Font.BOLD,12));
                                 labelTourID.setBounds(0,50,80,30);
@@ -340,18 +337,14 @@ public class GUI_Edit_Tour extends JPanel{
                                 labelStartDate.setFont(new Font("Segoe",Font.BOLD,12));
                                 labelStartDate.setBounds(185,50,120,30);
 
-//                                txtStartDate = new JTextField();
-//                                txtStartDate.setBounds(292,48,160,30);
-//                                txtStartDate.setBorder(null);
-//                                txtStartDate.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
                                 dateChooserStartDate = new JDateChooser();
-                                dateChooserStartDate.setBounds(292, 48, 160, 30);
+                                dateChooserStartDate.setBounds(292, 48, 140, 30);
                                 dateChooserStartDate.setBorder(null);
                                 dateChooserStartDate.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
                                 dateChooserStartDate.setDateFormatString("yyyy-MM-dd");
 
                                 sptStartDate = new JSeparator();
-                                sptStartDate.setBounds(292,78,160,10);
+                                sptStartDate.setBounds(292,78,140,10);
                                 sptStartDate.setBackground(new Color(0,0,0));
 
                                 //**************END TEXTFIELD START DATE*******************//
@@ -361,20 +354,15 @@ public class GUI_Edit_Tour extends JPanel{
                                 labelEndDate.setFont(new Font("Segoe",Font.BOLD,12));
                                 labelEndDate.setBounds(185,150,120,30);
 
-//                                txtEndDate = new JTextField();
-//                                txtEndDate.setBounds(292,148,160,30);
-//                                txtEndDate.setBorder(null);
-//                                txtEndDate.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
                                 dateChooserEndDate = new JDateChooser();
-                                dateChooserEndDate.setBounds(293, 148, 159, 30);
+                                dateChooserEndDate.setBounds(293, 148, 139, 30);
                                 dateChooserEndDate.setBorder(null);
                                 dateChooserEndDate.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
                                 dateChooserEndDate.setDateFormatString("yyyy-MM-dd");
 
                                 sptEndDate = new JSeparator();
-                                sptEndDate.setBounds(292,178,165,10);
+                                sptEndDate.setBounds(292,178,140,10);
                                 sptEndDate.setBackground(new Color(0,0,0));
-
 
                                 //**************END TEXTFIELD END DATE*******************//
 
@@ -412,7 +400,14 @@ public class GUI_Edit_Tour extends JPanel{
                             /*===================END PANEL FIELD PRICE TOUR========================*/
 
                             /*===================PANEL TABLE PRICE TOUR========================*/
-
+                                Vector<String> columnNames = new Vector<>();
+                                columnNames.add("Mã Giá");
+                                columnNames.add("Mã Tour");
+                                columnNames.add("Giá");
+                                columnNames.add("Ngày Bắt Đầu");
+                                columnNames.add("Ngày Kết Thúc");
+                                modelTablePriceTour = new DefaultTableModel(columnNames,0);
+                                tableTourPrice = new JTable(modelTablePriceTour);
                                 LoadDataTableTourPrice();
                                 tableTourPrice.setRowHeight(25);
                                 tableTourPrice.setSelectionBackground(new java.awt.Color(0,105,92, 180));
@@ -439,7 +434,7 @@ public class GUI_Edit_Tour extends JPanel{
                                         this.thumbColor = new Color(19, 113, 106);
                                     }
                                 });
-                                scrollPaneTablePrice.setBounds(480,10,490,340);
+                                scrollPaneTablePrice.setBounds(460,10,510,340);
 
 
                                 buttonEditPrice = new JButton("Sửa Giá Tour");
@@ -471,12 +466,10 @@ public class GUI_Edit_Tour extends JPanel{
                         panelPriceTour.add(sptPrice);
 
                         panelPriceTour.add(labelStartDate);
-//                        panelPriceTour.add(txtStartDate);
                         panelPriceTour.add(dateChooserStartDate);
                         panelPriceTour.add(sptStartDate);
 
                         panelPriceTour.add(labelEndDate);
-//                        panelPriceTour.add(txtEndDate);
                         panelPriceTour.add(dateChooserEndDate);
                         panelPriceTour.add(sptEndDate);
 
@@ -488,9 +481,6 @@ public class GUI_Edit_Tour extends JPanel{
                         panelPriceTour.add(scrollPaneTablePrice);
                         panelPriceTour.add(buttonEditPrice);
                         panelPriceTour.add(buttonDeletePrice);
-
-//                        txtEndDate.setVisible(false);
-//                        txtStartDate.setVisible(false);
 
                         /**********END ADD COMPONENT FOR PANEL PRICE TOUR***************/
                     /*------------------------END PANEL PRICE TOUR------------------------------*/
@@ -528,10 +518,8 @@ public class GUI_Edit_Tour extends JPanel{
                                 }
                             });
 
-                            listPlaceTour = new JList<>();
-                            UpdateJList();
-//                            DefaultListCellRenderer renderer = (DefaultListCellRenderer) listPlaceTour.getCellRenderer();
-//                            renderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+                            UpdateListAttractionTour();
                             listPlaceTour.setFixedCellHeight(27);
                             listPlaceTour.setFixedCellWidth(100);
                             listPlaceTour.setBorder(new EmptyBorder(10,10, 10, 10));
@@ -573,17 +561,19 @@ public class GUI_Edit_Tour extends JPanel{
                                 }
                             });
 
-                            listPlaceSeleted = new JList<>();
+//                            listPlaceSeleted = new JList<>();
+                            modelAttractionTourisSelected = new  DefaultListModel<String>();
+                            listPlaceTourisSelected = new JList<String>(modelAttractionTourisSelected);
                             UpdateJListSelected();
 
-                            listPlaceSeleted.setFixedCellHeight(27);
-                            listPlaceSeleted.setFixedCellWidth(100);
-                            listPlaceSeleted.setBorder(new EmptyBorder(10,10, 10, 10));
+                            listPlaceTourisSelected.setFixedCellHeight(27);
+                            listPlaceTourisSelected.setFixedCellWidth(100);
+                            listPlaceTourisSelected.setBorder(new EmptyBorder(10,10, 10, 10));
 
-                            listPlaceSeleted.setSelectedIndex(0);
-                            listPlaceSeleted.setVisibleRowCount(10);
-                            listPlaceSeleted.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-                            scrollPanePlaceSeleted.setViewportView(listPlaceSeleted);
+                            listPlaceTourisSelected.setSelectedIndex(0);
+                            listPlaceTourisSelected.setVisibleRowCount(10);
+                            listPlaceTourisSelected.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+                            scrollPanePlaceSeleted.setViewportView(listPlaceTourisSelected);
                             /******************END COMPONENT PLACE TOUR IS SELECTED*****************/
 
                         /**********ADD COMPONENT FOR PANEL PLACE TOUR*****************/
@@ -599,9 +589,16 @@ public class GUI_Edit_Tour extends JPanel{
                         /**********END ADD COMPONENT FOR PANEL PLACE TOUR***************/
                     /*------------------------END PANEL PLACE TOUR------------------------------*/
 
+                    /*------------------------PANEL GROUP TOUR------------------------------*/
+                        panelGroupTour = new JPanel();
+                        panelGroupTour.setLayout(null);
+                        panelGroupTour.setBackground(Color.white);
+                        panelGroupTour.setBounds(5,5,980,430);
+                    /*------------------------END PANEL GROUP TOUR------------------------------*/
                 /**********ADD COMPONENT FOR PANEL CONTENT*****************/
                     tabbedPaneContent.addTab("--Địa Điểm Tour--", panelPlaceTour);
                     tabbedPaneContent.addTab("--Giá Tour--", panelPriceTour);
+                    tabbedPaneContent.addTab("--Đoàn Tour--", panelGroupTour);
                 /**********END ADD COMPONENT FOR PANEL CONTENT*****************/
             /*------------------------END PANEL CONTENT------------------------------*/
 
@@ -609,7 +606,6 @@ public class GUI_Edit_Tour extends JPanel{
             add(panelHeader);
             add(tabbedPaneContent);
         /***************END ADD COMPONENT FOR PANEL MAIN********************/
-
 
         /*------------------------HANDLE CLICK BUTTON------------------------------*/
             btnSaveTour.addMouseListener(new MouseAdapter() {
@@ -624,10 +620,8 @@ public class GUI_Edit_Tour extends JPanel{
                         if(Pattern.matches(price_PATTERN, price)==false){
                         JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng kiểm giá tour");
                         } else {
-                            if(price.equals(Tour_DTO.getPrice())) {
-                                price = Tour_DTO.getPrice();
-                            }
-                            String parameter = "{\"id\":\""+Tour_DTO.getTourId()+"\",\"name\":\""+name+"\",\"specification\":\""+specification+"\",\"tourCategoryId\":\"b079a901-ee32-4fce-8777-72cd55317931\",\"price\":"+price+",\"status\":1}";
+                            String parameter = "{\"id\":"+Tour_DTO.getTourId()+",\"name\":\""+name+"\",\"specification\":\""+specification+"\",\"tourCategoryId\":1,\"price\":"+price+",\"status\":1}";
+                            System.out.println(parameter);
                             APIRequester.sendPUT(parameter, "tours/"+Tour_DTO.getTourId(), user.getToken());
                             JOptionPane.showMessageDialog(null, "Sửa thành công");
                         }
@@ -637,6 +631,12 @@ public class GUI_Edit_Tour extends JPanel{
 
                 }
             });
+        btnBack.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JOptionPane.showMessageDialog(null, "Chức năng sắp hoàn thành");
+            }
+        });
         /*------------------------END HANDLE CLICK BUTTON------------------------------*/
 
         /*========================HANDLE CLICK BUTTON OF PRICE====================================*/
@@ -651,8 +651,6 @@ public class GUI_Edit_Tour extends JPanel{
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     String price = txtPrice.getText();
-//                    String startDate = txtStartDate.getText();
-//                    String endDate = txtEndDate.getText();
 
                     String startDate = formatDateTime(dateChooserStartDate.getDate());
                     String  endDate = formatDateTime(dateChooserEndDate.getDate());
@@ -663,7 +661,7 @@ public class GUI_Edit_Tour extends JPanel{
                         if(Pattern.matches(price_PATTERN, price) == false) {
                             JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng kiểm giá tour");
                         }else {
-                            try {
+
                                 User_DTO user = new User_DTO();
 
                                 String parameter = "{\"tourId\":"+idTour+",\"price\":"+price+",\"startDate\":\""+startDate+"\",\"endDate\":\""+endDate+"\"}";
@@ -672,9 +670,7 @@ public class GUI_Edit_Tour extends JPanel{
                                 LoadDataTableTourPrice();
                                 JOptionPane.showMessageDialog(null, "Thêm thành công");
                                 clearTextFieldPrice();
-                            } catch (IOException | ParseException ex) {
-                                Logger.getLogger(GUI_Add_Attraction_and_Category_Tour.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+
                         }
                     }else {
                         JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng nhập đầy đủ thông tin");
@@ -691,7 +687,7 @@ public class GUI_Edit_Tour extends JPanel{
                     } else {
                         User_DTO user = new User_DTO();
                         String id = (tableTourPrice.getModel().getValueAt(row, 0).toString());
-                        APIRequester.sendDelete("tourPrices/"+id, user.getToken());
+                        APIRequester.sendDelete("","tourPrices/"+id, user.getToken());
                         LoadDataTableTourPrice();
                         JOptionPane.showMessageDialog(null, "Xoá giá tour thành công");
                     }
@@ -725,8 +721,6 @@ public class GUI_Edit_Tour extends JPanel{
                             txtPrice.setText(price);
                             dateChooserStartDate.setDate(startDateFormat);
                             dateChooserEndDate.setDate(endDateFormat);
-//                            txtStartDate.setText(startDate);
-//                            txtEndDate.setText(endDate);
                             Tour_Price_DTO price_dto = new Tour_Price_DTO(id, price, substringStartDate, substringEndtDate);
                         } catch (java.text.ParseException parseException) {
                             parseException.printStackTrace();
@@ -749,99 +743,231 @@ public class GUI_Edit_Tour extends JPanel{
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     String price = txtPrice.getText();
-//                    String startDate = txtStartDate.getText();
-//                    String endDate = txtEndDate.getText();
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     String startDate = dateFormat.format(dateChooserStartDate.getDate());
                     String  endDate = dateFormat.format(dateChooserEndDate.getDate());
-                    if(checkDifferentPrice(price, startDate, endDate)==false){
-                        User_DTO user = new User_DTO();
-                        String parameter = "{\"id\":"+Tour_Price_DTO.getPriceId()+",\"price\":"+price+",\"startDate\":\""+startDate+"\",\"endDate\":\""+endDate+"\"}";
-                        System.out.println(parameter);
-                        APIRequester.sendPUT(parameter, "tourPrices/"+Tour_Price_DTO.getPriceId(), user.getToken());
-                        clearTextFieldPrice();
-                        buttonSavePrice.setVisible(false);
-                        buttonCancelPrice.setVisible(false);
-                        buttonAddPrice.setVisible(true);
-                        buttonClearFieldPrice.setVisible(true);
-                        JOptionPane.showMessageDialog(null, "Sửa thành công");
+                    if( !empty( price ) && !empty( startDate ) && !empty(endDate)) {
+                        if(checkDifferentPrice(price, startDate, endDate)==false){
+                            String price_PATTERN = "^[0-9]+$";
+                            if(Pattern.matches(price_PATTERN, price) == false) {
+                                JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng kiểm giá tour");
+                            }else {
+                                User_DTO user = new User_DTO();
+                                String parameter = "{\"id\":"+Tour_Price_DTO.getPriceId()+",\"price\":"+price+",\"startDate\":\""+startDate+"\",\"endDate\":\""+endDate+"\"}";
+                                //APIRequester.sendPUT(parameter, "tourPrices/"+Tour_Price_DTO.getPriceId(), user.getToken());
+                                String response = Handle_API_Tour_Price.sendPut_Tour_Price(parameter,"tourPrices/"+Tour_Price_DTO.getPriceId(), user.getToken());
+                                if(response.equals("success")){
+                                    clearTextFieldPrice();
+                                    LoadDataTableTourPrice();
+                                    buttonSavePrice.setVisible(false);
+                                    buttonCancelPrice.setVisible(false);
+                                    buttonAddPrice.setVisible(true);
+                                    buttonClearFieldPrice.setVisible(true);
+                                }
+                            }
+
+                        }else {
+                            JOptionPane.showMessageDialog(null, "Giá tour không có thay đổi");
+                        }
                     }else {
-                        JOptionPane.showMessageDialog(null, "Giá tour không có thay đổi");
+                        JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng nhập đầy đủ thông tin");
                     }
                 }
             });
             /*========================END HANDLE CLICK BUTTON OF PRICE====================================*/
 
-    }
-
-    public static ArrayList<String> TourAttractionsList()
-    {
-        ArrayList<String> arrayTourAttractions = new ArrayList<>();
-        User_DTO user = new User_DTO();
-        Handle_API_Tour_Attractions tourAttractions = new Handle_API_Tour_Attractions();
-        JSONArray result = new JSONArray(Handle_API_Tour_Attractions.Fetch_API_Tour_Attraction("touristAttractions?Page=1&Limit=100", user.getToken()));
-            for(int i = 0; i < result.length(); i++){
-                JSONObject jsonObj;
-                try {
-                    jsonObj = result.getJSONObject(i);
-                    String name = jsonObj.get("name").toString();
-
-                    arrayTourAttractions.add(name);
-
-                } catch (JSONException ex) {
-                    Logger.getLogger(GUI_Edit_Tour.class.getName()).log(Level.SEVERE, null, ex);
+        tabbedPaneContent.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int i = tabbedPaneContent.getSelectedIndex();
+                if(i == 2) {
+                    panelGroupTour.removeAll();
+                    panelGroupTour.add(new GUI_Table_Group());
+                    repaint();
                 }
             }
+        });
 
-        return arrayTourAttractions;
-    }
-    private void UpdateJList(){
-        model = new DefaultListModel<String>();
-        for(String p : TourAttractionsList()){
-             model.addElement(p);
-        }
-        listPlaceTour.setModel(model);
-        listPlaceTour.setSelectedIndex(0);
-        listPlaceTour.setFont(new Font("Arial",Font.ITALIC,14));
+        /*======================== HANDLE HANDLE EVENT JLIST ATTRACTION====================================*/
+            listPlaceTour.addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
+                    if(e.getValueIsAdjusting()){
+                        for(Object x : dataAttraction.keySet()){
+                            if(listPlaceTour.getSelectedValue().equals(x)){
+                                String idAttraction = dataAttraction.get(x);
+                                Tour_Attraction_DTO tour_attraction_dto = new Tour_Attraction_DTO(idAttraction);
+                            }
+                        }
+                    }
+                }
+            });
+
+        listPlaceTourisSelected.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if(e.getValueIsAdjusting()){
+                    for(Object x : dataAttractionisSelected.keySet()){
+                        if(listPlaceTourisSelected.getSelectedValue().equals(x)){
+                            String idAttraction = dataAttractionisSelected.get(x);
+                            Tour_Attraction_DTO tour_attraction_dto = new Tour_Attraction_DTO(idAttraction);
+                        }
+                    }
+                }
+            }
+        });
+
+        btnAddPlaceTour.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                User_DTO user_dto = new User_DTO();
+                String parameter = "{\"tourId\":"+Tour_DTO.getTourId()+",\"touristAttractionIds\":["+Tour_Attraction_DTO.getAttractionsId()+"]}";
+                Handle_API_Tour_Attractions.sendPostTourDetail(parameter,"tourDetail", user_dto.getToken());
+                modelAttractionTourisSelected.clear();
+                UpdateJListSelected();
+            }
+        });
+
+        btnRemovePlaceTour.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                User_DTO user_dto = new User_DTO();
+                String parameter = "{\"tourId\":"+Tour_DTO.getTourId()+",\"touristAttractionIds\":["+Tour_Attraction_DTO.getAttractionsId()+"]}";
+                System.out.println(parameter);
+                Handle_API_Tour_Attractions.sendDeleteTourDetail(parameter,"tourDetail", user_dto.getToken());
+                modelAttractionTourisSelected.clear();
+                UpdateJListSelected();
+            }
+        });
+        /*======================== END HANDLE HANDLE EVENT JLIST ATTRACTION====================================*/
+
+
     }
 
-    public static ArrayList<String> TourAttractionsListisSelected(){
+    public static HashMap<String, String> hashMapTourAttraction(){
         User_DTO user = new User_DTO();
-        ArrayList<String> arrayTourAttractions = new ArrayList<>();
-        JSONArray json = new JSONArray(Handle_API_Tour_Id.Fetch_API_Tour_Id_Detail("tours/"+Tour_DTO.getTourId(), user.getToken()));
-            for(int i = 0 ; i < json.length(); i++){
-                try {
-                    JSONObject obj = (JSONObject) json.get(i);
-                    JSONObject my = (JSONObject) obj.get("touristAttraction");
+        dataAttraction = new HashMap<String, String>();
+        JSONArray result = new JSONArray(Handle_API_Tour_Attractions.Fetch_API_Tour_Attraction("touristAttractions?Page=1&Limit=100", user.getToken()));
+        for(int i = 0; i < result.length(); i++){
+            JSONObject jsonObj;
+            try {
+                jsonObj = result.getJSONObject(i);
+                String name = jsonObj.get("name").toString();
+                String id = jsonObj.get("id").toString();
+
+                dataAttraction.put(name,id);
+
+            } catch (JSONException ex) {
+                Logger.getLogger(GUI_Edit_Tour.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return dataAttraction;
+    }
+    public void UpdateListAttractionTour(){
+        hashMapTourAttraction();
+        modelAttractionTour = new  DefaultListModel<String>();
+        listPlaceTour = new JList<String>(modelAttractionTour);
+        for(Object object : dataAttraction.keySet()){
+            modelAttractionTour.addElement(String.valueOf(object));
+        }
+        listPlaceTour.setModel(modelAttractionTour);
+        listPlaceTour.setFont(new Font("Arial",Font.ITALIC,14));
+
+    }
+
+    public static HashMap<String, String> TourAttractionsListisSelected(){
+        User_DTO user = new User_DTO();
+        dataAttractionisSelected = new HashMap<String, String>();
+        JSONArray result = new JSONArray(Handle_API_Tour_Id.Fetch_API_Tour_Id_Detail("tours/"+Tour_DTO.getTourId(), user.getToken()));
+        for(int i = 0; i < result.length(); i++){
+            try {
+                JSONObject obj = (JSONObject) result.get(i);
+                JSONObject my = (JSONObject) obj.get("touristAttraction");
 
                     String name = my.get("name").toString();
+                    String id = my.get("id").toString();
 
-                    arrayTourAttractions.add(name);
-                } catch (JSONException ex) {
-                    Logger.getLogger(ProjectTourManagement.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                dataAttractionisSelected.put(name,id);
+
+            } catch (JSONException ex) {
+                Logger.getLogger(GUI_Edit_Tour.class.getName()).log(Level.SEVERE, null, ex);
             }
-        return arrayTourAttractions;
+        }
+        return dataAttractionisSelected;
+    }
+    public void UpdateJListSelected(){
+        TourAttractionsListisSelected();
+        for(Object object : dataAttractionisSelected.keySet()){
+            modelAttractionTourisSelected.addElement(String.valueOf(object));
+        }
+        listPlaceTourisSelected.setModel(modelAttractionTourisSelected);
+        listPlaceTourisSelected.setFont(new Font("Arial",Font.ITALIC,14));
+
     }
 
-        private void UpdateJListSelected(){
-        model = new DefaultListModel<String>();
-        for(String p : TourAttractionsListisSelected()){
-             model.addElement(p);
+    public static Map<String, String> categoryMap(){
+        User_DTO user = new User_DTO();
+        Map<String, String> category_dtoMap =  new HashMap<>();
+        JSONArray array = new JSONArray(Handle_API_Tour_Category.Fetch_API_Tour_Category("tourCategories?Page=1&Limit=100", user.getToken()));
+        for(int i = 0; i < array.length(); i++){
+            try {
+                JSONObject jsonObject = (JSONObject) array.get(i);
+                String id = jsonObject.get("id").toString();
+                String name = jsonObject.get("name").toString();
+                Tour_Category_DTO category = new Tour_Category_DTO(id, name);
+                category_dtoMap.put(Tour_Category_DTO.getCategoryId(), Tour_Category_DTO.getCategoryName());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-        listPlaceSeleted.setModel(model);
-        listPlaceSeleted.setSelectedIndex(0);
-        listPlaceSeleted.setFont(new Font("Arial",Font.ITALIC,14));
+        return category_dtoMap;
     }
+
+    public void getCategoryComboBox(){
+        System.out.println("category:"+Tour_DTO.getTourCategoryId());
+        Map<String, String> map = categoryMap();
+        Set<String> set = map.keySet();
+        int i = 0;
+        for (String key : set) {
+            comboBoxCategoryTour.addItem(map.get(key));
+            if (Tour_DTO.getTourCategoryId().equals(key) == true){
+                //comboBoxCategoryTour.getModel().setSelectedItem(map.get(key));
+                comboBoxCategoryTour.setSelectedIndex(i);
+            }
+            i++;
+        }
+
+    }
+    public void selectedComboBoxStatusTour(){
+        Map<Integer, String> map = new  HashMap<>();
+        map.put(1, "Đang Mở");
+        map.put(2, "Đã Đóng");
+        map.put(3, "Tạm Hoãn");
+        Set<Integer> set = map.keySet();
+        int i = 0;
+        for (Integer key : set){
+            comboBoxStatusTour.addItem(map.get(key));
+            int status = Integer.parseInt(Tour_DTO.getStatus());
+            if(status == key){
+                comboBoxStatusTour.setSelectedIndex(i);
+            }
+            i++;
+        }
+    }
+
     public static boolean checkDifferentTour(String name, String specification, String price){
-        if(name.equals(Tour_DTO.getTourName())== true && specification.equals(Tour_DTO.getSpecification())== true && price.equals(Tour_DTO.getPrice())== true){
+        if(name.equals(Tour_DTO.getTourName())== true &&
+                specification.equals(Tour_DTO.getSpecification())== true &&
+                price.equals(Tour_DTO.getPrice())== true){
             return true;
         }
         return false;
     }
 
     public static boolean checkDifferentPrice(String price, String startDate, String endDate){
-        if(price.equals(Tour_Price_DTO.getPrice())== true && startDate.equals(Tour_Price_DTO.getStartDate())== true && endDate.equals(Tour_Price_DTO.getEndDate())== true){
+        if(price.equals(Tour_Price_DTO.getPrice())== true &&
+                startDate.equals(Tour_Price_DTO.getStartDate())== true &&
+                endDate.equals(Tour_Price_DTO.getEndDate())== true){
             return true;
         }
         return false;
@@ -849,8 +975,10 @@ public class GUI_Edit_Tour extends JPanel{
 
     public void LoadDataTableTourPrice(){
         User_DTO user = new User_DTO();
-        JSONArray json = new JSONArray(Handle_API_Tour_Price.Fetch_API_Tour_Price("tourPrices?Page=1&Limit=100", user.getToken()));
-        Vector<Vector<String>> dataList = new Vector<>();
+        JSONArray json = new JSONArray(Handle_API_Tour_Price.Fetch_API_Tour_Price("tours/"+Tour_DTO.getTourId()+"/tourPrices?Page=1&Limit=100", user.getToken()));
+//        Vector<Vector<String>> dataList = new Vector<>();
+
+        modelTablePriceTour.setRowCount(0);
         for (int i = 0; i < json.length(); i++) {
 
             JSONObject jsonObj;
@@ -864,26 +992,20 @@ public class GUI_Edit_Tour extends JPanel{
                 data.add(jsonObj.get("startDate").toString());
                 data.add(jsonObj.get("endDate").toString());
 
-                dataList.add(data);
+                modelTablePriceTour.addRow(data);
             } catch (JSONException ex) {
                 Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
-        Vector<String> columnNames = new Vector<>();
 
-        columnNames.add("Mã Giá");
-        columnNames.add("Mã Tour");
-        columnNames.add("Giá");
-        columnNames.add("Ngày Bắt Đầu");
-        columnNames.add("Ngày Kết Thúc");
-        tableTourPrice = new JTable(dataList, columnNames);
+
+
+        tableTourPrice.setModel(modelTablePriceTour);
 
     }
     public void clearTextFieldPrice(){
         txtPrice.setText("");
-//        txtStartDate.setText("");
-//        txtEndDate.setText("");
         dateChooserEndDate.setCalendar(null);
         dateChooserStartDate.setCalendar(null);
     }

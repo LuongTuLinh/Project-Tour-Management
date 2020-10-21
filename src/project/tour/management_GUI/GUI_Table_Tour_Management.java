@@ -32,6 +32,9 @@ import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import project.tour.management_DTO.EnumStatusTour;
 import project.tour.management_DTO.User_DTO;
 import project.tour.management_Handle_API.Handle_API_Get_Tour;
 import project.tour.management_Handle_API.Handle_API_Tour_Id;
@@ -65,8 +68,8 @@ public class GUI_Table_Tour_Management extends JPanel{
     /*************END DECLARE ELEMENT JPANEL PANEL BUTTON HANDLE TOUR********************/
         
     /*************DECLARE ELEMENT JPANEL CONTENT********************/
-        private JTable tableTour;
-        private DefaultTableModel modelTable;
+        public JTable tableTour;
+        public DefaultTableModel modelTableTour;
         private JScrollPane scrollPane;
     /*************DECLARE ELEMENT JPANEL CONTENT********************/
     public GUI_Table_Tour_Management(){
@@ -172,7 +175,16 @@ public class GUI_Table_Tour_Management extends JPanel{
             panelContent.setLayout(null);
             panelContent.setBackground(Color.white);
             panelContent.setBounds(0, 175, 990, 420);
-                
+
+            Vector<String> columnNames = new Vector<>();
+            columnNames.add("Mã Tour");
+            columnNames.add("Tên Tour");
+            columnNames.add("Loại Tour");
+            columnNames.add("Trạng Thái");
+            columnNames.add("Giá Tour");
+            modelTableTour = new DefaultTableModel(columnNames, 0);
+            tableTour = new JTable(modelTableTour);
+
             LoadDataTable();
             
                 tableTour.setRowHeight(25);
@@ -248,13 +260,11 @@ public class GUI_Table_Tour_Management extends JPanel{
                     LoadDataTable();
                 }
             });
-            
+
             btnAddTour.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    removeAll();
-                    add(new GUI_Add_Tour());
-                    repaint();
+                    JOptionPane.showMessageDialog(null, "Chức năng sắp hoàn thành");
                 }
             });
         /*------------------------END HANDLE EVENT ONCLICK MOUSE BUTTON-----------------------------*/
@@ -264,7 +274,8 @@ public class GUI_Table_Tour_Management extends JPanel{
                 Handle_API_Get_Tour api_tour = new Handle_API_Get_Tour();
                 User_DTO user = new User_DTO();
                 JSONArray json = new JSONArray(Handle_API_Get_Tour.Fetch_API_Tour("tours?Page=1&Limit=100", user.getToken()));
-                Vector<Vector<String>> dataList = new Vector<>();
+//                Vector<Vector<String>> dataList = new Vector<>();
+                modelTableTour.setRowCount(0);
                 for (int i = 0; i < json.length(); i++) {
 
                     JSONObject jsonObj;
@@ -274,23 +285,22 @@ public class GUI_Table_Tour_Management extends JPanel{
 
                         data.add(jsonObj.get("id").toString());
                         data.add(jsonObj.get("name").toString());
-                        data.add(jsonObj.get("tourCategoryId").toString());
-                        data.add(jsonObj.get("status").toString());
+
+                        JSONParser parser = new JSONParser();
+                        org.json.simple.JSONObject myObject;
+                            myObject = (org.json.simple.JSONObject) parser.parse(jsonObj.get("tourCategory").toString());
+                        data.add(myObject.get("name").toString());
+                        int status = Integer.parseInt(jsonObj.get("status").toString());
+                        EnumStatusTour statusTour = EnumStatusTour.getWeekDayByValue(status);
+                        data.add(statusTour.toString());
                         data.add(jsonObj.get("price").toString());
 
-                        dataList.add(data);
-                    } catch (JSONException ex) {
+                        modelTableTour.addRow(data);
+                    } catch (JSONException | ParseException ex) {
                         Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
                 }
-                Vector<String> columnNames = new Vector<>();
-                columnNames.add("Mã Tour");
-                columnNames.add("Tên Tour");
-                columnNames.add("Loại Tour");
-                columnNames.add("Trạng Thái");
-                columnNames.add("Giá Tour");
-
-                 tableTour = new JTable(dataList, columnNames);
+                tableTour.setModel(modelTableTour);
           }
 }

@@ -12,6 +12,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import project.tour.management_API.APIRequester;
+import project.tour.management_DTO.User_DTO;
+
+import javax.swing.*;
 
 /**
  *
@@ -35,5 +38,37 @@ public class Handle_API_Tour_Attractions {
         }
         return null;
 
+    }
+    public static Object sendPostTourDetail(String parameter, String endpoint, String token){
+        JSONParser parser = new JSONParser();
+        JSONObject myObject;
+        try {
+            myObject = (JSONObject) parser.parse(APIRequester.sendPOST(parameter, endpoint, token));
+
+            if(myObject.get("ApiErr") == null) {
+                System.out.println("TourDetail Add Success");
+            } else {
+                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static Object sendDeleteTourDetail(String parameter, String endpoint, String token){
+        JSONParser parser = new JSONParser();
+        JSONObject myObject;
+        try {
+            myObject = (JSONObject) parser.parse(APIRequester.sendDelete(parameter, endpoint, token));
+
+            if(myObject.get("ApiErr") == null) {
+                System.out.println("TourDetail Delete Success");
+            } else {
+                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

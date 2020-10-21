@@ -91,9 +91,7 @@ public class Tour_DTO {
         return tourCategoryId;
     }
 
-    public void setTourCategoryId(String tourCategoryId) {
+    public static void setTourCategoryId(String tourCategoryId) {
         Tour_DTO.tourCategoryId = tourCategoryId;
     }
-    
-    
 }
