@@ -34,6 +34,7 @@ public class APIRequester {
              connection = (HttpURLConnection) urlForGetRequest.openConnection();
             connection.setAllowUserInteraction(true);
             connection.setRequestMethod("GET");
+            connection.setRequestProperty("content-type", "application/json; charset=utf-8");
             connection.setRequestProperty("Authorization", "Bearer " + token);
 
             int responseCode = connection.getResponseCode();

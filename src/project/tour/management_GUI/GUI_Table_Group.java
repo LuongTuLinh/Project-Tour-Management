@@ -24,6 +24,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GUI_Table_Group extends JPanel {
+    Tour_DTO tour_dto;
+    User_DTO user_dto;
+    Tour_Group_DTO tour_group_dto;
     /*==================DECLARE ELEMENT OF JPANEL=========================*/
 
         private JLabel labelNameGroup;
@@ -259,7 +262,7 @@ public class GUI_Table_Group extends JPanel {
                 String startDate = formatDateTime(dateChooserStartDate.getDate());
                 String  endDate = formatDateTime(dateChooserEndDate.getDate());
 
-                String  idTour = Tour_DTO.getTourId();
+                String  idTour = tour_dto.getTourId();
                 if( !empty( nameGroup ) && !empty( startDate ) && !empty(endDate)) {
 
                             User_DTO user = new User_DTO();
@@ -321,8 +324,8 @@ public class GUI_Table_Group extends JPanel {
                         txtNameGroup.setText(name);
                         dateChooserStartDate.setDate(startDateFormat);
                         dateChooserEndDate.setDate(endDateFormat);
-                        Tour_Group_DTO tour_group_dto = new Tour_Group_DTO();
-                        tour_group_dto.setGroupId(id);
+                        tour_group_dto = new Tour_Group_DTO(id);
+
                     } catch (java.text.ParseException parseException) {
                         parseException.printStackTrace();
                     }
@@ -349,12 +352,10 @@ public class GUI_Table_Group extends JPanel {
                 String  endDate = dateFormat.format(dateChooserEndDate.getDate());
                 if( !empty( name ) && !empty( startDate ) && !empty(endDate)) {
                     if(checkDifferentGroup(name, startDate, endDate)==false){
-                        Tour_Group_DTO group_dto = new Tour_Group_DTO();
-                        System.out.println(group_dto.getGroupId());
                         User_DTO user = new User_DTO();
-                        String parameter = "{\"id\":"+group_dto.getGroupId()+",\"name\":\""+name+"\",\"price\":1233,\"startDate\":\""+startDate+"\",\"endDate\":\""+endDate+"\"}";
+                        String parameter = "{\"id\":"+tour_group_dto.getGroupId()+",\"name\":\""+name+"\",\"price\":1233,\"startDate\":\""+startDate+"\",\"endDate\":\""+endDate+"\"}";
                         System.out.println(parameter);
-                        String response = Handle_API_Tour_Group.sendPut_Tour_Group(parameter, "groups/"+group_dto.getGroupId(), user.getToken());
+                        String response = Handle_API_Tour_Group.sendPut_Tour_Group(parameter, "groups/"+tour_group_dto.getGroupId(), user.getToken());
                         if(response.equals("success")){
                                 clearTextFieldGroup();
                                 LoadDataTableTourGroup();
@@ -377,7 +378,7 @@ public class GUI_Table_Group extends JPanel {
     }
     public void LoadDataTableTourGroup(){
         User_DTO user = new User_DTO();
-        JSONArray json = new JSONArray(Handle_API_Tour_Group.Fetch_API_Tour_Group("tours/"+Tour_DTO.getTourId()+"/groups?TourId="+Tour_DTO.getTourId()+"&Page=1&Limit=100", user.getToken()));
+        JSONArray json = new JSONArray(Handle_API_Tour_Group.Fetch_API_Tour_Group("tours/"+tour_dto.getTourId()+"/groups?TourId="+tour_dto.getTourId()+"&Page=1&Limit=100", user.getToken()));
 //        Vector<Vector<String>> dataList = new Vector<>();
         modelTableGroup.setRowCount(0);
         for (int i = 0; i < json.length(); i++) {

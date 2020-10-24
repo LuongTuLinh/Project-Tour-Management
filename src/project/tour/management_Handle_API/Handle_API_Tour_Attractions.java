@@ -29,10 +29,13 @@ public class Handle_API_Tour_Attractions {
             myObject = (JSONObject) parser.parse(APIRequester.fetchAPI(endpoint, token));
 
             JSONObject data = (JSONObject) myObject.get("data");
+            if(Integer.parseInt(data.get("totalItems").toString()) >= 1){
+                JSONArray tourAttraction = (JSONArray) data.get("data");
 
-            JSONArray tourAttraction = (JSONArray) data.get("data");
-
-            return tourAttraction;
+                return tourAttraction;
+            }else {
+                return null;
+            }
         } catch (ParseException ex) {
             Logger.getLogger(Handle_API_Get_Tour.class.getName()).log(Level.SEVERE, null, ex);
         }

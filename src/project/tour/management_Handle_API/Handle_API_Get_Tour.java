@@ -26,10 +26,12 @@ public class Handle_API_Get_Tour {
             myObject = (JSONObject) parser.parse(APIRequester.fetchAPI(endpoint, token));
 
             JSONObject data = (JSONObject) myObject.get("data");
-
-            JSONArray userRepsonse = (JSONArray) data.get("data");
-            
-            return userRepsonse;
+            if(Integer.parseInt(data.get("totalItems").toString()) >= 1){
+                JSONArray userRepsonse = (JSONArray) data.get("data");
+                return userRepsonse;
+            }else {
+                return null;
+            }
         } catch (ParseException ex) {
             Logger.getLogger(Handle_API_Get_Tour.class.getName()).log(Level.SEVERE, null, ex);
         }

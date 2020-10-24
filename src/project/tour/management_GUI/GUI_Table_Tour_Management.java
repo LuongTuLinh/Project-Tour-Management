@@ -10,21 +10,16 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -35,8 +30,11 @@ import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import project.tour.management_DTO.EnumStatusTour;
+import project.tour.management_DTO.Tour_Category_DTO;
+import project.tour.management_DTO.Tour_DTO;
 import project.tour.management_DTO.User_DTO;
 import project.tour.management_Handle_API.Handle_API_Get_Tour;
+import project.tour.management_Handle_API.Handle_API_Tour_Category;
 import project.tour.management_Handle_API.Handle_API_Tour_Id;
 
 /**
@@ -55,9 +53,11 @@ public class GUI_Table_Tour_Management extends JPanel{
         private JLabel labelSearch;
         private JLabel lbIconSearch;
         private JTextField txtSearch;
-        private JComboBox<String> comboBoxCategoryTour;
-        private JComboBox<String> comboBoxCharacteristicsTour;
-        private JComboBox<String> comboBoxPriceTour;
+        private static JComboBox<Tour_Category_DTO> comboBoxCategoryTour;
+        private JComboBox<String> comboBoxStatusTour;
+        private DefaultListCellRenderer listRenderer;
+        private JButton buttonSearchTour;
+
     /*************END DECLARE ELEMENT JPANEL HEADER********************/
         
     /*************DECLARE ELEMENT JPANEL PANEL BUTTON HANDLE TOUR********************/
@@ -97,31 +97,37 @@ public class GUI_Table_Tour_Management extends JPanel{
                 lbIconSearch = new JLabel();
                 lbIconSearch.setBounds(360,18,25,25);
                 lbIconSearch.setIcon(new ImageIcon(getClass().getResource("/image/icons8_Search_in_Browser_25px.png")));
-                
+
+                listRenderer = new DefaultListCellRenderer();
+                listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER); // center-aligned items
+
                 comboBoxCategoryTour = new JComboBox<>();
-                comboBoxCategoryTour.setModel(new DefaultComboBoxModel<>(new String [] {
-                    "Tour nước ngoài","Tên Tour"}));
-                comboBoxCategoryTour.setBounds(420,16,130,30);
+                loadCategoryTourComboBox();
+                comboBoxCategoryTour.setBounds(420,16,145,30);
                 comboBoxCategoryTour.setFont(new Font("Segoe",Font.BOLD,13));
-                
-                comboBoxCharacteristicsTour = new JComboBox<>();
-                comboBoxCharacteristicsTour.setModel(new DefaultComboBoxModel<>(new String [] {
-                    "Tour nước ngoài","Tour nước ngoài"}));
-                comboBoxCharacteristicsTour.setBounds(620,16,130,30);
-                comboBoxCharacteristicsTour.setFont(new Font("Segoe",Font.BOLD,13));
-                
-                comboBoxPriceTour = new JComboBox<>();
-                comboBoxPriceTour.setModel(new DefaultComboBoxModel<>(new String [] {
-                    "Tour nước ngoài","Đang Mở"}));
-                comboBoxPriceTour.setBounds(810,16,130,30);
-                comboBoxPriceTour.setFont(new Font("Segoe",Font.BOLD,13));
+                comboBoxCategoryTour.setRenderer(listRenderer);
+
+                comboBoxStatusTour = new JComboBox<>();
+                comboBoxStatusTour.setBounds(620,16,130,30);
+                comboBoxStatusTour.setFont(new Font("Segoe",Font.BOLD,13));
+                selectedComboBoxStatusTour();
+                    comboBoxStatusTour.setRenderer(listRenderer);
+
+                buttonSearchTour = new JButton("Tìm kiếm");
+                buttonSearchTour.setBackground(new Color(26, 26, 26));
+                buttonSearchTour.setFont(new Font("Segoe",Font.BOLD,13));
+                buttonSearchTour.setForeground(Color.WHITE);
+                buttonSearchTour.setBounds(810,16,130,30);
+                buttonSearchTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
             /****************ADD ELEMENT FOR PANEL HEADER***********************/
                 panelHeader.add(labelSearch);
                 panelHeader.add(txtSearch);
                 panelHeader.add(lbIconSearch);
                 panelHeader.add(comboBoxCategoryTour);
-                panelHeader.add(comboBoxCharacteristicsTour);
-                panelHeader.add(comboBoxPriceTour);
+                panelHeader.add(comboBoxCategoryTour);
+                panelHeader.add(comboBoxStatusTour);
+                panelHeader.add(buttonSearchTour);
             /***************END ADD ELEMENT FOR PANEL HEADER**********************/
           
           /*------------------------END PANEL HEADER INCLUDE BUTTON AND SEARCH-----------------------------*/
@@ -139,21 +145,22 @@ public class GUI_Table_Tour_Management extends JPanel{
                 btnEditTour.setBackground(new Color(239, 198, 74));
                 btnEditTour.setFont(new Font("Segoe",Font.BOLD,13));
                 btnEditTour.setForeground(Color.WHITE);
-                btnEditTour.setBounds(20,20,115,30); 
+                btnEditTour.setBounds(160,20,115,30);
                 btnEditTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                 btnDeleteTour = new JButton("Xoá Tour");
                 btnDeleteTour.setBackground(new Color(219, 50, 54));
                 btnDeleteTour.setFont(new Font("Segoe",Font.BOLD,13));
                 btnDeleteTour.setForeground(Color.WHITE);
-                btnDeleteTour.setBounds(160,20,115,30); 
+                btnDeleteTour.setBounds(160,20,115,30);
+                btnDeleteTour.setBounds(310,20,115,30);
                 btnDeleteTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                 btnAddTour = new JButton("Thêm Tour");
                 btnAddTour.setBackground(new Color(41, 149, 85));
                 btnAddTour.setFont(new Font("Segoe",Font.BOLD,13));
                 btnAddTour.setForeground(Color.WHITE);
-                btnAddTour.setBounds(310,20,115,30); 
+                btnAddTour.setBounds(20,20,115,30);
                 btnAddTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                 btnSaveTour = new JButton("Làm mới");
@@ -232,6 +239,82 @@ public class GUI_Table_Tour_Management extends JPanel{
         /******************END ADD ELEMENT FOR PANEL MAIN************************/
         
         /*------------------------HANDLE EVENT ONCLICK MOUSE BUTTON-----------------------------*/
+            buttonSearchTour.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    String nameTour = txtSearch.getText();
+                    Tour_Category_DTO category_dto = (Tour_Category_DTO) (comboBoxCategoryTour.getSelectedItem());
+                    String categoryId = category_dto.getCategoryId();
+                    if(categoryId.equals("0")){
+                        categoryId = "";
+                    }
+
+                    String status = comboBoxStatusTour.getSelectedItem().equals("--Trạng Thái--") == false
+                            ? comboBoxStatusTour.getSelectedItem().toString() : "";
+                    if(status.equals("Đang Mở") == true) {
+                        status = "1";
+                    }else if(status.equals("Đã Đóng") == true){
+                        status = "2";
+                    }else if(status.equals("Tạm Hoãn") == true){
+                        status = "3";
+                    }
+
+                    if(!empty(nameTour)){
+                        nameTour = encodeValue(nameTour);
+                    }else {
+                        nameTour="";
+                    }
+
+                    if(nameTour.equals("") == false){
+                        if(categoryId.equals("") == true&&status.equals("") == true){
+                            //1 minh name
+                            String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like";
+                            loadDataTableAfterSearch(parameter);
+                        }
+                        if(categoryId.equals("") == false||status.equals("") == false) {
+                            if(categoryId.equals("") == false&&status.equals("") == true){
+                                // name va category
+                                String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==";
+                                loadDataTableAfterSearch(parameter);
+                            }
+                            if(categoryId.equals("") == true&&status.equals("") == false){
+                                // name va status
+                                String parameter ="&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[status]=\""+status+"\"&FilterConditions[status]==";
+                                loadDataTableAfterSearch(parameter);
+                            }
+                            if(categoryId.equals("") == false&&status.equals("") == false){
+                                // name va category va status
+                                String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[status]=\""+status+"\"&FilterConditions[status]==";
+                                loadDataTableAfterSearch(parameter);
+                            }
+                        }
+                    }
+                    if(nameTour.equals("") == true){
+                        if(categoryId.equals("") == true&&status.equals("") == true){
+                            JOptionPane.showMessageDialog(null, "Vui lòng nhập tên hoặc chọn để tìm kiếm");
+                        }
+                        if(categoryId.equals("") == false||status.equals("") == false){
+                            if(categoryId.equals("") == false&&status.equals("") == true){
+                                // category
+                                String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==";
+                                loadDataTableAfterSearch(parameter);
+                            }
+                            if(categoryId.equals("") == true&&status.equals("") == false){
+                                // status
+                                String parameter = "&Filters[status]=\""+status+"\"&FilterConditions[status]==";
+                                loadDataTableAfterSearch(parameter);
+                            }
+                            if(categoryId.equals("") == false&&status.equals("") == false){
+                                // status
+                                String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[status]=\""+status+"\"&FilterConditions[status]==";
+                                loadDataTableAfterSearch(parameter);
+                            }
+                        }
+                    }
+
+                }
+            });
+
             btnEditTour.addMouseListener(new MouseAdapter() {
                 @Override
                     public void mouseClicked(MouseEvent e){
@@ -303,4 +386,86 @@ public class GUI_Table_Tour_Management extends JPanel{
                 }
                 tableTour.setModel(modelTableTour);
           }
+
+          public void loadDataTableAfterSearch(String parameter){
+              System.out.println(parameter);
+              Handle_API_Get_Tour api_tour = new Handle_API_Get_Tour();
+              User_DTO user = new User_DTO();
+              JSONArray json = new JSONArray(Handle_API_Get_Tour.Fetch_API_Tour("tours?Page=1&Limit=100"+parameter, user.getToken()));
+              System.out.println(json);
+              if(json.length() >=1) {
+                  modelTableTour.setRowCount(0);
+                  for (int i = 0; i < json.length(); i++) {
+
+                      JSONObject jsonObj;
+                      try {
+                          jsonObj = json.getJSONObject(i);
+                          Vector<String> data = new Vector<>();
+
+                          data.add(jsonObj.get("id").toString());
+                          data.add(jsonObj.get("name").toString());
+
+                          JSONParser parser = new JSONParser();
+                          org.json.simple.JSONObject myObject;
+                          myObject = (org.json.simple.JSONObject) parser.parse(jsonObj.get("tourCategory").toString());
+                          data.add(myObject.get("name").toString());
+                          int status = Integer.parseInt(jsonObj.get("status").toString());
+                          EnumStatusTour statusTour = EnumStatusTour.getWeekDayByValue(status);
+                          data.add(statusTour.toString());
+                          data.add(jsonObj.get("price").toString());
+
+                          modelTableTour.addRow(data);
+                      } catch (JSONException | ParseException ex) {
+                          Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+                      }
+
+                  }
+                  tableTour.setModel(modelTableTour);
+              }else {
+                  JOptionPane.showMessageDialog(null, "Không tìm thấy tour cần tìm");
+              }
+
+          }
+
+    public static void loadCategoryTourComboBox(){
+        User_DTO user = new User_DTO();
+        JSONArray array = new JSONArray(Handle_API_Tour_Category.Fetch_API_Tour_Category("tourCategories?Page=1&Limit=100", user.getToken()));
+        comboBoxCategoryTour.addItem(new Tour_Category_DTO("0", "--Thể Loại Tour--"));
+        for(int i = 0; i < array.length(); i++){
+            try {
+                JSONObject jsonObject = (JSONObject) array.get(i);
+                String id = jsonObject.get("id").toString();
+                String name = jsonObject.get("name").toString();
+                comboBoxCategoryTour.addItem(new Tour_Category_DTO(id, name));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public void selectedComboBoxStatusTour(){
+        Map<Integer, String> map = new HashMap<>();
+        map.put(0, "--Trạng Thái--");
+        map.put(1, "Đang Mở");
+        map.put(2, "Đã Đóng");
+        map.put(3, "Tạm Hoãn");
+        Set<Integer> set = map.keySet();
+        int i = 0;
+        for (Integer key : set){
+            comboBoxStatusTour.addItem(map.get(key));
+            i++;
+        }
+    }
+    public static boolean empty( final String s ) {
+        // Null-safe, short-circuit evaluation.
+        return s == null || s.trim().isEmpty();
+    }
+    private static String encodeValue(String value) {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex.getCause());
+        }
+    }
 }

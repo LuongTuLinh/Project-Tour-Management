@@ -1,13 +1,13 @@
 package project.tour.management_DTO;
 
 public class Tour_Group_DTO {
-    private static String groupId;
-    private static String groupName;
-    private static String price;
-    private static String startDate;
-    private static String endDate;
-    private static String createdAt;
-    private static String lastModifiedAt;
+    private String groupId;
+    private String groupName;
+    private String price;
+    private String startDate;
+    private String endDate;
+    private String createdAt;
+    private String lastModifiedAt;
 
     public Tour_Group_DTO() {
     }
@@ -18,6 +18,10 @@ public class Tour_Group_DTO {
         this.groupName = groupName;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public Tour_Group_DTO(String groupId) {
+        this.groupId = groupId;
     }
 
     public String getGroupId() {

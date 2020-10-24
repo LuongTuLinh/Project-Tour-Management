@@ -10,7 +10,9 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +35,6 @@ import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.simple.parser.ParseException;
 import project.tour.management_API.APIRequester;
 import project.tour.management_DTO.Tour_Attraction_DTO;
 import project.tour.management_DTO.Tour_Category_DTO;
@@ -46,6 +47,8 @@ import project.tour.management_Handle_API.Handle_API_Tour_Category;
  * @author DELL
  */
 public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
+    Tour_Category_DTO category_dto ;
+    Tour_Attraction_DTO tour_attraction_dto;
     private JTabbedPane tabbedPane;
     /*************************DECLARE OF TABBED PANEL*********************************/
         /*-----------------DECLARE PANEL ATTRACTION TOUR-------------------------*/
@@ -74,6 +77,7 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
                 private JLabel labelSearch;
                 private JTextField txtSearch;
                 private JLabel labelIconSearch;
+                private JLabel labelIconRefreshAttraction;
                 
                 private JButton buttonEditAttraction;
                 private JButton buttonDeleteAttraction;
@@ -101,6 +105,7 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
                 private JLabel labelSearchCategory;
                 private JTextField txtSearchCategory;
                 private JLabel labelIconSearchCategory;
+                private JLabel labelIconRefreshCategory;
                 
                 private JButton buttonEditCategory;
                 private JButton buttonDeleteCategory;
@@ -153,6 +158,7 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
                             textAreaDescription.setLineWrap(true);
                             textAreaDescription.setWrapStyleWord(true);
                             textAreaDescription.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                            textAreaDescription.setFont(new Font("Arial, Helvetica, sans-serif", Font.PLAIN, 14));
 
                             scrollPane = new JScrollPane(textAreaDescription);
                             scrollPane.setBounds(40,190,330,200);
@@ -220,6 +226,10 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
                             labelIconSearch.setBounds(410,20,25,25);
                             labelIconSearch.setIcon(new ImageIcon(getClass().getResource("/image/icons8_search_property_25px.png")));
 
+                            labelIconRefreshAttraction = new JLabel();
+                            labelIconRefreshAttraction.setBounds(443,20,25,25);
+                            labelIconRefreshAttraction.setIcon(new ImageIcon(getClass().getResource("/image/icons8_repeat_25px_1.png")));
+
                             Vector<String> columnNames = new Vector<>();
                             columnNames.add("Mã ĐĐ");
                             columnNames.add("Tên Địa Điểm");
@@ -281,6 +291,7 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
                         panelTable.add(labelSearch);
                         panelTable.add(txtSearch);
                         panelTable.add(labelIconSearch);
+                        panelTable.add(labelIconRefreshAttraction);
                         /**************END ADD ELEMENT FOR PANEL TABLE ATTRACTION TOUR*******************/
                     /*===================END PANEL TABLE ATTRACTION TOUR========================*/
                     
@@ -375,6 +386,10 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
                             labelIconSearchCategory.setBounds(410,20,25,25);
                             labelIconSearchCategory.setIcon(new ImageIcon(getClass().getResource("/image/icons8_search_property_25px.png")));
 
+                            labelIconRefreshCategory = new JLabel();
+                            labelIconRefreshCategory.setBounds(443,20,25,25);
+                            labelIconRefreshCategory.setIcon(new ImageIcon(getClass().getResource("/image/icons8_repeat_25px_1.png")));
+
                             Vector<String> columnName = new Vector<>();
                             columnName.add("Mã Thể Loại");
                             columnName.add("Tên Thể Loại");
@@ -434,6 +449,7 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
                         panelTableCategory.add(labelSearchCategory);
                         panelTableCategory.add(txtSearchCategory);
                         panelTableCategory.add(labelIconSearchCategory);
+                        panelTableCategory.add(labelIconRefreshCategory);
                         /**************END ADD ELEMENT FOR PANEL TABLE ATTRACTION TOUR*******************/
                     /*===================END PANEL TABLE ATTRACTION TOUR========================*/
                     
@@ -451,6 +467,24 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
         add(tabbedPane);
         
         /*========================HANDLE CLICK BUTTON OF ATTRACTION====================================*/
+            labelIconSearch.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    String nameAttraction = txtSearch.getText();
+                    if(!empty(nameAttraction)){
+                        nameAttraction = encodeValue(nameAttraction);
+                    }
+                    String parameter = "&Filters[Name]=\""+nameAttraction+"\"&FilterConditions[Name]=like";
+                    LoadDataTableAttractionAfterSearch(parameter);
+                }
+            });
+            labelIconRefreshAttraction.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    LoadDataTableAttraction();
+                }
+            });
+
             buttonClearFieldAttraction.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -512,7 +546,7 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
                         buttonCancelAttraction.setVisible(true);
                         txtNameAttraction.setText(name);
                         textAreaDescription.setText(description);
-                        Tour_Attraction_DTO attraction = new Tour_Attraction_DTO(tourId, name, description);
+                        tour_attraction_dto = new Tour_Attraction_DTO(tourId, name, description);
                     }
                 }
             });
@@ -531,11 +565,11 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
                 public void mouseClicked(MouseEvent e) {
                     String name = txtNameAttraction.getText();
                     String description = textAreaDescription.getText();
-                    if(checkDifferent(name, description)==false){
+                    if(checkDifferent(name, description, tour_attraction_dto)==false){
                         User_DTO user = new User_DTO();
-                        String parameter = "{\"id\":"+Tour_Attraction_DTO.getAttractionsId()+",\"name\":\""+name+"\",\"description\":\""+description+"\"}";
+                        String parameter = "{\"id\":"+tour_attraction_dto.getAttractionsId()+",\"name\":\""+name+"\",\"description\":\""+description+"\"}";
                         System.out.println(parameter);
-                        APIRequester.sendPUT(parameter, "touristAttractions/"+Tour_Attraction_DTO.getAttractionsId(), user.getToken());
+                        APIRequester.sendPUT(parameter, "touristAttractions/"+tour_attraction_dto.getAttractionsId(), user.getToken());
                         clearTextFieldAttraction();
                         LoadDataTableAttraction();
                         buttonSaveAttraction.setVisible(false);
@@ -551,6 +585,25 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
         /*========================END HANDLE CLICK BUTTON OF ATTRACTION====================================*/
 
         /*========================HANDLE CLICK BUTTON OF CATEGORY====================================*/
+            labelIconRefreshCategory.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    LoadDataTableCategory();
+                }
+            });
+
+            labelIconSearchCategory.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    String nameCategory = txtSearchCategory.getText();
+                    if(!empty(nameCategory)){
+                        nameCategory = encodeValue(nameCategory);
+                    }
+                    String parameter = "&Filters[Name]=\""+nameCategory+"\"&FilterConditions[Name]=like";
+                    LoadDataTableCategoryAfterSearch(parameter);
+                }
+            });
+
             buttonClearFieldCategory.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -609,7 +662,7 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
                         buttonSaveCategory.setVisible(true);
                         buttonCancelCategory.setVisible(true);
                         txtNameCategory.setText(name);
-                        Tour_Category_DTO category_dto = new Tour_Category_DTO(tourId, name);
+                        category_dto = new Tour_Category_DTO(tourId, name);
                     }
                 }
             });
@@ -628,11 +681,11 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     String name = txtNameCategory.getText();
-                    if(checkDifferent(name)==false){
+                    if(checkDifferent(name, category_dto)==false){
                         User_DTO user = new User_DTO();
-                        String parameter = "{\"id\":"+Tour_Category_DTO.getCategoryId()+",\"name\":\""+name+"\"}";
+                        String parameter = "{\"id\":"+category_dto.getCategoryId()+",\"name\":\""+name+"\"}";
                         System.out.println(parameter);
-                        APIRequester.sendPUT(parameter, "tourCategories/"+Tour_Category_DTO.getCategoryId(), user.getToken());
+                        APIRequester.sendPUT(parameter, "tourCategories/"+category_dto.getCategoryId(), user.getToken());
                         clearTextFieldCategory();
                         LoadDataTableCategory();
                         buttonSaveCategory.setVisible(false);
@@ -670,9 +723,36 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
 
         }
         tableAttractionTour.setModel(modelTableAttractionTour);
-
-
     }
+
+    public void LoadDataTableAttractionAfterSearch(String parameter){
+        User_DTO user = new User_DTO();
+        JSONArray json = new JSONArray(Handle_API_Tour_Attractions.Fetch_API_Tour_Attraction("touristAttractions?Page=1&Limit=100"+parameter, user.getToken()));
+        if(json.length()>=1){
+            modelTableAttractionTour.setRowCount(0);
+            for (int i = 0; i < json.length(); i++) {
+
+                JSONObject jsonObj;
+                try {
+                    jsonObj = json.getJSONObject(i);
+                    Vector<String> data = new Vector<>();
+
+                    data.add(jsonObj.get("id").toString());
+                    data.add(jsonObj.get("name").toString());
+                    data.add(jsonObj.get("description").toString());
+
+                    modelTableAttractionTour.addRow(data);
+                } catch (JSONException ex) {
+                    Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            tableAttractionTour.setModel(modelTableAttractionTour);
+        }else {
+            JOptionPane.showMessageDialog(null, "Không tìm thấy địa điểm cần tìm");
+        }
+    }
+
     public void LoadDataTableCategory(){
         User_DTO user = new User_DTO();
         JSONArray json = new JSONArray(Handle_API_Tour_Category.Fetch_API_Tour_Category("tourCategories?Page=1&Limit=100", user.getToken()));
@@ -698,19 +778,47 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
 
 
     }
+
+    public void LoadDataTableCategoryAfterSearch(String parameter){
+        User_DTO user = new User_DTO();
+        JSONArray json = new JSONArray(Handle_API_Tour_Category.Fetch_API_Tour_Category("tourCategories?Page=1&Limit=100"+parameter, user.getToken()));
+        if(json.length() >= 1) {
+            modelTableCategoryTour.setRowCount(0);
+            for (int i = 0; i < json.length(); i++) {
+
+                JSONObject jsonObj;
+                try {
+                    jsonObj = json.getJSONObject(i);
+                    Vector<String> data = new Vector<>();
+
+                    data.add(jsonObj.get("id").toString());
+                    data.add(jsonObj.get("name").toString());
+
+                    modelTableCategoryTour.addRow(data);
+                } catch (JSONException ex) {
+                    Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            tableCategoryTour.setModel(modelTableCategoryTour);
+        }else {
+            JOptionPane.showMessageDialog(null, "Không tìm thấy thể loại cần tìm");
+        }
+
+    }
+
     public static boolean empty( final String s ) {
         // Null-safe, short-circuit evaluation.
         return s == null || s.trim().isEmpty();
     }
-    public static boolean checkDifferent(String name, String description){
-        if(name.equals(Tour_Attraction_DTO.getAttractionsName())== true && description.equals(Tour_Attraction_DTO.getDescription())== true){
+    public static boolean checkDifferent(String name, String description, Tour_Attraction_DTO tour_attraction_dto){
+        if(name.equals(tour_attraction_dto.getAttractionsName())== true && description.equals(tour_attraction_dto.getDescription())== true){
             return true;
         }
         return false;
     }
 
-    public static boolean checkDifferent(String name){
-        if(name.equals(Tour_Attraction_DTO.getAttractionsName())== true ){
+    public static boolean checkDifferent(String name, Tour_Category_DTO category_dto){
+        if(name.equals(category_dto.getCategoryName())== true ){
             return true;
         }
         return false;
@@ -722,5 +830,12 @@ public class GUI_Add_Attraction_and_Category_Tour extends JPanel{
     }
     public void clearTextFieldCategory(){
         txtNameCategory.setText("");
+    }
+    private static String encodeValue(String value) {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex.getCause());
+        }
     }
 }

@@ -10,30 +10,36 @@ package project.tour.management_DTO;
  * @author DELL
  */
 public class Tour_Category_DTO {
-    private static String categoryId;
-    private static String categoryName;
+    private String categoryId;
+    private String categoryName;
 
     public Tour_Category_DTO() {
     }
-    public Tour_Category_DTO(String id, String name){
-        Tour_Category_DTO.categoryId = id;
-        Tour_Category_DTO.categoryName = name;
+
+    public Tour_Category_DTO(String categoryId, String categoryName) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
     }
 
-    public static String getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
-    public static void setCategoryId(String categoryId) {
-        Tour_Category_DTO.categoryId = categoryId;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public static String getCategoryName() {
+    public String getCategoryName() {
         return categoryName;
     }
 
-    public static void setCategoryName(String categoryName) {
-        Tour_Category_DTO.categoryName = categoryName;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    @Override
+    public String toString() {
+        return categoryName ;
     }
 }
 

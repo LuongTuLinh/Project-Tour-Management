@@ -12,7 +12,6 @@ package project.tour.management_DTO;
 public class User_DTO {
     private static String email;
     private static String password;
-    private static String phoneNumber;
     private static String firstName;
     private static String lastName;
     private static String token;
@@ -20,9 +19,8 @@ public class User_DTO {
     public User_DTO(){
         
     }
-    public User_DTO(String Email, String phoneNumber, String firstName, String lastName, String token){
+    public User_DTO(String Email, String firstName, String lastName, String token){
         User_DTO.email = Email;
-        User_DTO.phoneNumber = phoneNumber;
         User_DTO.firstName = firstName;
         User_DTO.lastName = lastName;
         User_DTO.token = token;
@@ -47,15 +45,6 @@ public class User_DTO {
     public void setPassword(String password) {
         User_DTO.password = password;
     }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        User_DTO.phoneNumber = phoneNumber;
-    }
-
 
     public String getFirstName() {
         return firstName;
