@@ -40,7 +40,7 @@ public class GUI_Tour_Management extends JFrame{
         private JPanel panelMain;
         private JPanel panelHeader;
         private JPanel panelMenu;
-        private JPanel panelProcessFunction;
+        private static JPanel panelProcessFunction;
     /***********END DECLARE JPANE*************/
         
     /***********DECLARE COMPONENT JPANE HEADER*************/
@@ -400,5 +400,11 @@ public class GUI_Tour_Management extends JFrame{
             });
         /********** END HANDLE ONCLICK CLOSE AND MINIMIZE PROGRAME ************/
       /*------------------------END HANDLE EVENT ONCLICK MOUSE------------------------*/
+    }
+    public static void removeAllAndAddNewPanel(JPanel panel){
+        panelProcessFunction.removeAll();
+        panelProcessFunction.add(panel);
+        panelProcessFunction.validate();
+        panelProcessFunction.repaint();
     }
 }

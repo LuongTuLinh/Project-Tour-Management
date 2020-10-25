@@ -12,10 +12,11 @@ public class Tour_Group_DTO {
     public Tour_Group_DTO() {
     }
 
-    public Tour_Group_DTO(String groupId, String groupName, String startDate,
+    public Tour_Group_DTO(String groupId, String groupName, String price, String startDate,
                           String endDate) {
         this.groupId = groupId;
         this.groupName = groupName;
+        this.price = price;
         this.startDate = startDate;
         this.endDate = endDate;
     }

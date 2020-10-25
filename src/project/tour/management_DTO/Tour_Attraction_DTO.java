@@ -5,6 +5,9 @@
  */
 package project.tour.management_DTO;
 
+import javax.swing.*;
+import javax.swing.event.ListDataListener;
+
 /**
  *
  * @author DELL
@@ -24,6 +27,16 @@ public class Tour_Attraction_DTO {
     }
     public Tour_Attraction_DTO(String id){
         this.attractionsId = id;
+    }
+
+    public Tour_Attraction_DTO(String id, String name){
+        this.attractionsId = id;
+        this.attractionsName = name;
+    }
+
+    @Override
+    public String toString() {
+        return attractionsName;
     }
 
     public String getAttractionsId() {
@@ -49,4 +62,5 @@ public class Tour_Attraction_DTO {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

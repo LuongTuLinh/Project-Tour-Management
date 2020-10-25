@@ -31,6 +31,39 @@ public class Handle_API_Tour_Price {
 
     }
 
+    public static String send_POST_Tour_Price(String parameter, String endpoint, String token) {
+        JSONParser parser = new JSONParser();
+        JSONObject myObject;
+        try {
+            myObject = (JSONObject) parser.parse(APIRequester.sendPOST(parameter, endpoint, token));
+            System.out.println(myObject);
+
+            if((myObject.get("ApiErr") == null && myObject.get("StartDate") == null && myObject.get("EndDate") == null)) {
+                JOptionPane.showMessageDialog(null, "Thêm thành công");
+                return "success";
+            } else {
+                String startDate = myObject.get("StartDate") == null ? "" : myObject.get("StartDate").toString();
+
+                String endDate = myObject.get("EndDate") == null ? "" : myObject.get("EndDate").toString();
+
+                String apierror = myObject.get("ApiErr") == null ? "" : myObject.get("ApiErr").toString();
+                String error = "Error:"+ apierror+"\n"+ startDate+ "\n "+ endDate;
+
+                String[] arrayError = error.split("\\.");
+                String messError = "";
+                for(String s : arrayError){
+                    messError+= s +"\n";
+                }
+
+                JOptionPane.showMessageDialog(null,messError, "My Message", JOptionPane.ERROR_MESSAGE);
+                return "error";
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String sendPut_Tour_Price(String parameter, String endpoint, String token) {
         JSONParser parser = new JSONParser();
         JSONObject myObject;
@@ -38,7 +71,7 @@ public class Handle_API_Tour_Price {
             myObject = (JSONObject) parser.parse(APIRequester.sendPUT(parameter, endpoint, token));
             System.out.println(myObject);
 
-            if(myObject.get("ApiSuccess")!=null && myObject.get("ApiErr") == null && myObject.get("StartDate") == null && myObject.get("EndDate") == null) {
+            if(myObject.get("ApiSuccess")!=null && (myObject.get("ApiErr") == null && myObject.get("StartDate") == null && myObject.get("EndDate") == null)) {
                 JOptionPane.showMessageDialog(null, "Sửa thành công");
                 return "success";
             } else {
@@ -48,8 +81,15 @@ public class Handle_API_Tour_Price {
 
                 String apierror = myObject.get("ApiErr") == null ? "" : myObject.get("ApiErr").toString();
 
-                JOptionPane.showMessageDialog(null,"Error: "+ apierror+
-                        startDate+ endDate);
+                String error = "Error:"+ apierror+"\n"+ startDate+ "\n "+ endDate;
+
+                String[] arrayError = error.split("\\.");
+                String messError = "";
+                for(String s : arrayError){
+                    messError+= s +"\n";
+                }
+
+                JOptionPane.showMessageDialog(null,messError, "My Message", JOptionPane.ERROR_MESSAGE);
                 return "error";
             }
         } catch (ParseException e) {

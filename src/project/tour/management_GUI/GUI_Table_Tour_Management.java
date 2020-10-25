@@ -141,11 +141,11 @@ public class GUI_Table_Tour_Management extends JPanel{
             panelButtonHandleTour.setBorder(borderPanelButton);
             
             
-                btnEditTour = new JButton("Sửa Tour");
+                btnEditTour = new JButton("Chi Tiết Tour");
                 btnEditTour.setBackground(new Color(239, 198, 74));
                 btnEditTour.setFont(new Font("Segoe",Font.BOLD,13));
                 btnEditTour.setForeground(Color.WHITE);
-                btnEditTour.setBounds(160,20,115,30);
+                btnEditTour.setBounds(160,20,125,30);
                 btnEditTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                 btnDeleteTour = new JButton("Xoá Tour");

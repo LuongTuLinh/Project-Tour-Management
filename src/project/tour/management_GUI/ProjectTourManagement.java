@@ -24,6 +24,12 @@ public class ProjectTourManagement {
 
         GUI_Login_Tour_Management login_tour = new GUI_Login_Tour_Management();
         //GUI_Add_New_Tour add_new_tour = new GUI_Add_New_Tour();
+//        JOptionPane.showMessageDialog
+//                (null, "peter_budo"+"\nCode tags enforcer"
+//                        ,"My Message", JOptionPane.WARNING_MESSAGE);
+//        String message = "Line1\nLine2";
+//        JFrame frame = new JFrame();
+//        JOptionPane.showMessageDialog(frame, message);
     }
     
 }

@@ -32,6 +32,8 @@ import project.tour.management_API.APIRequester;
 import project.tour.management_DTO.*;
 import project.tour.management_Handle_API.*;
 
+import static project.tour.management_GUI.GUI_Tour_Management.removeAllAndAddNewPanel;
+
 /**
  *
  * @author DELL
@@ -45,7 +47,7 @@ public class GUI_Edit_Tour extends JPanel{
 
     public static HashMap<String, String> dataAttraction ;
     public static DefaultListModel<String> modelAttractionTour;
-    public JList<String> listPlaceTour  ;
+    public JList<String> listPlaceTour;
 
     public static HashMap<String, String> dataAttractionSearch ;
     public static DefaultListModel<String> modelAttractionTourSearch;
@@ -564,6 +566,7 @@ public class GUI_Edit_Tour extends JPanel{
                             modelAttractionTourisSelected = new  DefaultListModel<String>();
                             listPlaceTourisSelected = new JList<String>(modelAttractionTourisSelected);
                             UpdateJListSelected();
+        //abc();
 
                             listPlaceTourisSelected.setFixedCellHeight(27);
                             listPlaceTourisSelected.setFixedCellWidth(100);
@@ -637,7 +640,7 @@ public class GUI_Edit_Tour extends JPanel{
         btnBack.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(null, "Chức năng sắp hoàn thành");
+                removeAllAndAddNewPanel(new GUI_Table_Tour_Management());
             }
         });
         /*------------------------END HANDLE CLICK BUTTON------------------------------*/
@@ -669,11 +672,12 @@ public class GUI_Edit_Tour extends JPanel{
 
                                 String parameter = "{\"tourId\":"+idTour+",\"price\":"+price+",\"startDate\":\""+startDate+"\",\"endDate\":\""+endDate+"\"}";
                                 System.out.println(parameter);
-                                APIRequester.sendPOST(parameter, "tourPrices", user.getToken());
-                                LoadDataTableTourPrice();
-                                JOptionPane.showMessageDialog(null, "Thêm thành công");
-                                clearTextFieldPrice();
-
+//                                APIRequester.sendPOST(parameter, "tourPrices", user.getToken());
+                                String response = Handle_API_Tour_Price.send_POST_Tour_Price(parameter, "tourPrices", user.getToken());
+                                if(response.equals("success") == true){
+                                    LoadDataTableTourPrice();
+                                    clearTextFieldPrice();
+                                }
                         }
                     }else {
                         JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng nhập đầy đủ thông tin");
@@ -813,6 +817,7 @@ public class GUI_Edit_Tour extends JPanel{
                     for(Object x : dataAttractionisSelected.keySet()){
                         if(listPlaceTourisSelected.getSelectedValue().equals(x)){
                             String idAttraction = dataAttractionisSelected.get(x);
+                            System.out.println(idAttraction);
                             tour_attraction_dto = new Tour_Attraction_DTO(idAttraction);
                         }
                     }
@@ -847,17 +852,26 @@ public class GUI_Edit_Tour extends JPanel{
                 User_DTO user_dto = new User_DTO();
                 String idAttraction ="";
                 for(Object x : dataAttractionisSelected.keySet()){
-                    if(listPlaceTourisSelected.getSelectedValue().equals(x)){
-                        idAttraction = dataAttractionisSelected.get(x);
+                    if(listPlaceTourisSelected.getSelectedValue().equals(dataAttractionisSelected.get(x))){
+                       Object s = listPlaceTourisSelected.getSelectedValue();
+                        System.out.println(s);
+                        System.out.println(listPlaceTourisSelected.getSelectedValue());
+
+                        System.out.println(dataAttractionisSelected.get(x));
+
+                        idAttraction = x.toString();
+
+                        System.out.println(x);
                         //tour_attraction_dto = new Tour_Attraction_DTO(idAttraction);
                     }
                 }
-                String parameter = "{\"tourId\":"+tour_dto.getTourId()+",\"touristAttractionIds\":["+idAttraction+"]}";
-                System.out.println(parameter);
-                Handle_API_Tour_Attractions.sendDeleteTourDetail(parameter,"tourDetail", user_dto.getToken());
-                modelAttractionTourisSelected.clear();
-                UpdateJListSelected();
-                listPlaceTourisSelected.setSelectedIndex(0);
+
+//                String parameter = "{\"tourId\":"+tour_dto.getTourId()+",\"touristAttractionIds\":["+idAttraction+"]}";
+//                System.out.println(parameter);
+//                Handle_API_Tour_Attractions.sendDeleteTourDetail(parameter,"tourDetail", user_dto.getToken());
+//                modelAttractionTourisSelected.clear();
+                //UpdateJListSelected();
+//                listPlaceTourisSelected.setSelectedIndex(0);
             }
         });
 
@@ -865,24 +879,27 @@ public class GUI_Edit_Tour extends JPanel{
             @Override
             public void mouseClicked(MouseEvent e) {
                 User_DTO user = new User_DTO();
-                String parameter = "{ \"tourId\": 1, \"tourDetails\": [ ";
+                String s = "{\"tourId\":"+Tour_DTO.getTourId()+",\"tourDetails\":[";
+                //String parameter = "{ \"tourId\": "+Tour_DTO.getTourId()+", \"tourDetails\": [ ";
                 for (int i = 0; i < listPlaceTourisSelected.getModel().getSize(); i++) {
                     Object item = listPlaceTourisSelected.getModel().getElementAt(i);
                     for(Object x : dataAttractionisSelected.keySet()){
                         if(item.equals(x)){
-                                parameter += "{ \"touristAttractionId\": "+dataAttractionisSelected.get(x)+", \"index\": "+(i+1)+" }, ";
+                                s += "{\"touristAttractionId\":"+dataAttractionisSelected.get(x)+",\"index\":"+(i+1)+"},";
+                                //parameter += "{ \"touristAttractionId\": "+dataAttractionisSelected.get(x)+", \"index\": "+(i+1)+" }, ";
                         }
                     }
                 }
-                parameter += "]}";
-                StringBuilder parameterFormat = new StringBuilder(parameter);
-                System.out.println(parameterFormat.deleteCharAt(parameterFormat.length()-4));
-                String reponse = Handle_API_Tour_Detail.sendPUT_Attraction_Tour(parameterFormat.deleteCharAt(parameterFormat.length()-5).toString(),
+                s += "]}";
+                StringBuilder parameterFormat = new StringBuilder(s);
+                System.out.println(parameterFormat.deleteCharAt(parameterFormat.length()-3));
+                String reponse = Handle_API_Tour_Detail.sendPUT_Attraction_Tour(parameterFormat.deleteCharAt(parameterFormat.length()-3).toString(),
                         "tourDetail", user.getToken());
                 if(reponse.equals("success") == true){
                     JOptionPane.showMessageDialog(null, "Lưu địa điểm thành công");
-                    modelAttractionTourisSelected.clear();
-                    UpdateJListSelected();
+                    //modelAttractionTourisSelected.clear();
+                    modelAttractionTourisSelected.removeAllElements();
+                    //UpdateJListSelected();
                     listPlaceTourisSelected.setSelectedIndex(0);
                 } else {
                     JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi !");
@@ -1050,9 +1067,9 @@ public class GUI_Edit_Tour extends JPanel{
                 JSONObject my = (JSONObject) obj.get("touristAttraction");
 
                     String name = my.get("name").toString();
-                    String id = my.get("id").toString();
+                    String id = obj.get("id").toString();
 
-                dataAttractionisSelected.put(name,id);
+                dataAttractionisSelected.put(id,name);
 
             } catch (JSONException ex) {
                 Logger.getLogger(GUI_Edit_Tour.class.getName()).log(Level.SEVERE, null, ex);
@@ -1063,12 +1080,14 @@ public class GUI_Edit_Tour extends JPanel{
     public void UpdateJListSelected(){
         TourAttractionsListisSelected( tour_dto);
         for(Object object : dataAttractionisSelected.keySet()){
-            modelAttractionTourisSelected.addElement(String.valueOf(object));
+            //String.valueOf(object)
+            modelAttractionTourisSelected.addElement(dataAttractionisSelected.get(object));
         }
         listPlaceTourisSelected.setModel(modelAttractionTourisSelected);
         listPlaceTourisSelected.setFont(new Font("Arial",Font.ITALIC,14));
 
     }
+
     public static void loadCategoryTourComboBox( Tour_DTO tour_dto){
         User_DTO user = new User_DTO();
         JSONArray array = new JSONArray(Handle_API_Tour_Category.Fetch_API_Tour_Category("tourCategories?Page=1&Limit=100", user.getToken()));

@@ -23,6 +23,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static project.tour.management_GUI.GUI_Tour_Management.removeAllAndAddNewPanel;
+
 public class GUI_Table_Group extends JPanel {
     Tour_DTO tour_dto;
     User_DTO user_dto;
@@ -68,15 +70,15 @@ public class GUI_Table_Group extends JPanel {
         //**************TEXTFIELD NAME GROUP*******************//
         labelNameGroup = new JLabel("TÊN ĐOÀN :",JLabel.CENTER);
         labelNameGroup.setFont(new Font("Segoe",Font.BOLD,12));
-        labelNameGroup.setBounds(50,45,80,30);
+        labelNameGroup.setBounds(30,45,80,30);
 
         txtNameGroup = new JTextField();
-        txtNameGroup.setBounds(135,43,150,30);
+        txtNameGroup.setBounds(135,43,180,30);
         txtNameGroup.setBorder(null);
         txtNameGroup.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
 
         sptNameGroup = new JSeparator();
-        sptNameGroup.setBounds(135,73,150,10);
+        sptNameGroup.setBounds(135,73,180,10);
         sptNameGroup.setBackground(new Color(0,0,0));
         //**************END TEXTFIELD NAME GROUP*******************//
 
@@ -172,8 +174,8 @@ public class GUI_Table_Group extends JPanel {
 
 
         /****************SET SIZE COLUMN OF TABLE***********************/
-        tableGroup.getColumnModel().getColumn(0).setPreferredWidth(50);
-        tableGroup.getColumnModel().getColumn(2).setPreferredWidth(50);
+        tableGroup.getColumnModel().getColumn(0).setPreferredWidth(40);
+        tableGroup.getColumnModel().getColumn(2).setPreferredWidth(40);
         /****************SET SIZE COLUMN OF TABLE***********************/
 
 
@@ -186,28 +188,28 @@ public class GUI_Table_Group extends JPanel {
                 this.thumbColor = new Color(19, 113, 106);
             }
         });
-        scrollPaneTableGroup.setBounds(400,10,570,340);
+        scrollPaneTableGroup.setBounds(370,10,600,340);
 
 
         buttonEditGroup = new JButton("Sửa Đoàn Tour");
         buttonEditGroup.setBackground(new Color(255,165, 0));
         buttonEditGroup.setFont(new Font("Segoe",Font.BOLD,13));
         buttonEditGroup.setForeground(Color.WHITE);
-        buttonEditGroup.setBounds(460,360,140,30);
+        buttonEditGroup.setBounds(435,360,140,30);
         buttonEditGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         buttonDetailGroup = new JButton("Chi Tiết Đoàn ");
         buttonDetailGroup.setBackground(new Color(38, 210, 159));
         buttonDetailGroup.setFont(new Font("Segoe",Font.BOLD,13));
         buttonDetailGroup.setForeground(Color.WHITE);
-        buttonDetailGroup.setBounds(630,360,140,30);
+        buttonDetailGroup.setBounds(605,360,140,30);
         buttonDetailGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         buttonDeleteGroup = new JButton("Xoá Đoàn Tour");
         buttonDeleteGroup.setBackground(new Color(214, 38, 53));
         buttonDeleteGroup.setFont(new Font("Segoe",Font.BOLD,13));
         buttonDeleteGroup.setForeground(Color.WHITE);
-        buttonDeleteGroup.setBounds(800,360,140,30);
+        buttonDeleteGroup.setBounds(775,360,140,30);
         buttonDeleteGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         /*------------------------END PANEL TABLE GROUP TOUR------------------------------*/
@@ -243,7 +245,24 @@ public class GUI_Table_Group extends JPanel {
         buttonDetailGroup.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(null, "Chức năng sắp hoàn thành");
+                int row = tableGroup.getSelectedRow();
+                if( row == -1 ){
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn đoàn tour cần xem");
+                }else {
+                    String id = (tableGroup.getModel().getValueAt(row, 0).toString());
+                    System.out.println("id group:"+id);
+                    String name = (tableGroup.getModel().getValueAt(row, 1).toString());
+                    String price = (tableGroup.getModel().getValueAt(row, 3).toString());
+                    String startDate = (tableGroup.getModel().getValueAt(row, 4).toString());
+                    String endDate = (tableGroup.getModel().getValueAt(row, 5).toString());
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String substringStartDate = startDate.substring(0,10);
+                    String substringEndtDate = endDate.substring(0,10);
+
+                    Tour_Group_DTO group_dto = new Tour_Group_DTO(id, name, price, substringStartDate, substringEndtDate);
+                    removeAllAndAddNewPanel(new GUI_Group_Tour_Details(id, name, price, substringStartDate, substringEndtDate));
+                }
             }
         });
         buttonClearFieldGroup.addMouseListener(new MouseAdapter() {
@@ -257,7 +276,6 @@ public class GUI_Table_Group extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String nameGroup = txtNameGroup.getText();
-                int price = 11111;
 
                 String startDate = formatDateTime(dateChooserStartDate.getDate());
                 String  endDate = formatDateTime(dateChooserEndDate.getDate());
@@ -267,13 +285,14 @@ public class GUI_Table_Group extends JPanel {
 
                             User_DTO user = new User_DTO();
 
-                            String parameter = "{\"tourId\":"+idTour+",\"name\":\""+nameGroup+"\",\"price\":"+price+",\"startDate\":\""+startDate+"\",\"endDate\":\""+endDate+"\"}";
+                            String parameter = "{\"tourId\":"+idTour+",\"name\":\""+nameGroup+"\",\"startDate\":\""+startDate+"\",\"endDate\":\""+endDate+"\"}";
                             System.out.println(parameter);
-                            APIRequester.sendPOST(parameter, "groups", user.getToken());
-                            LoadDataTableTourGroup();
-                            JOptionPane.showMessageDialog(null, "Thêm thành công");
-                            clearTextFieldGroup();
-
+//                            APIRequester.sendPOST(parameter, "groups", user.getToken());
+                            String response = Handle_API_Tour_Group.send_POST_Tour_Group(parameter, "groups", user.getToken());
+                            if(response.equals("success") == true){
+                                LoadDataTableTourGroup();
+                                clearTextFieldGroup();
+                            }
                 }else {
                     JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng nhập đầy đủ thông tin");
                 }
@@ -302,7 +321,7 @@ public class GUI_Table_Group extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int row = tableGroup.getSelectedRow();
                 if( row == -1 ){
-                    JOptionPane.showMessageDialog(null, "Vui lòng chọn giá tour cần sửa");
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn đoàn tour cần sửa");
                 }else {
                     String id = (tableGroup.getModel().getValueAt(row, 0).toString());
                     System.out.println("id group:"+id);

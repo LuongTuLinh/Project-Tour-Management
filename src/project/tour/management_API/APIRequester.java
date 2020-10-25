@@ -38,6 +38,7 @@ public class APIRequester {
             connection.setRequestProperty("Authorization", "Bearer " + token);
 
             int responseCode = connection.getResponseCode();
+            System.out.println(responseCode);
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 StringBuilder response;
                  in = new BufferedReader(
@@ -80,6 +81,7 @@ public class APIRequester {
         try {
             obj = new URL(url + "/" + endpoint);
             System.out.println(obj);
+            System.out.println(parameter);
             trustCertificateBeforeRequest();
 
             httpURLConnection = (HttpURLConnection) obj.openConnection();
@@ -187,7 +189,7 @@ public class APIRequester {
         } catch (IOException e) {
 
         }
-        return null;
+        return "{\"ApiErr\": \"Error\"}";
 
     }
     
