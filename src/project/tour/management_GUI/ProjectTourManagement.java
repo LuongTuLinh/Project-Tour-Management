@@ -23,6 +23,7 @@ public class ProjectTourManagement {
 //            } catch(Exception ignored){}
 
         GUI_Login_Tour_Management login_tour = new GUI_Login_Tour_Management();
+        //GUI_Add_New_Tour add_new_tour = new GUI_Add_New_Tour();
     }
     
 }

@@ -68,8 +68,8 @@ public class GUI_Table_Tour_Management extends JPanel{
     /*************END DECLARE ELEMENT JPANEL PANEL BUTTON HANDLE TOUR********************/
         
     /*************DECLARE ELEMENT JPANEL CONTENT********************/
-        public JTable tableTour;
-        public DefaultTableModel modelTableTour;
+        public static JTable tableTour;
+        public static DefaultTableModel modelTableTour;
         private JScrollPane scrollPane;
     /*************DECLARE ELEMENT JPANEL CONTENT********************/
     public GUI_Table_Tour_Management(){
@@ -347,13 +347,20 @@ public class GUI_Table_Tour_Management extends JPanel{
             btnAddTour.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
+                    GUI_Add_New_Tour add_new_tour = new GUI_Add_New_Tour();
+                }
+            });
+
+            btnDeleteTour.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
                     JOptionPane.showMessageDialog(null, "Chức năng sắp hoàn thành");
                 }
             });
         /*------------------------END HANDLE EVENT ONCLICK MOUSE BUTTON-----------------------------*/
     }
     
-    public void LoadDataTable(){
+    public static void LoadDataTable(){
                 Handle_API_Get_Tour api_tour = new Handle_API_Get_Tour();
                 User_DTO user = new User_DTO();
                 JSONArray json = new JSONArray(Handle_API_Get_Tour.Fetch_API_Tour("tours?Page=1&Limit=100", user.getToken()));
