@@ -65,7 +65,7 @@ public class GUI_List_Customers extends JFrame {
                     }
                 });
 
-                UpdateListAttractionTour();
+                UpdateListCustomerGroup();
                 listCustomers.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                 listCustomers.setFixedCellHeight(30);
                 listCustomers.setFixedCellWidth(350);
@@ -107,10 +107,11 @@ public class GUI_List_Customers extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 String paramterIds = "";
 
-                ArrayList<String> arrayListNameSelected = (ArrayList<String>) listCustomers.getSelectedValuesList();
-                if(arrayListNameSelected.isEmpty()){
-                    System.out.println(arrayListNameSelected);
-                } else {
+                if(listCustomers.getSelectedValuesList() == null){
+                    JOptionPane.showMessageDialog(null,"Vui lòng chọn khách hàng");
+                }
+                else {
+                    ArrayList<String> arrayListNameSelected = (ArrayList<String>) listCustomers.getSelectedValuesList();
                     for(Object x : dataListCustomers.keySet()){
                         for (String nameSelected : arrayListNameSelected) {
 
@@ -140,30 +141,54 @@ public class GUI_List_Customers extends JFrame {
             }
         });
     }
-    public static HashMap<String, String> hashMapTourAttraction(){
-        StringBuilder customerNotIn = new StringBuilder(idCustomersInGroup);
-        System.out.println(customerNotIn.deleteCharAt(customerNotIn.length()-1));
+    public static HashMap<String, String> hashMapCustomerGroup(){
+        if(idCustomersInGroup.isEmpty()){
+            User_DTO user = new User_DTO();
+            dataListCustomers = new HashMap<String, String>();
+            JSONArray result = new JSONArray(Handle_API_Tour_Group.Fetch_API_List_All_Customers("users/customers?Page=1&Limit=100", user.getToken()));
+            for(int i = 0; i < result.length(); i++){
+                JSONObject jsonObj;
+                try {
+                    jsonObj = result.getJSONObject(i);
+                    String name = jsonObj.get("lastName").toString()+" "+jsonObj.get("firstName").toString();
+                    String id = jsonObj.get("id").toString();
 
-        User_DTO user = new User_DTO();
-        dataListCustomers = new HashMap<String, String>();
-        JSONArray result = new JSONArray(Handle_API_Tour_Group.Fetch_API_List_All_Customers("users/customers?Page=1&Limit=100&Filters[Id]="+customerNotIn+"&FilterConditions[Id]=notin", user.getToken()));
-        for(int i = 0; i < result.length(); i++){
-            JSONObject jsonObj;
-            try {
-                jsonObj = result.getJSONObject(i);
-                String name = jsonObj.get("lastName").toString()+" "+jsonObj.get("firstName").toString();
-                String id = jsonObj.get("id").toString();
+                    dataListCustomers.put(name,id);
 
-                dataListCustomers.put(name,id);
-
-            } catch (JSONException ex) {
-                Logger.getLogger(GUI_Edit_Tour.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (JSONException ex) {
+                    Logger.getLogger(GUI_Edit_Tour.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
+            return dataListCustomers;
+        }else {
+            String idCustomer = "";
+            for (String idCustomerNotIn : idCustomersInGroup
+                 ) {
+                idCustomer += idCustomerNotIn+",";
+            }
+            StringBuilder customerNotIn = new StringBuilder(idCustomer);
+            System.out.println(customerNotIn.deleteCharAt(customerNotIn.length()-1));
+            User_DTO user = new User_DTO();
+            dataListCustomers = new HashMap<String, String>();
+            JSONArray result = new JSONArray(Handle_API_Tour_Group.Fetch_API_List_All_Customers("users/customers?Page=1&Limit=100&Filters[Id]="+customerNotIn+"&FilterConditions[Id]=notin", user.getToken()));
+            for(int i = 0; i < result.length(); i++){
+                JSONObject jsonObj;
+                try {
+                    jsonObj = result.getJSONObject(i);
+                    String name = jsonObj.get("lastName").toString()+" "+jsonObj.get("firstName").toString();
+                    String id = jsonObj.get("id").toString();
+
+                    dataListCustomers.put(name,id);
+
+                } catch (JSONException ex) {
+                    Logger.getLogger(GUI_Edit_Tour.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            return dataListCustomers;
         }
-        return dataListCustomers;
     }
-    public void UpdateListAttractionTour(){
-        hashMapTourAttraction();
+    public void UpdateListCustomerGroup(){
+        hashMapCustomerGroup();
         modelListCustomers = new  DefaultListModel<String>();
         listCustomers = new JList<String>(modelListCustomers);
         listCustomers.setCellRenderer(new CheckboxListCellRenderer());

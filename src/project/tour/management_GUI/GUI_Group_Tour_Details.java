@@ -10,7 +10,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import project.tour.management_DTO.Tour_DTO;
-import project.tour.management_DTO.Tour_Group_DTO;
 import project.tour.management_DTO.User_DTO;
 import project.tour.management_Handle_API.Handle_API_Tour_Group;
 
@@ -19,6 +18,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -33,7 +33,9 @@ import javax.swing.table.DefaultTableModel;
  * @author DELL
  */
 public class GUI_Group_Tour_Details extends JPanel{
-    public static String idCustomersInGroup = "";
+    public static ArrayList<String> idCustomersInGroup = new ArrayList<String>();
+    public static ArrayList<String> idEmployeeInGroup = new ArrayList<String>();
+    public static ArrayList<String> idCostTypeInGroup = new ArrayList<String>();
     /***************DECLARE JPANEL********************/
         private JPanel panelHeader;
         private JTabbedPane tabbedPaneContent;
@@ -86,6 +88,35 @@ public class GUI_Group_Tour_Details extends JPanel{
             private JButton btnRemoveCustomer;
         /***************DECLARE ELEMENT FOR PANEL CUSTOMER********************/
 
+        /***************DECLARE ELEMENT FOR PANEL CUSTOMER********************/
+
+        private JScrollPane scrollPaneTableCostType;
+        public static JTable tableGroupCostType;
+        public static DefaultTableModel modelTableCostType;
+
+        private JButton btnAddCostType;
+        private JButton btnRemoveCostType;
+        /***************DECLARE ELEMENT FOR PANEL CUSTOMER********************/
+
+        /***************DECLARE ELEMENT FOR PANEL CUSTOMER********************/
+
+        private JLabel labelTitleEmployeeInGroup;
+        private JLabel labelTitleRoleEmployee;
+
+        private JScrollPane scrollPaneTableEmployeeGroup;
+        public static JTable tableEmployeeGroup;
+        public static DefaultTableModel modelTableEmployeeGroup;
+
+        private JButton btnAddEmployeeGroup;
+        private JButton btnRemoveEmployeeGroup;
+
+        private JScrollPane scrollPaneTableRoleEmployee;
+        public static JTable tableRoleEmployee;
+        public static DefaultTableModel modelTableRoleEmployee;
+
+        private JButton btnRemoveRoleEmployee;
+        /***************DECLARE ELEMENT FOR PANEL CUSTOMER********************/
+
 
     /***************END DECLARE COMPONENT FOR PANEL CONTENT********************/
 
@@ -118,7 +149,7 @@ public class GUI_Group_Tour_Details extends JPanel{
             labelTitle.setBounds(-5,0,150,30);
 
             sptTitle = new JSeparator();
-            sptTitle.setBounds(10,28,100,10);
+            sptTitle.setBounds(10,28,120,10);
             sptTitle.setBackground(new Color(0,0,0));
 
             //**************TEXTFIELD TOUR ID*******************//
@@ -273,7 +304,7 @@ public class GUI_Group_Tour_Details extends JPanel{
             /********************** END ADD ELEMENT FOR HEADER *********************/
         /**==================================*END PANEL HEADER*===================================*/
 
-        /*------------------------PANEL CONTENT------------------------------*/
+        /**==================================* PANEL CONTENT*===================================*/
         tabbedPaneContent = new JTabbedPane();
         tabbedPaneContent.setBounds(0,150,990,440);
         tabbedPaneContent.setBackground(new Color(0,77,64));
@@ -341,24 +372,199 @@ public class GUI_Group_Tour_Details extends JPanel{
                 /********************** END ADD ELEMENT FOR PANEL CUSTOMER *********************/
         /**==================================*END PANEL CUSTOMER*===================================*/
 
+        /**==================================*PANEL COST TYPE**===================================*/
+                panelCostTypeGroup = new JPanel();
+                panelCostTypeGroup.setLayout(null);
+                panelCostTypeGroup.setBackground(Color.white);
+                panelCostTypeGroup.setBounds(5,5,980,430);
+
+                    Vector<String> columnNamesCostType = new Vector<>();
+                    columnNamesCostType.add("Mã Thể Loại");
+                    columnNamesCostType.add("Tên Loại Chi Phí");
+                    columnNamesCostType.add("Giá Chí Phí");
+                    columnNamesCostType.add("Ngày Tạo");
+                    columnNamesCostType.add("Ghi Chú");
+                    modelTableCostType = new DefaultTableModel(columnNamesCostType,0);
+                    tableGroupCostType = new JTable(modelTableCustomerGroup);
+                    LoadDataTableCostTypeInGroup(id);
+                    tableGroupCostType.setRowHeight(25);
+                    tableGroupCostType.setSelectionBackground(new java.awt.Color(0,105,92, 180));
+                    tableGroupCostType.getTableHeader().setReorderingAllowed(false);
+                    tableGroupCostType.getTableHeader().setFont(new Font("Times New Roman",Font.BOLD,15));
+                    tableGroupCostType.getTableHeader().setOpaque(false);
+                    tableGroupCostType.getTableHeader().setBackground(new Color(0,77,64));
+                    tableGroupCostType.getTableHeader().setForeground(new Color(255,255,255));
+                    tableGroupCostType.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+
+                    /****************SET SIZE COLUMN OF TABLE***********************/
+                    tableGroupCostType.getColumnModel().getColumn(0).setPreferredWidth(50);
+                    tableGroupCostType.getColumnModel().getColumn(2).setPreferredWidth(50);
+                    tableGroupCostType.getColumnModel().getColumn(3).setPreferredWidth(50);
+                    /****************SET SIZE COLUMN OF TABLE***********************/
+
+
+                    tableGroupCostType.setFont(new Font("Times New Roman",Font.PLAIN,15));
+
+                    scrollPaneTableCostType = new JScrollPane(tableGroupCostType);
+                    scrollPaneTableCostType.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+                        @Override
+                        protected void configureScrollBarColors() {
+                            this.thumbColor = new Color(19, 113, 106);
+                        }
+                    });
+                    scrollPaneTableCostType.setBounds(150,20,700,340);
+
+
+                    btnAddCostType = new JButton("Thêm Chi Phí");
+                    btnAddCostType.setBackground(new Color(39, 113, 4));
+                    btnAddCostType.setFont(new Font("Segoe",Font.BOLD,13));
+                    btnAddCostType.setForeground(Color.WHITE);
+                    btnAddCostType.setBounds(235,375,165,30);
+                    btnAddCostType.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+                    btnRemoveCostType = new JButton("Xoá");
+                    btnRemoveCostType.setBackground(new Color(149, 4, 4));
+                    btnRemoveCostType.setFont(new Font("Segoe",Font.BOLD,13));
+                    btnRemoveCostType.setForeground(Color.WHITE);
+                    btnRemoveCostType.setBounds(535,375,115,30);
+                    btnRemoveCostType.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+                /********************** ADD ELEMENT FOR PANEL COST TYPE* *********************/
+                panelCostTypeGroup.add(scrollPaneTableCostType);
+                panelCostTypeGroup.add(btnAddCostType);
+                panelCostTypeGroup.add(btnRemoveCostType);
+                /********************** END ADD ELEMENT FOR PANEL COST TYPE* *********************/
+        /**==================================*END PANEL COST TYPE*===================================*/
+
+        /**==================================*PANEL EMPLOYEE*===================================*/
             panelEmployeeGroup = new JPanel();
             panelEmployeeGroup.setLayout(null);
             panelEmployeeGroup.setBounds(5,5,980,430);
             panelEmployeeGroup.setBackground(Color.white);
 
-            panelCostTypeGroup = new JPanel();
-            panelCostTypeGroup.setLayout(null);
-            panelCostTypeGroup.setBackground(Color.white);
-            panelCostTypeGroup.setBounds(5,5,980,430);
-        /*------------------------END PANEL GROUP TOUR------------------------------*/
+                labelTitleEmployeeInGroup = new JLabel("Nhân Viên Đoàn Tour");
+                labelTitleEmployeeInGroup.setBounds(110,7,250,20);
+                labelTitleEmployeeInGroup.setForeground(new Color(0,0,0));
+                labelTitleEmployeeInGroup.setFont(new Font("Times New Roman",1,18));
 
+                Vector<String> columnNamesEmployeeGroup = new Vector<>();
+                columnNamesEmployeeGroup.add("Mã NV");
+                columnNamesEmployeeGroup.add("Họ");
+                columnNamesEmployeeGroup.add("Tên");
+                columnNamesEmployeeGroup.add("Email");
+                modelTableEmployeeGroup = new DefaultTableModel(columnNamesEmployeeGroup,0);
+                tableEmployeeGroup = new JTable(modelTableEmployeeGroup);
+                LoadDataEmployeeInGroup(id);
+                tableEmployeeGroup.setRowHeight(25);
+                tableEmployeeGroup.setSelectionBackground(new java.awt.Color(0,105,92, 180));
+                tableEmployeeGroup.getTableHeader().setReorderingAllowed(false);
+                tableEmployeeGroup.getTableHeader().setFont(new Font("Times New Roman",Font.BOLD,15));
+                tableEmployeeGroup.getTableHeader().setOpaque(false);
+                tableEmployeeGroup.getTableHeader().setBackground(new Color(0,77,64));
+                tableEmployeeGroup.getTableHeader().setForeground(new Color(255,255,255));
+                tableEmployeeGroup.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+
+                /****************SET SIZE COLUMN OF TABLE***********************/
+                tableEmployeeGroup.getColumnModel().getColumn(0).setPreferredWidth(25);
+                tableEmployeeGroup.getColumnModel().getColumn(1).setPreferredWidth(50);
+                tableEmployeeGroup.getColumnModel().getColumn(2).setPreferredWidth(40);
+                /****************SET SIZE COLUMN OF TABLE***********************/
+
+
+                tableEmployeeGroup.setFont(new Font("Times New Roman",Font.PLAIN,15));
+
+                scrollPaneTableEmployeeGroup = new JScrollPane(tableEmployeeGroup);
+                scrollPaneTableEmployeeGroup.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+                    @Override
+                    protected void configureScrollBarColors() {
+                        this.thumbColor = new Color(19, 113, 106);
+                    }
+                });
+                    scrollPaneTableEmployeeGroup.setBounds(10,35,500,330);
+
+
+                btnAddEmployeeGroup = new JButton("Thêm nhân viên");
+                btnAddEmployeeGroup.setBackground(new Color(39, 113, 4));
+                btnAddEmployeeGroup.setFont(new Font("Segoe",Font.BOLD,13));
+                btnAddEmployeeGroup.setForeground(Color.WHITE);
+                btnAddEmployeeGroup.setBounds(100,377,165,30);
+                btnAddEmployeeGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+                btnRemoveEmployeeGroup = new JButton("Xoá");
+                btnRemoveEmployeeGroup.setBackground(new Color(149, 4, 4));
+                btnRemoveEmployeeGroup.setFont(new Font("Segoe",Font.BOLD,13));
+                btnRemoveEmployeeGroup.setForeground(Color.WHITE);
+                btnRemoveEmployeeGroup.setBounds(400,377,115,30);
+                btnRemoveEmployeeGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+            /**==================================================================================**/
+
+                labelTitleRoleEmployee = new JLabel("Vai Trò Nhân Viên Trong Đoàn");
+                labelTitleRoleEmployee.setBounds(660,7,250,20);
+                labelTitleRoleEmployee.setForeground(new Color(0,0,0));
+                labelTitleRoleEmployee.setFont(new Font("Times New Roman",1,18));
+
+//                Vector<String> columnNamesRoleEmployee = new Vector<>();
+//                columnNamesRoleEmployee.add("Họ");
+//                columnNamesRoleEmployee.add("Tên");
+//                columnNamesRoleEmployee.add("Công Việc");
+//                modelTableRoleEmployee = new DefaultTableModel(columnNamesRoleEmployee,0);
+//                tableRoleEmployee = new JTable(modelTableRoleEmployee);
+                LoadDataRoleEmployee(id);
+                tableRoleEmployee.setRowHeight(25);
+                tableRoleEmployee.setSelectionBackground(new java.awt.Color(0,105,92, 180));
+                tableRoleEmployee.getTableHeader().setReorderingAllowed(false);
+                tableRoleEmployee.getTableHeader().setFont(new Font("Times New Roman",Font.BOLD,15));
+                tableRoleEmployee.getTableHeader().setOpaque(false);
+                tableRoleEmployee.getTableHeader().setBackground(new Color(0,77,64));
+                tableRoleEmployee.getTableHeader().setForeground(new Color(255,255,255));
+                tableRoleEmployee.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+
+                /****************SET SIZE COLUMN OF TABLE***********************/
+                tableRoleEmployee.getColumnModel().getColumn(0).setPreferredWidth(50);
+                tableRoleEmployee.getColumnModel().getColumn(1).setPreferredWidth(40);
+                /****************SET SIZE COLUMN OF TABLE***********************/
+
+
+                tableRoleEmployee.setFont(new Font("Times New Roman",Font.PLAIN,15));
+
+                scrollPaneTableRoleEmployee = new JScrollPane(tableRoleEmployee);
+                scrollPaneTableRoleEmployee.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+                    @Override
+                    protected void configureScrollBarColors() {
+                        this.thumbColor = new Color(19, 113, 106);
+                    }
+                });
+                scrollPaneTableRoleEmployee.setBounds(600,35,380,330);
+
+                btnRemoveRoleEmployee = new JButton("Xoá nhiệm vụ");
+                btnRemoveRoleEmployee.setBackground(new Color(149, 4, 4));
+                btnRemoveRoleEmployee.setFont(new Font("Segoe",Font.BOLD,13));
+                btnRemoveRoleEmployee.setForeground(Color.WHITE);
+                btnRemoveRoleEmployee.setBounds(740,377,135,30);
+                btnRemoveRoleEmployee.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+            /********************** ADD ELEMENT FOR PANEL EMPLOYEE *********************/
+            panelEmployeeGroup.add(labelTitleEmployeeInGroup);
+            panelEmployeeGroup.add(labelTitleRoleEmployee);
+            panelEmployeeGroup.add(scrollPaneTableEmployeeGroup);
+            panelEmployeeGroup.add(btnAddEmployeeGroup);
+            panelEmployeeGroup.add(btnRemoveEmployeeGroup);
+            panelEmployeeGroup.add(scrollPaneTableRoleEmployee);
+            panelEmployeeGroup.add(btnRemoveRoleEmployee);
+            /********************** END ADD ELEMENT FOR PANEL EMPLOYEE *********************/
+        /**==================================*END PANEL EMPLOYEE*===================================*/
 
             /**********ADD COMPONENT FOR PANEL CONTENT*****************/
             tabbedPaneContent.addTab("--Khách Hàng Đoàn--", panelCustomerGroup);
             tabbedPaneContent.addTab("--Nhân Viên--", panelEmployeeGroup);
             tabbedPaneContent.addTab("--Loại Chi Phí--", panelCostTypeGroup);
             /**********END ADD COMPONENT FOR PANEL CONTENT*****************/
-        /*------------------------END PANEL CONTENT------------------------------*/
+
+        /**==================================*END PANEL CONTENT*===================================*/
 
         /***************ADD COMPONENT FOR PANEL MAIN********************/
             add(panelHeader);
@@ -372,6 +578,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     GUI_List_Customers gui_list_customers = new GUI_List_Customers(id);
+
                 }
             });
             btnRemoveCustomer.addMouseListener(new MouseAdapter() {
@@ -385,11 +592,65 @@ public class GUI_Group_Tour_Details extends JPanel{
                         String idCustomer = (tableGroupCustomer.getModel().getValueAt(row, 0).toString());
                         String response = Handle_API_Tour_Group.send_Delete_Customer_In_Group("", "groupDetails/"+idCustomer, user_dto.getToken());
                         if(response.equals("success") == true){
+
                             LoadDataTableCustomerInGroup(id);
                         }
                     }
                 }
             });
+        /**=================*END HANDLE EVENT TABLE CUSTOMER*============*/
+
+        /**======================* HANDLE EVENT TABLE EMPLOYEE *==============*/
+        btnAddEmployeeGroup.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                GUI_List_Employee gui_list_employee = new GUI_List_Employee(id);
+
+            }
+        });
+        btnRemoveEmployeeGroup.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = tableGroupCustomer.getSelectedRow();
+                if( row == -1 ){
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên cần xoá");
+                }else {
+                    User_DTO user_dto = new User_DTO();
+                    String idCustomer = (tableGroupCustomer.getModel().getValueAt(row, 0).toString());
+                    String response = Handle_API_Tour_Group.send_Delete_Customer_In_Group("", "groupDetails/"+idCustomer, user_dto.getToken());
+                    if(response.equals("success") == true){
+                        LoadDataTableCustomerInGroup(id);
+                    }
+                }
+            }
+        });
+        /**=================*END HANDLE EVENT TABLE EMPLOYEE*============*/
+
+        /**======================* HANDLE EVENT TABLE CUSTOMER *==============*/
+        btnAddCostType.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                GUI_List_Cost_Type gui_list_cost_type = new GUI_List_Cost_Type(id);
+
+            }
+        });
+        btnRemoveCostType.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = tableGroupCostType.getSelectedRow();
+                if( row == -1 ){
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn chi phí cần xoá");
+                }else {
+                    User_DTO user_dto = new User_DTO();
+                    String idCostType = (tableGroupCostType.getModel().getValueAt(row, 0).toString());
+                    String response = Handle_API_Tour_Group.send_Delete_Customer_In_Group("", "groupCosts/"+idCostType, user_dto.getToken());
+                    if(response.equals("success") == true){
+
+                        LoadDataTableCostTypeInGroup(id);
+                    }
+                }
+            }
+        });
         /**=================*END HANDLE EVENT TABLE CUSTOMER*============*/
     }
 
@@ -397,13 +658,17 @@ public class GUI_Group_Tour_Details extends JPanel{
         User_DTO user = new User_DTO();
         JSONArray json = new JSONArray(Handle_API_Tour_Group.Fetch_API_Customer_In_Group("groupDetails?Page=1&Limit=100&Filters[groupId]="+groupId+"&FilterConditions[groupId]==", user.getToken()));
 
+        idCustomersInGroup.clear();
+
         modelTableCustomerGroup.setRowCount(0);
         for (int i = 0; i < json.length(); i++) {
 
             JSONObject jsonObj;
             try {
                 jsonObj = json.getJSONObject(i);
-                idCustomersInGroup += jsonObj.get("userId")+",";
+//                idCustomersInGroup += jsonObj.get("userId")+",";
+                idCustomersInGroup.add(jsonObj.get("userId").toString());
+                System.out.println(idCustomersInGroup);
                 JSONObject my = (JSONObject) jsonObj.get("applicationUser");
                 Vector<String> data = new Vector<>();
 
@@ -420,5 +685,105 @@ public class GUI_Group_Tour_Details extends JPanel{
         }
 
         tableGroupCustomer.setModel(modelTableCustomerGroup);
+    }
+
+    public static void LoadDataEmployeeInGroup(String groupId){
+        User_DTO user = new User_DTO();
+        JSONArray json = new JSONArray(Handle_API_Tour_Group.Fetch_API_Customer_In_Group("groupDetails?Page=1&Limit=100&Filters[groupId]="+groupId+"&FilterConditions[groupId]==", user.getToken()));
+
+        idEmployeeInGroup.clear();
+
+        modelTableEmployeeGroup.setRowCount(0);
+        for (int i = 0; i < json.length(); i++) {
+
+            JSONObject jsonObj;
+            try {
+                jsonObj = json.getJSONObject(i);
+//                idEmployeeInGroup += jsonObj.get("userId")+",";
+                idEmployeeInGroup.add(jsonObj.get("userId").toString());
+                JSONObject my = (JSONObject) jsonObj.get("applicationUser");
+                Vector<String> data = new Vector<>();
+
+                data.add(jsonObj.get("id").toString());
+                data.add(my.get("lastName").toString());
+                data.add(my.get("firstName").toString());
+                data.add(my.get("email").toString());
+
+                modelTableEmployeeGroup.addRow(data);
+            } catch (JSONException ex) {
+                Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        tableEmployeeGroup.setModel(modelTableEmployeeGroup);
+    }
+
+    public static void LoadDataRoleEmployee(String groupId){
+//        User_DTO user = new User_DTO();
+//        JSONArray json = new JSONArray(Handle_API_Tour_Group.Fetch_API_Customer_In_Group("groupDetails?Page=1&Limit=100&Filters[groupId]="+groupId+"&FilterConditions[groupId]==", user.getToken()));
+
+//        modelTableEmployeeGroup.setRowCount(0);
+//        for (int i = 0; i < json.length(); i++) {
+//
+//            JSONObject jsonObj;
+//            try {
+//                jsonObj = json.getJSONObject(i);
+//                idEmployeeInGroup += jsonObj.get("userId")+",";
+//                JSONObject my = (JSONObject) jsonObj.get("applicationUser");
+//                Vector<String> data = new Vector<>();
+
+//                data.add(jsonObj.get("id").toString());
+//                data.add(my.get("lastName").toString());
+//                data.add(my.get("firstName").toString());
+//                data.add(my.get("email").toString());
+
+//                modelTableEmployeeGroup.addRow(data);
+//            } catch (JSONException ex) {
+//                Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+
+//        }
+        String data[][]={ {"Cao Bá","Quát","Hướng dẫn viên"},
+                {"Cao Thị Vân","Anh","Massage cho khách"},
+                {"Cao Bá","Quát","Massage cho Linh"},
+                {"Nguyễn ","Huệ","Lái xe"}};
+        String column[]={"Họ","Tên","Công Việc"};
+        tableRoleEmployee=new JTable(data,column);
+
+//        tableEmployeeGroup.setModel(modelTableEmployeeGroup);
+    }
+
+    public static void LoadDataTableCostTypeInGroup(String groupId){
+        User_DTO user = new User_DTO();
+        JSONArray json = new JSONArray(Handle_API_Tour_Group.Fetch_API_Customer_In_Group("groupCosts?Page=1&Limit=100&Filters[groupId]="+groupId+"&FilterConditions[groupId]==", user.getToken()));
+
+        idCostTypeInGroup.clear();
+
+        modelTableCostType.setRowCount(0);
+        for (int i = 0; i < json.length(); i++) {
+
+            JSONObject jsonObj;
+            try {
+                jsonObj = json.getJSONObject(i);
+//                idCostTypeInGroup += jsonObj.get("costTypeId")+",";
+                idCostTypeInGroup.add(jsonObj.get("costTypeId").toString());
+                JSONObject my = (JSONObject) jsonObj.get("costType");
+                Vector<String> data = new Vector<>();
+
+                data.add(jsonObj.get("id").toString());
+                data.add(my.get("name").toString());
+                data.add(jsonObj.get("price").toString());
+                data.add(jsonObj.get("createdAt").toString());
+                data.add(jsonObj.get("note").toString());
+
+                modelTableCostType.addRow(data);
+            } catch (JSONException ex) {
+                Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        tableGroupCostType.setModel(modelTableCostType);
     }
 }

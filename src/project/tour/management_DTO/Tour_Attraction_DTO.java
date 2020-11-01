@@ -16,6 +16,7 @@ public class Tour_Attraction_DTO {
     private String attractionsId;
     private String attractionsName;
     private String description;
+    private int index;
 
     public Tour_Attraction_DTO() {
     }
@@ -24,14 +25,16 @@ public class Tour_Attraction_DTO {
         this.attractionsId = id;
         this.attractionsName = name;
         this.description = description;
+        this.index = index;
     }
     public Tour_Attraction_DTO(String id){
         this.attractionsId = id;
     }
 
-    public Tour_Attraction_DTO(String id, String name){
+    public Tour_Attraction_DTO(String id, String name, int index){
         this.attractionsId = id;
         this.attractionsName = name;
+        this.index = index;
     }
 
     @Override
@@ -63,4 +66,11 @@ public class Tour_Attraction_DTO {
         this.description = description;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 }

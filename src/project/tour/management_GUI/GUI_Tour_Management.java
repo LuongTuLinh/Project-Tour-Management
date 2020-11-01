@@ -62,6 +62,7 @@ public class GUI_Tour_Management extends JFrame{
         private JLabel labelMenu;
         private JButton btnTourManagement;
         private JButton btnAdd;
+        private JButton btnCostTypeManagement;
         
         private JLabel labelSetting;
         private JButton btnUser;
@@ -114,7 +115,7 @@ public class GUI_Tour_Management extends JFrame{
 
                 lbUserName = new JLabel("LinhLee");
                 lbUserName.setText(user.getFirstName().toUpperCase()+" "+user.getLastName().toUpperCase());
-                lbUserName.setBounds(820,7,50,25);
+                lbUserName.setBounds(820,7,100,25);
                 lbUserName.setForeground(new Color(102,102,102));
 
                 lbiconClose = new JLabel();
@@ -226,6 +227,17 @@ public class GUI_Tour_Management extends JFrame{
                 btnAdd.setBorder(null);
                 btnAdd.setFocusPainted(false);
                 btnAdd.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+                btnCostTypeManagement = new JButton(" Quản Lý Loại Chi Phí ");
+                btnCostTypeManagement.setBackground(new Color(12, 109, 102));
+                btnCostTypeManagement.setBounds(5,260,190,30);
+                btnCostTypeManagement.setForeground(new Color(255,255,255));
+                btnCostTypeManagement.setIcon(new ImageIcon(getClass().getResource("/image/icons8_compass_20px.png")));
+                btnCostTypeManagement.setFont(new Font("Times New Roman",1,14));
+                btnCostTypeManagement.setHorizontalAlignment(SwingConstants.CENTER);
+                btnCostTypeManagement.setBorder(null);
+                btnCostTypeManagement.setFocusPainted(false);
+                btnCostTypeManagement.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 
                 /********** TINH NANG THEM *********/
                 /********** TINH NANG THEM *********/
@@ -294,6 +306,7 @@ public class GUI_Tour_Management extends JFrame{
                 panelMenu.add(labelMenu);
                 panelMenu.add(btnTourManagement);
                 panelMenu.add(btnAdd);
+                panelMenu.add(btnCostTypeManagement);
                 
                 panelMenu.add(labelSetting);
                 panelMenu.add(btnSetUp);
@@ -380,6 +393,23 @@ public class GUI_Tour_Management extends JFrame{
                 public void mouseExited(MouseEvent e){
                     btnAdd.setBackground(new Color(12, 109, 102));
                 }
+            });
+
+            btnCostTypeManagement.addMouseListener(new MouseAdapter(){
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    panelProcessFunction.removeAll();
+                    panelProcessFunction.add(new GUI_Cost_Type_Management());
+                    repaint();
+                }
+                @Override
+                public void mouseEntered(MouseEvent e){
+                    btnCostTypeManagement.setBackground(new Color(19, 113, 106));
+                }
+                @Override
+                public void mouseExited(MouseEvent e){
+                    btnCostTypeManagement.setBackground(new Color(12, 109, 102));
+            }
             });
             
         /********** END HANDLE SET COLOR FOR BUTTON ************/

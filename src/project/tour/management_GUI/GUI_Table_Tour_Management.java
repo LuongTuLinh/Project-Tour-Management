@@ -322,7 +322,7 @@ public class GUI_Table_Tour_Management extends JPanel{
 
                         if(row == -1)
                         {
-                            JOptionPane.showMessageDialog(null, "Vui lòng chọn Tour cần sửa");
+                            JOptionPane.showMessageDialog(null, "Vui lòng chọn Tour cần xem");
                         }
                         else
                         {
