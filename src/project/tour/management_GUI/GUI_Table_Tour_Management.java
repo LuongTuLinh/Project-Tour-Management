@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -46,9 +47,10 @@ public class GUI_Table_Tour_Management extends JPanel{
         private JPanel panelHeader;
         private JPanel panelContent;
         private JPanel panelButtonHandleTour;
+        private JPanel panelSearchPrice;
 
     /*************END DECLARE JPANEL********************/
-        
+
     /*************DECLARE ELEMENT JPANEL HEADER********************/
         private JLabel labelSearch;
         private JLabel lbIconSearch;
@@ -59,6 +61,13 @@ public class GUI_Table_Tour_Management extends JPanel{
         private JButton buttonSearchTour;
 
     /*************END DECLARE ELEMENT JPANEL HEADER********************/
+
+        /*************DECLARE ELEMENT JPANEL SEARCH PRICE********************/
+        private JLabel labelPriceToPrice;
+        private JTextField txtSearchPriceLow;
+        private JTextField txtSearchPriceExpensive;
+
+        /*************END DECLARE ELEMENT JPANEL SEARCH PRICE********************/
         
     /*************DECLARE ELEMENT JPANEL PANEL BUTTON HANDLE TOUR********************/
         private JButton btnEditTour;
@@ -131,6 +140,24 @@ public class GUI_Table_Tour_Management extends JPanel{
             /***************END ADD ELEMENT FOR PANEL HEADER**********************/
           
           /*------------------------END PANEL HEADER INCLUDE BUTTON AND SEARCH-----------------------------*/
+
+            panelSearchPrice = new JPanel();
+            panelSearchPrice.setLayout(null);
+            panelSearchPrice.setBounds(5, 80, 340, 70);
+            panelSearchPrice.setBackground(Color.white);
+            Border borderOfPanelSearchPrice = BorderFactory.createTitledBorder("Tìm kiếm theo giá");
+            panelSearchPrice.setBorder(borderOfPanelSearchPrice);
+                txtSearchPriceLow = new JTextField();
+                txtSearchPriceLow.setBounds(25,25,120,25);
+
+                    labelPriceToPrice = new JLabel("đến");
+                    labelPriceToPrice.setBounds(155,25,80,25);
+
+                txtSearchPriceExpensive = new JTextField();
+                txtSearchPriceExpensive.setBounds(190,25,120,25);
+            panelSearchPrice.add(txtSearchPriceLow);
+            panelSearchPrice.add(labelPriceToPrice);
+            panelSearchPrice.add(txtSearchPriceExpensive);
           
           /*------------------------PANEL BUTTON HANDLE TOUR(ADD, EDIT, DELETE, SAVE)-----------------------------*/
             panelButtonHandleTour = new JPanel();
@@ -233,6 +260,7 @@ public class GUI_Table_Tour_Management extends JPanel{
             
         /*******************ADD ELEMENT FOR PANEL MAIN***********************/
             add(panelHeader);
+            add(panelSearchPrice);
             add(panelContent);
             add(panelButtonHandleTour);
             
@@ -248,6 +276,10 @@ public class GUI_Table_Tour_Management extends JPanel{
                     if(categoryId.equals("0")){
                         categoryId = "";
                     }
+                    String priceLow = txtSearchPriceLow.getText();
+                    String priceExpensive = txtSearchPriceExpensive.getText();
+
+                    String price_PATTERN = "^[0-9]+$";
 
                     String status = comboBoxStatusTour.getSelectedItem().equals("--Trạng Thái--") == false
                             ? comboBoxStatusTour.getSelectedItem().toString() : "";
@@ -265,49 +297,296 @@ public class GUI_Table_Tour_Management extends JPanel{
                         nameTour="";
                     }
 
+
                     if(nameTour.equals("") == false){
-                        if(categoryId.equals("") == true&&status.equals("") == true){
+                        if(categoryId.equals("") == true&&status.equals("") == true && priceLow.equals("") == true&&
+                            priceExpensive.equals("")==true){
                             //1 minh name
                             String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like";
                             loadDataTableAfterSearch(parameter);
                         }
-                        if(categoryId.equals("") == false||status.equals("") == false) {
+                        if(categoryId.equals("") == false||status.equals("") == false||priceLow.equals("")==false||priceExpensive.equals("")==false) {
                             if(categoryId.equals("") == false&&status.equals("") == true){
-                                // name va category
-                                String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==";
-                                loadDataTableAfterSearch(parameter);
+                                if(priceLow.equals("")==true&&priceExpensive.equals("")==true){
+                                    // name va category
+                                    String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==";
+                                    loadDataTableAfterSearch(parameter);
+                                }
+                                if(priceLow.equals("")==false&&priceExpensive.equals("")==true){
+                                    if(Pattern.matches(price_PATTERN, priceLow) == true){
+                                        // name va category va price low
+                                        String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[Price]="+priceLow+"&FilterConditions[Price]=>=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+
+                                }
+                                if(priceLow.equals("")==true&&priceExpensive.equals("")==false){
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true){
+                                        // name va category va price expensive
+                                        String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[Price]="+priceExpensive+"&FilterConditions[Price]=<=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+
+                                }
+                                if(priceLow.equals("")==false&&priceExpensive.equals("")==false){
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true||Pattern.matches(price_PATTERN, priceLow) == true){
+                                        // name va category va price expensive price low
+                                        String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[Price]="+priceLow+","+priceExpensive+"&FilterConditions[Price]=between";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+
+                                }
+
+
                             }
                             if(categoryId.equals("") == true&&status.equals("") == false){
-                                // name va status
-                                String parameter ="&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[status]=\""+status+"\"&FilterConditions[status]==";
-                                loadDataTableAfterSearch(parameter);
+                                if(priceLow.equals("")==true&&priceExpensive.equals("")==true){
+                                    // name va status
+                                    String parameter ="&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[status]=\""+status+"\"&FilterConditions[status]==";
+                                    loadDataTableAfterSearch(parameter);
+                                }
+                                if(priceLow.equals("")==false&&priceExpensive.equals("")==true){
+                                    if(Pattern.matches(price_PATTERN, priceLow) == true){
+                                        // name va status va price low
+                                        String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[Price]="+priceLow+"&FilterConditions[Price]=>=&Filters[status]=\""+status+"\"&FilterConditions[status]==";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+
+                                }
+                                if(priceLow.equals("")==true&&priceExpensive.equals("")==false){
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true){
+                                        // name va status va price expensive
+                                        String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[Price]="+priceExpensive+"&FilterConditions[Price]=<=&Filters[status]=\""+status+"\"&FilterConditions[status]==";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+
+                                }
+                                if(priceLow.equals("")==false&&priceExpensive.equals("")==false){
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true||Pattern.matches(price_PATTERN, priceLow) == true){
+                                        // name va status va price expensive price low
+                                        String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[status]=\""+status+"\"&FilterConditions[status]==&Filters[Price]="+priceLow+","+priceExpensive+"&FilterConditions[Price]=between";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+
+                                }
+
                             }
                             if(categoryId.equals("") == false&&status.equals("") == false){
-                                // name va category va status
-                                String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[status]=\""+status+"\"&FilterConditions[status]==";
-                                loadDataTableAfterSearch(parameter);
+                                if(priceLow.equals("")==false&&priceExpensive.equals("")==false){
+                                    // name status category price l  price e
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true|| Pattern.matches(price_PATTERN, priceLow) == true){
+                                        String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[status]=\""+status+"\"&FilterConditions[status]==&Filters[Price]="+priceLow+","+priceExpensive+"&FilterConditions[Price]=between";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                                if(priceLow.equals("")==true&&priceExpensive.equals("")==false){
+                                    // name status category  price e
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true){
+                                        String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[status]=\""+status+"\"&FilterConditions[status]==&Filters[Price]="+priceExpensive+"&FilterConditions[Price]=<=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                                if(priceLow.equals("")==false&&priceExpensive.equals("")==true){
+                                    // name status category price l
+                                    if(Pattern.matches(price_PATTERN, priceLow) == true){
+                                        String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[status]=\""+status+"\"&FilterConditions[status]==&Filters[Price]="+priceLow+"&FilterConditions[Price]=>=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                            }
+                            if(categoryId.equals("") == true&&status.equals("") == true){
+                                if(priceLow.equals("")==false&&priceExpensive.equals("")==false){
+                                    //name va price low price expensive
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true|| Pattern.matches(price_PATTERN, priceLow) == true){
+                                        String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[Price]="+priceLow+","+priceExpensive+"&FilterConditions[Price]=between";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                                if(priceLow.equals("")==false&&priceExpensive.equals("")==true){
+                                    //name va price low
+                                    if(Pattern.matches(price_PATTERN, priceLow) == true){
+                                        String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[Price]="+priceLow+"&FilterConditions[Price]=>=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                                if(priceLow.equals("")==true&&priceExpensive.equals("")==false){
+                                    //name va price low
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true){
+                                        String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like&Filters[Price]="+priceExpensive+"&FilterConditions[Price]=<=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
                             }
                         }
                     }
                     if(nameTour.equals("") == true){
-                        if(categoryId.equals("") == true&&status.equals("") == true){
-                            JOptionPane.showMessageDialog(null, "Vui lòng nhập tên hoặc chọn để tìm kiếm");
+                        if(categoryId.equals("") == true&&status.equals("") == true&&priceExpensive.equals("")==true&&priceLow.equals("")==true){
+                            //name
+                            String parameter = "&Filters[Name]=\""+nameTour+"\"&FilterConditions[Name]=like";
+                            loadDataTableAfterSearch(parameter);
                         }
-                        if(categoryId.equals("") == false||status.equals("") == false){
+                        if(categoryId.equals("") == false||status.equals("") == false||priceExpensive.equals("")==false||priceLow.equals("")==false){
                             if(categoryId.equals("") == false&&status.equals("") == true){
-                                // category
-                                String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==";
-                                loadDataTableAfterSearch(parameter);
+                                if(priceExpensive.equals("")==true&&priceLow.equals("")==true){
+                                    // category
+                                    String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==";
+                                    loadDataTableAfterSearch(parameter);
+                                }
+                                if(priceExpensive.equals("")==false&&priceLow.equals("")==false){
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true|| Pattern.matches(price_PATTERN, priceLow) == true){
+                                        // category thap cao
+                                        String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[Price]="+priceLow+","+priceExpensive+"&FilterConditions[Price]=between";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                                if(priceExpensive.equals("")==true&&priceLow.equals("")==false){
+                                    if(Pattern.matches(price_PATTERN, priceLow) == true){
+                                        // category thap
+                                        String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[Price]="+priceLow+"&FilterConditions[Price]=>=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                                if(priceExpensive.equals("")==false&&priceLow.equals("")==true){
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true){
+                                        // category cao
+                                        String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[Price]="+priceExpensive+"&FilterConditions[Price]=<=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
                             }
                             if(categoryId.equals("") == true&&status.equals("") == false){
-                                // status
-                                String parameter = "&Filters[status]=\""+status+"\"&FilterConditions[status]==";
-                                loadDataTableAfterSearch(parameter);
+
+//                                // status
+//                                String parameter = "&Filters[status]=\""+status+"\"&FilterConditions[status]==";
+//                                loadDataTableAfterSearch(parameter);
+                                if(priceExpensive.equals("")==true&&priceLow.equals("")==true){
+                                    // status
+                                    String parameter = "&Filters[status]=\""+status+"\"&FilterConditions[status]==";
+                                    loadDataTableAfterSearch(parameter);
+                                }
+                                if(priceExpensive.equals("")==false&&priceLow.equals("")==false){
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true|| Pattern.matches(price_PATTERN, priceLow) == true){
+                                        // status thap cao
+                                        String parameter = "&Filters[status]=\""+status+"\"&FilterConditions[status]==&Filters[Price]="+priceLow+","+priceExpensive+"&FilterConditions[Price]=between";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                                if(priceExpensive.equals("")==true&&priceLow.equals("")==false){
+                                    if(Pattern.matches(price_PATTERN, priceLow) == true){
+                                        // status thap
+                                        String parameter = "&Filters[status]=\""+status+"\"&FilterConditions[status]==&Filters[Price]="+priceLow+"&FilterConditions[Price]=>=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                                if(priceExpensive.equals("")==false&&priceLow.equals("")==true){
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true){
+                                        // status cao
+                                        String parameter = "&Filters[status]=\""+status+"\"&FilterConditions[status]==&Filters[Price]="+priceExpensive+"&FilterConditions[Price]=<=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
                             }
                             if(categoryId.equals("") == false&&status.equals("") == false){
-                                // status
-                                String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[status]=\""+status+"\"&FilterConditions[status]==";
-                                loadDataTableAfterSearch(parameter);
+                                // status va category
+//                                String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[status]=\""+status+"\"&FilterConditions[status]==";
+//                                loadDataTableAfterSearch(parameter);
+                                if(priceExpensive.equals("")==true&&priceLow.equals("")==true){
+                                    // status va category
+                                    String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[status]=\""+status+"\"&FilterConditions[status]==";
+                                    loadDataTableAfterSearch(parameter);
+                                }
+                                if(priceExpensive.equals("")==false&&priceLow.equals("")==false){
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true|| Pattern.matches(price_PATTERN, priceLow) == true){
+                                        // status va category thap cao
+                                        String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[status]=\""+status+"\"&FilterConditions[status]==&Filters[Price]="+priceLow+","+priceExpensive+"&FilterConditions[Price]=between";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                                if(priceExpensive.equals("")==true&&priceLow.equals("")==false){
+                                    if(Pattern.matches(price_PATTERN, priceLow) == true){
+                                        // status category thap
+                                        String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[status]=\""+status+"\"&FilterConditions[status]==&Filters[Price]="+priceLow+"&FilterConditions[Price]=>=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                                if(priceExpensive.equals("")==false&&priceLow.equals("")==true){
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true){
+                                        // status category cao
+                                        String parameter = "&Filters[tourCategoryId]=\""+categoryId+"\"&FilterConditions[tourCategoryId]==&Filters[status]=\""+status+"\"&FilterConditions[status]==&Filters[Price]="+priceExpensive+"&FilterConditions[Price]=<=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                            }
+                            if(status.equals("")==true&&categoryId.equals("")==true){
+                                if(priceLow.equals("")==false&&priceExpensive.equals("")==false){
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true|| Pattern.matches(price_PATTERN, priceLow) == true){
+                                        // thap cao
+                                        String parameter = "&Filters[Price]="+priceLow+","+priceExpensive+"&FilterConditions[Price]=between";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                                if(priceLow.equals("")==false&&priceExpensive.equals("")==true){
+                                    if(Pattern.matches(price_PATTERN, priceLow) == true){
+                                        // thap
+                                        String parameter = "&Filters[Price]="+priceLow+"&FilterConditions[Price]=>=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
+                                if(priceLow.equals("")==true&&priceExpensive.equals("")==false){
+                                    if(Pattern.matches(price_PATTERN, priceExpensive) == true){
+                                        //  cao
+                                        String parameter = "&Filters[Price]="+priceExpensive+"&FilterConditions[Price]=<=";
+                                        loadDataTableAfterSearch(parameter);
+                                    }else {
+                                        JOptionPane.showMessageDialog(null,"Vui lòng kiểm tra lại giá");
+                                    }
+                                }
                             }
                         }
                     }
@@ -332,6 +611,7 @@ public class GUI_Table_Tour_Management extends JPanel{
                             Handle_API_Tour_Id.Fetch_API_Tour_Id("tours/"+tourId, user.getToken());
                             removeAll();
                             add(new GUI_Edit_Tour());
+                            validate();
                             repaint();
                         }
                     }

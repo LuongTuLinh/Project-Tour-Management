@@ -106,8 +106,8 @@ public class GUI_List_Customers extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String paramterIds = "";
-
-                if(listCustomers.getSelectedValuesList() == null){
+                System.out.println(listCustomers.getSelectedValuesList());
+                if(listCustomers.getSelectedValuesList().isEmpty()){
                     JOptionPane.showMessageDialog(null,"Vui lòng chọn khách hàng");
                 }
                 else {
@@ -127,16 +127,15 @@ public class GUI_List_Customers extends JFrame {
                             }
                         }
                     }
-                }
-
-                String parameterCustomersId="{\"groupId\":"+id+",\"userIds\":["+paramterIds+"]}";
-                StringBuilder stringBuilderIds = new StringBuilder(parameterCustomersId);
-                System.out.println(stringBuilderIds.deleteCharAt(stringBuilderIds.length()-3));
-                String parameter = stringBuilderIds.toString();
-                String response = Handle_API_Tour_Group.send_POST_Add_Customer_To_Group(parameter, "groupDetails", user_dto.getToken());
-                if(response.equals("success") == true){
-                    dispose();
-                    LoadDataTableCustomerInGroup(id);
+                    String parameterCustomersId="{\"groupId\":"+id+",\"userIds\":["+paramterIds+"]}";
+                    StringBuilder stringBuilderIds = new StringBuilder(parameterCustomersId);
+                    System.out.println(stringBuilderIds.deleteCharAt(stringBuilderIds.length()-3));
+                    String parameter = stringBuilderIds.toString();
+                    String response = Handle_API_Tour_Group.send_POST_Add_Customer_To_Group(parameter, "groupDetails", user_dto.getToken());
+                    if(response.equals("success") == true){
+                        dispose();
+                        LoadDataTableCustomerInGroup(id);
+                    }
                 }
             }
         });

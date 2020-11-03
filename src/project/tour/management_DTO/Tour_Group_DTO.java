@@ -21,6 +21,14 @@ public class Tour_Group_DTO {
         this.endDate = endDate;
     }
 
+    public Tour_Group_DTO(String groupId, String groupName, String startDate,
+                          String endDate) {
+        this.groupId = groupId;
+        this.groupName = groupName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public Tour_Group_DTO(String groupId) {
         this.groupId = groupId;
     }

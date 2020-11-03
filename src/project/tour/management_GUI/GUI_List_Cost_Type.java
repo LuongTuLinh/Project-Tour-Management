@@ -140,7 +140,7 @@ public class GUI_List_Cost_Type extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
 
-                if(listCostType.getSelectedValuesList() == null){
+                if(listCostType.getSelectedValuesList().isEmpty()){
                     JOptionPane.showMessageDialog(null,"Vui lòng chọn chi phí");
                 }
                 else {
@@ -172,15 +172,15 @@ public class GUI_List_Cost_Type extends JFrame {
         });
     }
     public static HashMap<String, String> hashMapCostTypeInGroup(){
-        if(idCustomersInGroup.isEmpty()){
+        if(idCostTypeInGroup.isEmpty()){
             User_DTO user = new User_DTO();
             dataListCostType = new HashMap<String, String>();
-            JSONArray result = new JSONArray(Handle_API_Tour_Group.Fetch_API_List_All_Customers("costTypes?Page=1&Limit=100", user.getToken()));
+            JSONArray result = new JSONArray(Handle_API_Cost_Type.Fetch_API_All_Cost_Type("costTypes?Page=1&Limit=100", user.getToken()));
             for(int i = 0; i < result.length(); i++){
                 JSONObject jsonObj;
                 try {
                     jsonObj = result.getJSONObject(i);
-                    String name = jsonObj.get("lastName").toString()+" "+jsonObj.get("firstName").toString();
+                    String name = jsonObj.get("name").toString();
                     String id = jsonObj.get("id").toString();
 
                     dataListCostType.put(name,id);
@@ -201,7 +201,7 @@ public class GUI_List_Cost_Type extends JFrame {
             System.out.println(costTypeNotIn.deleteCharAt(costTypeNotIn.length()-1));
             User_DTO user = new User_DTO();
             dataListCostType = new HashMap<String, String>();
-            JSONArray result = new JSONArray(Handle_API_Tour_Group.Fetch_API_List_All_Customers("costTypes?Page=1&Limit=100&Filters[Id]="+costTypeNotIn+"&FilterConditions[Id]=notin", user.getToken()));
+            JSONArray result = new JSONArray(Handle_API_Cost_Type.Fetch_API_All_Cost_Type("costTypes?Page=1&Limit=100&Filters[Id]="+costTypeNotIn+"&FilterConditions[Id]=notin", user.getToken()));
             for(int i = 0; i < result.length(); i++){
                 JSONObject jsonObj;
                 try {

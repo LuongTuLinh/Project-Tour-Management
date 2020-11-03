@@ -60,7 +60,7 @@ public class GUI_Login_Tour_Management extends JFrame {
     private JSeparator sptPassword;
 
     private JButton btnLogin;
-    private JButton btnSignup;
+
 
     GUI_Login_Tour_Management() {
         GUI();
@@ -168,12 +168,6 @@ public class GUI_Login_Tour_Management extends JFrame {
         btnLogin.setBackground(Color.WHITE);
         btnLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        btnSignup = new JButton("Tạo tài khoản");
-        btnSignup.setBounds(460, 475, 180, 23);
-        btnSignup.setBackground(new Color(56, 131, 121));
-        btnSignup.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnSignup.setBorder(new MatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
-        btnSignup.setForeground(Color.WHITE);
 
         //---------------------Panel Form Login ------------------------//
         //---------------------Panel Form Login ------------------------//
@@ -219,7 +213,6 @@ public class GUI_Login_Tour_Management extends JFrame {
         panelLogin.add(txtPassword);
         panelLogin.add(sptPassword);
         panelLogin.add(btnLogin);
-        panelLogin.add(btnSignup);
 
         panelLogin.add(lbImageTour_1);
         panelLogin.add(lbImageTour_2);
@@ -263,13 +256,6 @@ public class GUI_Login_Tour_Management extends JFrame {
                 } else {
                     JOptionPane.showMessageDialog(null, "Đăng nhập thất bại, vui lòng thử lại");
                 }
-
-            }
-        });
-        btnSignup.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(null, "Chức năng sắp hoàn thành ");
 
             }
         });

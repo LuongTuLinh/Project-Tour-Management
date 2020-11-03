@@ -61,8 +61,11 @@ public class GUI_Tour_Management extends JFrame{
         private JSeparator sptUnderLogo;
         private JLabel labelMenu;
         private JButton btnTourManagement;
-        private JButton btnAdd;
+        private JButton btnAttractionManagement;
+        private JButton btnCategoryManagement;
         private JButton btnCostTypeManagement;
+        private JButton btnRoleManagement;
+        private JButton btnThongKe;
         
         private JLabel labelSetting;
         private JButton btnUser;
@@ -217,27 +220,60 @@ public class GUI_Tour_Management extends JFrame{
                 btnTourManagement.setFocusPainted(false);
                 btnTourManagement.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 
-                btnAdd = new JButton(" Thêm ");
-                btnAdd.setBackground(new Color(12, 109, 102));
-                btnAdd.setBounds(5,230,190,30);
-                btnAdd.setForeground(new Color(255,255,255));
-                btnAdd.setIcon(new ImageIcon(getClass().getResource("/image/icons8_add_20px.png")));
-                btnAdd.setFont(new Font("Times New Roman",1,14));
-                btnAdd.setHorizontalAlignment(SwingConstants.CENTER);
-                btnAdd.setBorder(null);
-                btnAdd.setFocusPainted(false);
-                btnAdd.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnAttractionManagement = new JButton(" Quản Lý Địa Điểm ");
+                btnAttractionManagement.setBackground(new Color(12, 109, 102));
+                btnAttractionManagement.setBounds(5,230,190,30);
+                btnAttractionManagement.setForeground(new Color(255,255,255));
+                btnAttractionManagement.setIcon(new ImageIcon(getClass().getResource("/image/icons8_around_the_globe_filled_20px.png")));
+                btnAttractionManagement.setFont(new Font("Times New Roman",1,14));
+                btnAttractionManagement.setHorizontalAlignment(SwingConstants.CENTER);
+                btnAttractionManagement.setBorder(null);
+                btnAttractionManagement.setFocusPainted(false);
+                btnAttractionManagement.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                btnCostTypeManagement = new JButton(" Quản Lý Loại Chi Phí ");
+                btnCategoryManagement = new JButton(" Quản Lý Thể Loại ");
+                btnCategoryManagement.setBackground(new Color(12, 109, 102));
+                btnCategoryManagement.setBounds(5,260,190,30);
+                btnCategoryManagement.setForeground(new Color(255,255,255));
+                btnCategoryManagement.setIcon(new ImageIcon(getClass().getResource("/image/icons8_checklist_20px.png")));
+                btnCategoryManagement.setFont(new Font("Times New Roman",1,14));
+                btnCategoryManagement.setHorizontalAlignment(SwingConstants.CENTER);
+                btnCategoryManagement.setBorder(null);
+                btnCategoryManagement.setFocusPainted(false);
+                btnCategoryManagement.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+                btnCostTypeManagement = new JButton("  Quản Lý Chi Phí  ");
                 btnCostTypeManagement.setBackground(new Color(12, 109, 102));
-                btnCostTypeManagement.setBounds(5,260,190,30);
+                btnCostTypeManagement.setBounds(5,290,190,30);
                 btnCostTypeManagement.setForeground(new Color(255,255,255));
-                btnCostTypeManagement.setIcon(new ImageIcon(getClass().getResource("/image/icons8_compass_20px.png")));
+                btnCostTypeManagement.setIcon(new ImageIcon(getClass().getResource("/image/icons8_coin_in_hand_20px.png")));
                 btnCostTypeManagement.setFont(new Font("Times New Roman",1,14));
                 btnCostTypeManagement.setHorizontalAlignment(SwingConstants.CENTER);
                 btnCostTypeManagement.setBorder(null);
                 btnCostTypeManagement.setFocusPainted(false);
                 btnCostTypeManagement.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+                btnRoleManagement = new JButton("Quản Lý Nhiệm Vụ ");
+                btnRoleManagement.setBackground(new Color(12, 109, 102));
+                btnRoleManagement.setBounds(5,320,190,30);
+                btnRoleManagement.setForeground(new Color(255,255,255));
+                btnRoleManagement.setIcon(new ImageIcon(getClass().getResource("/image/icons8_passenger_with_baggage_20px.png")));
+                btnRoleManagement.setFont(new Font("Times New Roman",1,14));
+                btnRoleManagement.setHorizontalAlignment(SwingConstants.CENTER);
+                btnRoleManagement.setBorder(null);
+                btnRoleManagement.setFocusPainted(false);
+                btnRoleManagement.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+                btnThongKe = new JButton("  Thống Kê ");
+                btnThongKe.setBackground(new Color(12, 109, 102));
+                btnThongKe.setBounds(5,350,190,30);
+                btnThongKe.setForeground(new Color(255,255,255));
+                btnThongKe.setIcon(new ImageIcon(getClass().getResource("/image/icons8_bullish_20px.png")));
+                btnThongKe.setFont(new Font("Times New Roman",1,14));
+                btnThongKe.setHorizontalAlignment(SwingConstants.CENTER);
+                btnThongKe.setBorder(null);
+                btnThongKe.setFocusPainted(false);
+                btnThongKe.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 
                 /********** TINH NANG THEM *********/
                 /********** TINH NANG THEM *********/
@@ -305,8 +341,11 @@ public class GUI_Tour_Management extends JFrame{
                 panelMenu.add(sptUnderLogo);
                 panelMenu.add(labelMenu);
                 panelMenu.add(btnTourManagement);
-                panelMenu.add(btnAdd);
+                panelMenu.add(btnAttractionManagement);
+                panelMenu.add(btnCategoryManagement);
                 panelMenu.add(btnCostTypeManagement);
+                panelMenu.add(btnRoleManagement);
+                panelMenu.add(btnThongKe);
                 
                 panelMenu.add(labelSetting);
                 panelMenu.add(btnSetUp);
@@ -352,7 +391,7 @@ public class GUI_Tour_Management extends JFrame{
             btnTourManagement.addMouseListener(new MouseAdapter(){
                 @Override
                 public void mouseEntered(MouseEvent e){
-                    btnTourManagement.setBackground(new Color(19, 113, 106));
+                    btnTourManagement.setBackground(new Color(25, 172, 158));
                 }
                 @Override
                 public void mouseExited(MouseEvent e){
@@ -377,21 +416,38 @@ public class GUI_Tour_Management extends JFrame{
 //                    }
                 }
             });
-            
-            btnAdd.addMouseListener(new MouseAdapter() {
+
+            btnAttractionManagement.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e){
                     panelProcessFunction.removeAll();
-                    panelProcessFunction.add(new GUI_Add_Attraction_and_Category_Tour());
+                    panelProcessFunction.add(new GUI_Attraction_Management());
                     repaint();
                 }
                  @Override
                 public void mouseEntered(MouseEvent e){
-                    btnAdd.setBackground(new Color(19, 113, 106));
+                     btnAttractionManagement.setBackground(new Color(25, 172, 158));
                 }
                 @Override
                 public void mouseExited(MouseEvent e){
-                    btnAdd.setBackground(new Color(12, 109, 102));
+                    btnAttractionManagement.setBackground(new Color(12, 109, 102));
+                }
+            });
+
+            btnCategoryManagement.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    panelProcessFunction.removeAll();
+                    panelProcessFunction.add(new GUI_Category_Management());
+                    repaint();
+                }
+                @Override
+                public void mouseEntered(MouseEvent e){
+                    btnCategoryManagement.setBackground(new Color(25, 172, 158));
+                }
+                @Override
+                public void mouseExited(MouseEvent e){
+                    btnCategoryManagement.setBackground(new Color(12, 109, 102));
                 }
             });
 
@@ -400,17 +456,54 @@ public class GUI_Tour_Management extends JFrame{
                 public void mouseClicked(MouseEvent e){
                     panelProcessFunction.removeAll();
                     panelProcessFunction.add(new GUI_Cost_Type_Management());
+                    validate();
                     repaint();
                 }
                 @Override
                 public void mouseEntered(MouseEvent e){
-                    btnCostTypeManagement.setBackground(new Color(19, 113, 106));
+                    btnCostTypeManagement.setBackground(new Color(25, 172, 158));
                 }
                 @Override
                 public void mouseExited(MouseEvent e){
                     btnCostTypeManagement.setBackground(new Color(12, 109, 102));
             }
             });
+
+            btnRoleManagement.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    panelProcessFunction.removeAll();
+                    panelProcessFunction.add(new GUI_RoleGroup_Management());
+                    validate();
+                    repaint();
+                }
+                @Override
+                public void mouseEntered(MouseEvent e){
+                    btnRoleManagement.setBackground(new Color(25, 172, 158));
+                }
+                @Override
+                public void mouseExited(MouseEvent e){
+                    btnRoleManagement.setBackground(new Color(12, 109, 102));
+                }
+            });
+
+            btnThongKe.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+//                panelProcessFunction.removeAll();
+//                panelProcessFunction.add(new GUI_RoleGroup_Management());
+//                validate();
+//                repaint();
+            }
+            @Override
+            public void mouseEntered(MouseEvent e){
+                btnThongKe.setBackground(new Color(25, 167, 159));
+            }
+            @Override
+            public void mouseExited(MouseEvent e){
+                btnThongKe.setBackground(new Color(12, 109, 102));
+            }
+        });
             
         /********** END HANDLE SET COLOR FOR BUTTON ************/
         

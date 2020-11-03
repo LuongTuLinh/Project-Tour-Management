@@ -3,11 +3,10 @@ package project.tour.management_GUI;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import project.tour.management_API.APIRequester;
-import project.tour.management_DTO.Tour_Category_DTO;
+
+import project.tour.management_DTO.Tour_Group_CostType;
 import project.tour.management_DTO.User_DTO;
 import project.tour.management_Handle_API.Handle_API_Cost_Type;
-import project.tour.management_Handle_API.Handle_API_Tour_Category;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -19,9 +18,13 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static project.tour.management_GUI.GUI_Attraction_Management.encodeValue;
+
 public class GUI_Cost_Type_Management extends JPanel {
-    public static String NameCostType = "";
-    public String IdCostType = "";
+    public Tour_Group_CostType tour_group_costType;
+
+    private JTabbedPane tabbedPane;
+    private JPanel panelCostType;
     /*---------------DECLARE PANEL CostType TOUR--------------------*/
     private JPanel panelFieldCostType;
     private JPanel panelTableCostType;
@@ -53,13 +56,21 @@ public class GUI_Cost_Type_Management extends JPanel {
     }
     public void GUI(){
         setLayout(null);
-        setBounds(0, 30, 990, 590);
+        setBounds(0, 0, 990, 590);
         setBackground(Color.white);
+            tabbedPane = new JTabbedPane();
+            tabbedPane.setBounds(5, 5, 980, 580);
+            tabbedPane.setBackground(new Color(0,77,64));
+            tabbedPane.setForeground(Color.white);
+                panelCostType = new JPanel();
+                panelCostType.setLayout(null);
+                panelCostType.setBounds(5,5,970,570);
+                panelCostType.setBackground(Color.white);
             /*===================PANEL FIELD CostType TOUR========================*/
             panelFieldCostType = new JPanel();
             panelFieldCostType.setLayout(null);
             panelFieldCostType.setBackground(Color.white);
-            panelFieldCostType.setBounds(0,0,400,580);
+            panelFieldCostType.setBounds(0,0,400,570);
             //**************TEXTFIELD NAME CostType*******************//
             labelNameCostType = new JLabel("TÊN LOẠI CHI PHÍ :",JLabel.CENTER);
             labelNameCostType.setFont(new Font("Segoe",Font.BOLD,12));
@@ -202,12 +213,32 @@ public class GUI_Cost_Type_Management extends JPanel {
             /*===================END PANEL TABLE COST TYPE========================*/
 
             /**************ADD PANEL FOR PANEL COST TYPE*********************/
-            add(panelFieldCostType);
-            add(panelTableCostType);
+            panelCostType.add(panelFieldCostType);
+            panelCostType.add(panelTableCostType);
             /**************END ADD PANEL FOR PANEL COST TYPE*********************/
             /*========================END PANEL CostType TOUR====================================*/
-
+        /**************ADD PANEL FOR TABBED PANEL*********************/
+        tabbedPane.addTab("--Loại Chi Phí--", panelCostType);
+        add(tabbedPane);
+        /**************END ADD PANEL FOR TABBED PANEL*********************/
         /*========================END HANDLE CLICK BUTTON OF COST TYPE====================================*/
+
+        labelIconRefreshCostType.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                LoadDataTableCostType();
+            }
+        });
+
+        labelIconSearchCostType.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String nameCostType = txtSearchCostType.getText();
+                nameCostType = encodeValue(nameCostType);
+                String parameter = "&Filters[Name]=\""+nameCostType+"\"&FilterConditions[Name]=like";
+                LoadDataTableCostTypeAfterSearch(parameter);
+            }
+        });
 
         buttonClearFieldCostType.addMouseListener(new MouseAdapter() {
             @Override
@@ -272,9 +303,10 @@ public class GUI_Cost_Type_Management extends JPanel {
                     buttonSaveCostType.setVisible(true);
                     buttonCancelCostType.setVisible(true);
                     txtNameCostType.setText(name);
-                    NameCostType = name;
-                    IdCostType = idCostType;
+//                    NameCostType = name;
+//                    IdCostType = idCostType;
 //                    category_dto = new Tour_Category_DTO(tourId, name);
+                    tour_group_costType = new Tour_Group_CostType(idCostType, name);
                 }
             }
         });
@@ -293,18 +325,22 @@ public class GUI_Cost_Type_Management extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String name = txtNameCostType.getText();
-                if(checkDifferent(name)==false){
+                if(checkDifferent(name, tour_group_costType)==false){
                     User_DTO user = new User_DTO();
-                    String parameter = "{\"id\":"+IdCostType+",\"name\":\""+name+"\"}";
+                    String parameter = "{\"id\":"+tour_group_costType.getCostTypeId()+",\"name\":\""+name+"\"}";
                     System.out.println(parameter);
-                    APIRequester.sendPUT(parameter, "costTypes/"+IdCostType, user.getToken());
-                    clearTextFieldCostType();
-                    LoadDataTableCostType();
-                    buttonSaveCostType.setVisible(false);
-                    buttonCancelCostType.setVisible(false);
-                    buttonAddCostType.setVisible(true);
-                    buttonClearFieldCostType.setVisible(true);
-                    JOptionPane.showMessageDialog(null, "Sửa thành công");
+                    //APIRequester.sendPUT(parameter, "costTypes/"+IdCostType, user.getToken());
+                    String response = Handle_API_Cost_Type.send_PUT_Edit_Cost_Type(parameter, "costTypes/"+tour_group_costType.getCostTypeId(), user.getToken());
+                    if(response.equals("success")){
+                        clearTextFieldCostType();
+                        LoadDataTableCostType();
+                        buttonSaveCostType.setVisible(false);
+                        buttonCancelCostType.setVisible(false);
+                        buttonAddCostType.setVisible(true);
+                        buttonClearFieldCostType.setVisible(true);
+                        JOptionPane.showMessageDialog(null, "Sửa thành công");
+                    }
+
                 }else {
                     JOptionPane.showMessageDialog(null, "Loại chi phí không có thay đổi");
                 }
@@ -337,6 +373,31 @@ public class GUI_Cost_Type_Management extends JPanel {
 
 
     }
+    public void LoadDataTableCostTypeAfterSearch(String parameter){
+        User_DTO user = new User_DTO();
+        JSONArray json = new JSONArray(Handle_API_Cost_Type.Fetch_API_All_Cost_Type("costTypes?Page=1&Limit=100"+parameter, user.getToken()));
+        if(json.length() >= 1) {
+            modeltableCostType.setRowCount(0);
+            for (int i = 0; i < json.length(); i++) {
+
+                JSONObject jsonObj;
+                try {
+                    jsonObj = json.getJSONObject(i);
+                    Vector<String> data = new Vector<>();
+
+                    data.add(jsonObj.get("id").toString());
+                    data.add(jsonObj.get("name").toString());
+
+                    modeltableCostType.addRow(data);
+                } catch (JSONException ex) {
+                    Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            tableCostType.setModel(modeltableCostType);
+        }else {
+            JOptionPane.showMessageDialog(null, "Không tìm thấy chi phí cần tìm");
+        }
+    }
     public void clearTextFieldCostType(){
         txtNameCostType.setText("");
     }
@@ -344,8 +405,8 @@ public class GUI_Cost_Type_Management extends JPanel {
         // Null-safe, short-circuit evaluation.
         return s == null || s.trim().isEmpty();
     }
-    public static boolean checkDifferent(String name){
-        if(name.equals(NameCostType)== true ){
+    public static boolean checkDifferent(String name, Tour_Group_CostType costType){
+        if(name.equals(costType.getCostTypeName())== true ){
             return true;
         }
         return false;

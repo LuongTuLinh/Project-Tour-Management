@@ -4,22 +4,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import project.tour.management_DTO.User_DTO;
+import project.tour.management_Handle_API.Handle_API_Employee_And_Role;
 import project.tour.management_Handle_API.Handle_API_Tour_Group;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static project.tour.management_GUI.GUI_Group_Tour_Details.*;
+import static project.tour.management_GUI.GUI_List_Roles.*;
 
 public class GUI_List_Employee extends JFrame {
+
+    public GUI_List_Roles gui_list_roles =  new GUI_List_Roles();;
+    public static ArrayList<String> arrayListIdRole;
 
     private JPanel panelListEmployee;
 
@@ -61,23 +67,11 @@ public class GUI_List_Employee extends JFrame {
         });
 
         UpdateListEmployee();
-        listEmployee.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        listEmployee.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listEmployee.setFixedCellHeight(30);
         listEmployee.setFixedCellWidth(350);
         listEmployee.setBorder(new EmptyBorder(10,10, 10, 10));
 
-
-        listEmployee.setSelectionModel(new DefaultListSelectionModel() {
-            @Override
-            public void setSelectionInterval(int index0, int index1) {
-                if(super.isSelectedIndex(index0)) {
-                    super.removeSelectionInterval(index0, index1);
-                }
-                else {
-                    super.addSelectionInterval(index0, index1);
-                }
-            }
-        });
         scrollPaneAllEmployee.setViewportView(listEmployee);
 
         btnAddEmployeeToGroup = new JButton("Lưu");
@@ -93,52 +87,106 @@ public class GUI_List_Employee extends JFrame {
         add(panelListEmployee);
         setVisible(true);
 
+        listEmployee.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getButton() == MouseEvent.BUTTON1) {
+                    gui_list_roles.createAndStartDownwardTimer(myFrame);
+                }
+                if(e.getButton() == MouseEvent.BUTTON3) {
+                    listEmployee.clearSelection();
+                    listRoles.clearSelection();
+                    gui_list_roles.createAndStartUpwardTimer();
+                }
+            }
+        });
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dispose();
+
+                GUI_List_Roles.disConnectJFrame();
+                LoadDataEmployeeInGroup(id);
+                LoadDataRoleEmployee(id);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
+
 
         btnAddEmployeeToGroup.addMouseListener(new MouseAdapter() {
             User_DTO user_dto = new User_DTO();
             @Override
             public void mouseClicked(MouseEvent e) {
-                String paramterIds = "";
+                getIdRoles();
+                String idEmployee ="";
+                String idRoles = "";
 
                 if(listEmployee.getSelectedValuesList() == null){
                     JOptionPane.showMessageDialog(null,"Vui lòng chọn nhân viên");
                 }
                 else {
-                    ArrayList<String> arrayListNameSelected = (ArrayList<String>) listEmployee.getSelectedValuesList();
+
                     for(Object x : dataListEmployee.keySet()){
-                        for (String nameSelected : arrayListNameSelected) {
-
-                            System.out.println(x +" và "+nameSelected);
-
-                            if(nameSelected.equals(x)==true){
-                                String idCustomer = dataListEmployee.get(x);
-                                System.out.println("id customer:"+idCustomer);
-
-                                paramterIds+="\""+idCustomer+"\",";
-                                System.out.println(paramterIds);
-
-                            }
+                        if(listEmployee.getSelectedValue().equals(x)){
+                            idEmployee = dataListEmployee.get(x);
                         }
                     }
                 }
+                System.out.println(arrayListIdRole);
+                for(String idrole : arrayListIdRole){
+                    idRoles+=idrole+",";
+                }
+                System.out.println("id: "+idEmployee);
+                StringBuilder idR = new StringBuilder(idRoles);
+                System.out.println("list id roles: "+idR.deleteCharAt(idR.length()-1));
 
-                String parameterCustomersId="{\"groupId\":"+id+",\"userIds\":["+paramterIds+"]}";
-                StringBuilder stringBuilderIds = new StringBuilder(parameterCustomersId);
-                System.out.println(stringBuilderIds.deleteCharAt(stringBuilderIds.length()-3));
-                String parameter = stringBuilderIds.toString();
-                String response = Handle_API_Tour_Group.send_POST_Add_Customer_To_Group(parameter, "groupDetails", user_dto.getToken());
+                String parameter = "{\"groupId\":"+id+",\"staffId\":\""+idEmployee+"\",\"groupRoles\":["+idR.toString()+"]}";
+
+                String response = Handle_API_Tour_Group.send_POST_Add_Customer_To_Group(parameter, "staffGroupRoles", user_dto.getToken());
                 if(response.equals("success") == true){
                     dispose();
-                    LoadDataTableCustomerInGroup(id);
+
+                    GUI_List_Roles.disConnectJFrame();
+                    LoadDataEmployeeInGroup(id);
+                    LoadDataRoleEmployee(id);
                 }
             }
         });
     }
     public static HashMap<String, String> hashMapEmployeeGroup(){
-        if(idCustomersInGroup.isEmpty()){
+        if(idEmployeeInGroup.isEmpty()){
             User_DTO user = new User_DTO();
             dataListEmployee = new HashMap<String, String>();
-            JSONArray result = new JSONArray(Handle_API_Tour_Group.Fetch_API_List_All_Customers("users/staffs?Page=1&Limit=100", user.getToken()));
+            JSONArray result = new JSONArray(Handle_API_Employee_And_Role.Fetch_API_All_Employee("users/staffs?Page=1&Limit=100", user.getToken()));
             for(int i = 0; i < result.length(); i++){
                 JSONObject jsonObj;
                 try {
@@ -154,16 +202,16 @@ public class GUI_List_Employee extends JFrame {
             }
             return dataListEmployee;
         }else {
-            String idCustomer = "";
-            for (String idCustomerNotIn : idCustomersInGroup
+            String idEmployee = "";
+            for (String idEmployeeNotIn : idEmployeeInGroup
             ) {
-                idCustomer += idCustomerNotIn+",";
+                idEmployee += idEmployeeNotIn+",";
             }
-            StringBuilder customerNotIn = new StringBuilder(idCustomer);
-            System.out.println(customerNotIn.deleteCharAt(customerNotIn.length()-1));
+            StringBuilder EmployeeNotIn = new StringBuilder(idEmployee);
+            System.out.println(EmployeeNotIn.deleteCharAt(EmployeeNotIn.length()-1));
             User_DTO user = new User_DTO();
             dataListEmployee = new HashMap<String, String>();
-            JSONArray result = new JSONArray(Handle_API_Tour_Group.Fetch_API_List_All_Customers("users/staffs?Page=1&Limit=100&Filters[Id]="+customerNotIn+"&FilterConditions[Id]=notin", user.getToken()));
+            JSONArray result = new JSONArray(Handle_API_Employee_And_Role.Fetch_API_All_Employee("users/staffs?Page=1&Limit=100&Filters[Id]="+EmployeeNotIn+"&FilterConditions[Id]=notin", user.getToken()));
             for(int i = 0; i < result.length(); i++){
                 JSONObject jsonObj;
                 try {

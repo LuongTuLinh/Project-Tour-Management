@@ -10,8 +10,9 @@ import javax.swing.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Handle_API_Cost_Type {
-    public static JSONArray Fetch_API_All_Cost_Type(String endpoint, String token) {
+public class Handle_API_Employee_And_Role {
+
+    public static JSONArray Fetch_API_All_Employee(String endpoint, String token) {
         JSONParser parser = new JSONParser();
         JSONObject myObject;
         try {
@@ -19,9 +20,9 @@ public class Handle_API_Cost_Type {
 
             JSONObject data = (JSONObject) myObject.get("data");
             if(Integer.parseInt(data.get("totalItems").toString()) >= 1){
-                JSONArray allCostType = (JSONArray) data.get("data");
+                JSONArray allEmployee = (JSONArray) data.get("data");
 
-                return allCostType;
+                return allEmployee;
             }else {
                 return null;
             }
@@ -33,7 +34,30 @@ public class Handle_API_Cost_Type {
         return null;
 
     }
-    public static String sendPost_Add_Cost_Type(String parameter, String endpoint, String token){
+
+    public static JSONArray Fetch_API_All_Role(String endpoint, String token) {
+        JSONParser parser = new JSONParser();
+        JSONObject myObject;
+        try {
+            myObject = (JSONObject) parser.parse(APIRequester.fetchAPI(endpoint, token));
+
+            JSONObject data = (JSONObject) myObject.get("data");
+            if(Integer.parseInt(data.get("totalItems").toString()) >= 1){
+                JSONArray allRoleGroup = (JSONArray) data.get("data");
+
+                return allRoleGroup;
+            }else {
+                return null;
+            }
+
+
+        } catch (ParseException ex) {
+            Logger.getLogger(Handle_API_Get_Tour.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
+    }
+    public static String sendPost_Add_Role_Group(String parameter, String endpoint, String token){
         JSONParser parser = new JSONParser();
         JSONObject myObject;
         try {
@@ -51,7 +75,7 @@ public class Handle_API_Cost_Type {
         }
         return null;
     }
-    public static String sendDeleteCostType(String parameter, String endpoint, String token){
+    public static String sendDeleteRole(String parameter, String endpoint, String token){
         JSONParser parser = new JSONParser();
         JSONObject myObject;
         try {
@@ -69,7 +93,7 @@ public class Handle_API_Cost_Type {
         }
         return null;
     }
-    public static String send_PUT_Edit_Cost_Type(String parameter, String endpoint, String token){
+    public static String send_PUT_Edit_Role(String parameter, String endpoint, String token){
         JSONParser parser = new JSONParser();
         JSONObject myObject;
         try {

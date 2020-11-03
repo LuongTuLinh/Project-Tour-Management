@@ -239,7 +239,7 @@ public class GUI_Edit_Tour extends JPanel{
                     comboBoxCategoryTour = new JComboBox<>();
                         loadCategoryTourComboBox(tour_dto);
 
-                    comboBoxCategoryTour.setBounds(680,13,140,30);
+                    comboBoxCategoryTour.setBounds(680,13,150,30);
                     comboBoxCategoryTour.setFont(new Font("Segoe",Font.BOLD,13));
 
 
@@ -562,12 +562,11 @@ public class GUI_Edit_Tour extends JPanel{
                                     this.thumbColor = new Color(19, 113, 106);
                                 }
                             });
-
-//                            listPlaceSeleted = new JList<>();
+                            
                             modelAttractionTourisSelected = new  DefaultListModel<Tour_Attraction_DTO>();
                             listPlaceTourisSelected = new JList<Tour_Attraction_DTO>(modelAttractionTourisSelected);
                             UpdateJListSelected();
-        //abc();
+
 
                             listPlaceTourisSelected.setFixedCellHeight(27);
                             listPlaceTourisSelected.setFixedCellWidth(100);

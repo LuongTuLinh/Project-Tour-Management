@@ -343,7 +343,7 @@ public class GUI_Table_Group extends JPanel {
                         txtNameGroup.setText(name);
                         dateChooserStartDate.setDate(startDateFormat);
                         dateChooserEndDate.setDate(endDateFormat);
-                        tour_group_dto = new Tour_Group_DTO(id);
+                        tour_group_dto = new Tour_Group_DTO(id, name, substringStartDate, substringEndtDate);
 
                     } catch (java.text.ParseException parseException) {
                         parseException.printStackTrace();
@@ -370,7 +370,7 @@ public class GUI_Table_Group extends JPanel {
                 String startDate = dateFormat.format(dateChooserStartDate.getDate());
                 String  endDate = dateFormat.format(dateChooserEndDate.getDate());
                 if( !empty( name ) && !empty( startDate ) && !empty(endDate)) {
-                    if(checkDifferentGroup(name, startDate, endDate)==false){
+                    if(checkDifferentGroup(name, startDate, endDate, tour_group_dto)==false){
                         User_DTO user = new User_DTO();
                         String parameter = "{\"id\":"+tour_group_dto.getGroupId()+",\"name\":\""+name+"\",\"price\":1233,\"startDate\":\""+startDate+"\",\"endDate\":\""+endDate+"\"}";
                         System.out.println(parameter);
@@ -437,9 +437,8 @@ public class GUI_Table_Group extends JPanel {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return (dateOrNull == null ? null : dateFormat.format(dateOrNull));
     }
-    public static boolean checkDifferentGroup(String name, String startDate, String endDate){
-        Tour_Group_DTO group_dto = new Tour_Group_DTO();
-        if(name.equals(group_dto.getGroupId())== true &&
+    public static boolean checkDifferentGroup(String name, String startDate, String endDate, Tour_Group_DTO group_dto){
+        if(name.equals(group_dto.getGroupName())== true &&
                 startDate.equals(group_dto.getStartDate())== true &&
                 endDate.equals(group_dto.getEndDate())== true){
             return true;
