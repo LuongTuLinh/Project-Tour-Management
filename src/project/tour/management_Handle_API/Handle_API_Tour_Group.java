@@ -5,6 +5,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import project.tour.management_API.APIRequester;
+import project.tour.management_DTO.Tour_DTO;
+import project.tour.management_DTO.Tour_Group_DTO;
+import project.tour.management_DTO.User_DTO;
 
 import javax.swing.*;
 import java.util.logging.Level;
@@ -22,6 +25,25 @@ public class Handle_API_Tour_Group {
             JSONArray tourGroup = (JSONArray) data.get("data");
 
             return tourGroup;
+        } catch (ParseException ex) {
+            Logger.getLogger(Handle_API_Get_Tour.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
+    }
+
+    public static JSONArray API_Get_Tour_Group_Id(String endpoint, String token) {
+        JSONParser parser = new JSONParser();
+        JSONObject myObject;
+        try {
+            myObject = (JSONObject) parser.parse(APIRequester.fetchAPI(endpoint, token));
+            JSONObject data = (JSONObject) myObject.get("data");
+            Tour_Group_DTO tour = new Tour_Group_DTO();
+            tour.setGroupId(data.get("id").toString());
+            tour.setGroupName(data.get("name").toString());
+            tour.setStartDate(data.get("startDate").toString());
+            tour.setStatus(data.get("status").toString());
+            tour.setEndDate(data.get("endDate").toString());
         } catch (ParseException ex) {
             Logger.getLogger(Handle_API_Get_Tour.class.getName()).log(Level.SEVERE, null, ex);
         }

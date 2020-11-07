@@ -94,22 +94,22 @@ public class GUI_Cost_Type_Management extends JPanel {
             buttonAddCostType.setBounds(50,305,170,30);
             buttonAddCostType.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-            buttonClearFieldCostType = new JButton("Xoá");
-            buttonClearFieldCostType.setBackground(new Color(239, 198, 74));
+            buttonClearFieldCostType = new JButton("Làm Mới");
+            buttonClearFieldCostType.setBackground(new Color(255, 255, 255));
             buttonClearFieldCostType.setFont(new Font("Segoe",Font.BOLD,13));
-            buttonClearFieldCostType.setForeground(Color.WHITE);
+            buttonClearFieldCostType.setForeground(Color.BLACK);
             buttonClearFieldCostType.setBounds(250,305,105,30);
             buttonClearFieldCostType.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             buttonSaveCostType = new JButton("Lưu");
-            buttonSaveCostType.setBackground(new Color(41, 149, 85));
+            buttonSaveCostType.setBackground(new Color(32, 171, 214));
             buttonSaveCostType.setFont(new Font("Segoe",Font.BOLD,13));
             buttonSaveCostType.setForeground(Color.WHITE);
             buttonSaveCostType.setBounds(50,305,105,30);
             buttonSaveCostType.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             buttonCancelCostType = new JButton("Huỷ Bỏ");
-            buttonCancelCostType.setBackground(new Color(239, 198, 74));
+            buttonCancelCostType.setBackground(new Color(219, 50, 54));
             buttonCancelCostType.setFont(new Font("Segoe",Font.BOLD,13));
             buttonCancelCostType.setForeground(Color.WHITE);
             buttonCancelCostType.setBounds(250,305,105,30);
@@ -188,14 +188,14 @@ public class GUI_Cost_Type_Management extends JPanel {
 
 
             buttonEditCostType = new JButton("Sửa Loại Chi Phí");
-            buttonEditCostType.setBackground(new Color(147, 123, 14));
+            buttonEditCostType.setBackground(new Color(194, 98, 14));
             buttonEditCostType.setFont(new Font("Segoe",Font.BOLD,13));
             buttonEditCostType.setForeground(Color.WHITE);
             buttonEditCostType.setBounds(100,485,150,30);
             buttonEditCostType.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             buttonDeleteCostType = new JButton("Xoá Loại Chi Phí");
-            buttonDeleteCostType.setBackground(new Color(158, 18, 31));
+            buttonDeleteCostType.setBackground(new Color(219, 50, 54));
             buttonDeleteCostType.setFont(new Font("Segoe",Font.BOLD,13));
             buttonDeleteCostType.setForeground(Color.WHITE);
             buttonDeleteCostType.setBounds(300,485,150,30);

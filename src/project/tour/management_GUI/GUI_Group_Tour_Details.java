@@ -10,18 +10,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import project.tour.management_DTO.Tour_DTO;
+import project.tour.management_DTO.Tour_Group_DTO;
 import project.tour.management_DTO.User_DTO;
 import project.tour.management_Handle_API.Handle_API_Employee_And_Role;
 import project.tour.management_Handle_API.Handle_API_Tour_Group;
 
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Vector;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,20 +30,27 @@ import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableModel;
 
+import static project.tour.management_GUI.GUI_Tour_Management.removeAllAndAddNewPanel;
+
 /**
  *
  * @author DELL
  */
 public class GUI_Group_Tour_Details extends JPanel{
+    private static Tour_Group_DTO tour_group_dto;
+    Tour_DTO tour_dto;
+    public static String statusGroup="";
+
     public static ArrayList<String> idCustomersInGroup = new ArrayList<String>();
     public static ArrayList<String> idEmployeeInGroup = new ArrayList<String>();
-    public static ArrayList<String> idCostTypeInGroup = new ArrayList<String>();
     /***************DECLARE JPANEL********************/
         private JPanel panelHeader;
         private JTabbedPane tabbedPaneContent;
     /***************END DECLARE JPANEL********************/
 
     /***************DECLARE COMPONENT FOR PANEL HEADER********************/
+        private JLabel labelBack;
+
         private JLabel labelTitle;
         private JSeparator sptTitle;
 
@@ -58,6 +66,11 @@ public class GUI_Group_Tour_Details extends JPanel{
         private JTextField txtGroupName;
         private JSeparator sptGroupName;
 
+        private JLabel labelStatusGroup;
+        private JComboBox<String> comboBoxStatusGroup;
+
+        private JButton btnSaveGroup;
+
         private JLabel labelGroupPrice;
         private JTextField txtGroupPrice;
         private JSeparator sptGroupPrice;
@@ -70,8 +83,6 @@ public class GUI_Group_Tour_Details extends JPanel{
         private JDateChooser dateChooserEndDate;
         private JSeparator sptEndDate;
 
-        private JButton btnSaveTour;
-        private JButton btnBack;
 
     /***************END DECLARE COMPONENT FOR PANEL HEADER********************/
 
@@ -131,9 +142,13 @@ public class GUI_Group_Tour_Details extends JPanel{
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        System.out.println(startDateFormat);
-        System.out.println(endDateFormat);
+
         init(id, name, price, startDateFormat, endDateFormat);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String startDateG = sdf.format(startDateFormat);
+        String endDateG = sdf.format(endDateFormat);
+        tour_group_dto = new Tour_Group_DTO(id, name, startDateG, endDateG);
     }
     public void init(String id, String name, String price, Date startDateFormat, Date endDateFormat){
         setLayout(null);
@@ -145,12 +160,16 @@ public class GUI_Group_Tour_Details extends JPanel{
         panelHeader.setBackground(Color.white);
         panelHeader.setBounds(0,0,990,150);
 
+        labelBack = new JLabel(" << Trở lại",JLabel.CENTER);
+        labelBack.setFont(new Font("Segoe",Font.BOLD,14));
+        labelBack.setBounds(-5,0,80,30);
+
             labelTitle = new JLabel("Chi Tiết Đoàn:",JLabel.CENTER);
             labelTitle.setFont(new Font("Segoe",Font.BOLD,14));
-            labelTitle.setBounds(-5,0,150,30);
+            labelTitle.setBounds(95,0,150,30);
 
             sptTitle = new JSeparator();
-            sptTitle.setBounds(10,28,120,10);
+            sptTitle.setBounds(110,28,120,10);
             sptTitle.setBackground(new Color(0,0,0));
 
             //**************TEXTFIELD TOUR ID*******************//
@@ -190,19 +209,35 @@ public class GUI_Group_Tour_Details extends JPanel{
             //**************TEXTFIELD GROUP NAME*******************//
             labelGroupName = new JLabel("TÊN ĐOÀN:",JLabel.CENTER);
             labelGroupName.setFont(new Font("Segoe",Font.BOLD,12));
-            labelGroupName.setBounds(505,45,80,30);
+            labelGroupName.setBounds(465,45,80,30);
 
             txtGroupName = new JTextField();
-            txtGroupName.setBounds(585,43,200,30);
+            txtGroupName.setBounds(545,43,200,30);
             txtGroupName.setBorder(null);
             txtGroupName.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
-            txtGroupName.setEditable(false);
             txtGroupName.setText(name);
 
             sptGroupName = new JSeparator();
-            sptGroupName.setBounds(585,73,200,10);
+            sptGroupName.setBounds(545,73,200,10);
             sptGroupName.setBackground(new Color(0,0,0));
             //**************END TEXTFIELD GROUP NAME*******************//
+
+            labelStatusGroup = new JLabel("TRẠNG THÁI:",JLabel.CENTER);
+            labelStatusGroup.setFont(new Font("Segoe",Font.BOLD,12));
+            labelStatusGroup.setBounds(775,45,80,30);
+
+            comboBoxStatusGroup = new JComboBox<>();
+
+            comboBoxStatusGroup.setBounds(860,44,110,30);
+            comboBoxStatusGroup.setFont(new Font("Segoe",Font.BOLD,13));
+            selectedComboBoxStatusGroup();
+
+            btnSaveGroup = new JButton("Lưu");
+            btnSaveGroup.setBackground(new Color(32, 171, 214));
+            btnSaveGroup.setFont(new Font("Segoe",Font.BOLD,13));
+            btnSaveGroup.setForeground(Color.WHITE);
+            btnSaveGroup.setBounds(855,100,115,30);
+            btnSaveGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             //**************TEXTFIELD GROUP PRICE*******************//
             labelGroupPrice = new JLabel("GIÁ :",JLabel.CENTER);
@@ -233,6 +268,7 @@ public class GUI_Group_Tour_Details extends JPanel{
             dateChooserStartDate.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
             dateChooserStartDate.setDateFormatString("yyyy-MM-dd");
             dateChooserStartDate.setDate(startDateFormat);
+            dateChooserStartDate.setEnabled(true);
 
             sptStartDate = new JSeparator();
             sptStartDate.setBounds(362,128,130,10);
@@ -246,11 +282,12 @@ public class GUI_Group_Tour_Details extends JPanel{
             labelEndDate.setBounds(550,100,120,30);
 
             dateChooserEndDate = new JDateChooser();
-            dateChooserEndDate.setBounds(657, 98, 129, 30);
+            dateChooserEndDate.setBounds(658, 98, 129, 30);
             dateChooserEndDate.setBorder(null);
             dateChooserEndDate.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
             dateChooserEndDate.setDateFormatString("yyyy-MM-dd");
             dateChooserEndDate.setDate(endDateFormat);
+            dateChooserEndDate.setEnabled(true);
 
             sptEndDate = new JSeparator();
             sptEndDate.setBounds(657,128,130,10);
@@ -258,21 +295,10 @@ public class GUI_Group_Tour_Details extends JPanel{
 
             //**************END TEXTFIELD END DATE*******************//
 
-            btnSaveTour = new JButton("Lưu");
-            btnSaveTour.setBackground(new Color(32, 171, 214));
-            btnSaveTour.setFont(new Font("Segoe",Font.BOLD,13));
-            btnSaveTour.setForeground(Color.WHITE);
-            btnSaveTour.setBounds(850,35,115,30);
-            btnSaveTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-            btnBack = new JButton("Trờ lại");
-            btnBack.setBackground(new Color(239, 198, 74));
-            btnBack.setFont(new Font("Segoe",Font.BOLD,13));
-            btnBack.setForeground(Color.WHITE);
-            btnBack.setBounds(850,105,115,30);
-            btnBack.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             /********************** ADD ELEMENT FOR HEADER *******************/
+                panelHeader.add(labelBack);
                 panelHeader.add(labelTitle);
                 panelHeader.add(sptTitle);
 
@@ -288,6 +314,10 @@ public class GUI_Group_Tour_Details extends JPanel{
                 panelHeader.add(txtGroupName);
                 panelHeader.add(sptGroupName);
 
+                panelHeader.add(labelStatusGroup);
+                panelHeader.add(comboBoxStatusGroup);
+                panelHeader.add(btnSaveGroup);
+
                 panelHeader.add(labelGroupPrice);
                 panelHeader.add(txtGroupPrice);
                 panelHeader.add(sptGroupPrice);
@@ -300,8 +330,6 @@ public class GUI_Group_Tour_Details extends JPanel{
                 panelHeader.add(dateChooserEndDate);
                 panelHeader.add(sptEndDate);
 
-                panelHeader.add(btnSaveTour);
-                panelHeader.add(btnBack);
             /********************** END ADD ELEMENT FOR HEADER *********************/
         /**==================================*END PANEL HEADER*===================================*/
 
@@ -326,8 +354,8 @@ public class GUI_Group_Tour_Details extends JPanel{
                     modelTableCustomerGroup = new DefaultTableModel(columnNames,0);
                     tableGroupCustomer = new JTable(modelTableCustomerGroup);
                     LoadDataTableCustomerInGroup(id);
-                    tableGroupCustomer.setRowHeight(25);
-                    tableGroupCustomer.setSelectionBackground(new java.awt.Color(0,105,92, 180));
+
+                    tableGroupCustomer.setSelectionBackground(new Color(0,105,92, 180));
                     tableGroupCustomer.getTableHeader().setReorderingAllowed(false);
                     tableGroupCustomer.getTableHeader().setFont(new Font("Times New Roman",Font.BOLD,15));
                     tableGroupCustomer.getTableHeader().setOpaque(false);
@@ -339,6 +367,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                     /****************SET SIZE COLUMN OF TABLE***********************/
                         tableGroupCustomer.getColumnModel().getColumn(0).setPreferredWidth(50);
                         tableGroupCustomer.getColumnModel().getColumn(2).setPreferredWidth(50);
+                        tableGroupCustomer.getColumnModel().getColumn(3).setPreferredWidth(50);
                     /****************SET SIZE COLUMN OF TABLE***********************/
 
 
@@ -351,18 +380,18 @@ public class GUI_Group_Tour_Details extends JPanel{
                             this.thumbColor = new Color(19, 113, 106);
                         }
                     });
-                    scrollPaneTableCustomer.setBounds(100,20,780,340);
+                    scrollPaneTableCustomer.setBounds(80,20,815,340);
 
 
                     btnAddCustomer = new JButton("Thêm khách hàng");
-                    btnAddCustomer.setBackground(new Color(39, 113, 4));
+                    btnAddCustomer.setBackground(new Color(41, 149, 85));
                     btnAddCustomer.setFont(new Font("Segoe",Font.BOLD,13));
                     btnAddCustomer.setForeground(Color.WHITE);
                     btnAddCustomer.setBounds(235,375,165,30);
                     btnAddCustomer.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                     btnRemoveCustomer = new JButton("Xoá");
-                    btnRemoveCustomer.setBackground(new Color(149, 4, 4));
+                    btnRemoveCustomer.setBackground(new Color(219, 50, 54));
                     btnRemoveCustomer.setFont(new Font("Segoe",Font.BOLD,13));
                     btnRemoveCustomer.setForeground(Color.WHITE);
                     btnRemoveCustomer.setBounds(535,375,115,30);
@@ -391,7 +420,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                     tableGroupCostType = new JTable(modelTableCustomerGroup);
                     LoadDataTableCostTypeInGroup(id);
                     tableGroupCostType.setRowHeight(25);
-                    tableGroupCostType.setSelectionBackground(new java.awt.Color(0,105,92, 180));
+                    tableGroupCostType.setSelectionBackground(new Color(0,105,92, 180));
                     tableGroupCostType.getTableHeader().setReorderingAllowed(false);
                     tableGroupCostType.getTableHeader().setFont(new Font("Times New Roman",Font.BOLD,15));
                     tableGroupCostType.getTableHeader().setOpaque(false);
@@ -420,14 +449,14 @@ public class GUI_Group_Tour_Details extends JPanel{
 
 
                     btnAddCostType = new JButton("Thêm Chi Phí");
-                    btnAddCostType.setBackground(new Color(39, 113, 4));
+                    btnAddCostType.setBackground(new Color(41, 149, 85));
                     btnAddCostType.setFont(new Font("Segoe",Font.BOLD,13));
                     btnAddCostType.setForeground(Color.WHITE);
                     btnAddCostType.setBounds(235,375,165,30);
                     btnAddCostType.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                     btnRemoveCostType = new JButton("Xoá");
-                    btnRemoveCostType.setBackground(new Color(149, 4, 4));
+                    btnRemoveCostType.setBackground(new Color(219, 50, 54));
                     btnRemoveCostType.setFont(new Font("Segoe",Font.BOLD,13));
                     btnRemoveCostType.setForeground(Color.WHITE);
                     btnRemoveCostType.setBounds(535,375,115,30);
@@ -446,7 +475,7 @@ public class GUI_Group_Tour_Details extends JPanel{
             panelEmployeeGroup.setBounds(5,5,980,430);
             panelEmployeeGroup.setBackground(Color.white);
 
-                labelTitleEmployeeInGroup = new JLabel("Nhân Viên Đoàn Tour");
+                labelTitleEmployeeInGroup = new JLabel("Các Nhân Viên Trong Đoàn ");
                 labelTitleEmployeeInGroup.setBounds(110,7,250,20);
                 labelTitleEmployeeInGroup.setForeground(new Color(0,0,0));
                 labelTitleEmployeeInGroup.setFont(new Font("Times New Roman",1,18));
@@ -460,7 +489,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                 tableEmployeeGroup = new JTable(modelTableEmployeeGroup);
                 LoadDataEmployeeInGroup(id);
                 tableEmployeeGroup.setRowHeight(25);
-                tableEmployeeGroup.setSelectionBackground(new java.awt.Color(0,105,92, 180));
+                tableEmployeeGroup.setSelectionBackground(new Color(0,105,92, 180));
                 tableEmployeeGroup.getTableHeader().setReorderingAllowed(false);
                 tableEmployeeGroup.getTableHeader().setFont(new Font("Times New Roman",Font.BOLD,15));
                 tableEmployeeGroup.getTableHeader().setOpaque(false);
@@ -489,14 +518,14 @@ public class GUI_Group_Tour_Details extends JPanel{
 
 
                 btnAddEmployeeGroup = new JButton("Thêm nhân viên");
-                btnAddEmployeeGroup.setBackground(new Color(39, 113, 4));
+                btnAddEmployeeGroup.setBackground(new Color(41, 149, 85));
                 btnAddEmployeeGroup.setFont(new Font("Segoe",Font.BOLD,13));
                 btnAddEmployeeGroup.setForeground(Color.WHITE);
                 btnAddEmployeeGroup.setBounds(80,377,165,30);
                 btnAddEmployeeGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                 btnRemoveEmployeeGroup = new JButton("Xoá");
-                btnRemoveEmployeeGroup.setBackground(new Color(149, 4, 4));
+                btnRemoveEmployeeGroup.setBackground(new Color(219, 50, 54));
                 btnRemoveEmployeeGroup.setFont(new Font("Segoe",Font.BOLD,13));
                 btnRemoveEmployeeGroup.setForeground(Color.WHITE);
                 btnRemoveEmployeeGroup.setBounds(380,377,115,30);
@@ -518,7 +547,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                 tableRoleEmployee = new JTable(modelTableRoleEmployee);
                 LoadDataRoleEmployee(id);
                 tableRoleEmployee.setRowHeight(25);
-                tableRoleEmployee.setSelectionBackground(new java.awt.Color(0,105,92, 180));
+                tableRoleEmployee.setSelectionBackground(new Color(0,105,92, 180));
                 tableRoleEmployee.getTableHeader().setReorderingAllowed(false);
                 tableRoleEmployee.getTableHeader().setFont(new Font("Times New Roman",Font.BOLD,15));
                 tableRoleEmployee.getTableHeader().setOpaque(false);
@@ -546,7 +575,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                 scrollPaneTableRoleEmployee.setBounds(600,35,400,330);
 
                 btnRemoveRoleEmployee = new JButton("Xoá nhiệm vụ");
-                btnRemoveRoleEmployee.setBackground(new Color(149, 4, 4));
+                btnRemoveRoleEmployee.setBackground(new Color(219, 50, 54));
                 btnRemoveRoleEmployee.setFont(new Font("Segoe",Font.BOLD,13));
                 btnRemoveRoleEmployee.setForeground(Color.WHITE);
                 btnRemoveRoleEmployee.setBounds(740,377,135,30);
@@ -577,6 +606,62 @@ public class GUI_Group_Tour_Details extends JPanel{
             //revalidate();
         /***************END ADD COMPONENT FOR PANEL MAIN********************/
 
+        checkStatusGroup();
+
+        comboBoxStatusGroup.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent arg0) {
+                System.out.println(comboBoxStatusGroup.getSelectedItem());
+                if(comboBoxStatusGroup.getSelectedItem().equals("Mới")){
+                    statusGroup = "1";
+                }
+                if(comboBoxStatusGroup.getSelectedItem().equals("Đang Xử Lý")){
+                    statusGroup = "2";
+                }
+                if(comboBoxStatusGroup.getSelectedItem().equals("Hoàn Thành")){
+                    statusGroup = "3";
+                }
+                if(comboBoxStatusGroup.getSelectedItem().equals("Huỷ Đoàn")){
+                    statusGroup = "4";
+                }
+            }
+        });
+
+        labelBack.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                removeAllAndAddNewPanel(new GUI_Edit_Tour());
+            }
+        });
+        btnSaveGroup.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String nameG = txtGroupName.getText();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String startDateG = dateFormat.format(dateChooserStartDate.getDate());
+                String  endDateG = dateFormat.format(dateChooserEndDate.getDate());
+                String status = statusGroup != "" ? statusGroup : Tour_Group_DTO.getStatus();
+                String price = txtGroupPrice.getText().replace(",","");
+                if( !empty( name ) && !empty( startDateG ) && !empty(endDateG)) {
+                    if(checkDifferentGroup(nameG, startDateG, endDateG, status)==false){
+                        User_DTO user = new User_DTO();
+                        String parameter = "{\"id\":"+tour_group_dto.getGroupId()+",\"name\":\""+name+"\",\"price\":"+price+",\"status\":"+status+",\"startDate\":\""+startDateG+"\",\"endDate\":\""+endDateG+"\"}";
+                        System.out.println(parameter);
+                        String response = Handle_API_Tour_Group.sendPut_Tour_Group(parameter, "groups/"+tour_group_dto.getGroupId(), user.getToken());
+                        if(response.equals("success")){
+                            //LoadDataTableTourGroup();
+                            getGroupTourId(id);
+                            checkStatusGroup();
+                        }
+
+
+                    }else {
+                        JOptionPane.showMessageDialog(null, "Đoàn tour không có thay đổi");
+                    }
+                }else {
+                    JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng nhập đầy đủ thông tin");
+                }
+            }
+        });
 
         /**======================* HANDLE EVENT TABLE CUSTOMER *==============*/
             btnAddCustomer.addMouseListener(new MouseAdapter() {
@@ -782,7 +867,6 @@ public class GUI_Group_Tour_Details extends JPanel{
         User_DTO user = new User_DTO();
         JSONArray json = new JSONArray(Handle_API_Tour_Group.Fetch_API_Customer_In_Group("groupCosts?Page=1&Limit=100&Filters[groupId]="+groupId+"&FilterConditions[groupId]==", user.getToken()));
 
-        idCostTypeInGroup.clear();
 
         modelTableCostType.setRowCount(0);
         for (int i = 0; i < json.length(); i++) {
@@ -791,7 +875,6 @@ public class GUI_Group_Tour_Details extends JPanel{
             try {
                 jsonObj = json.getJSONObject(i);
 //                idCostTypeInGroup += jsonObj.get("costTypeId")+",";
-                idCostTypeInGroup.add(jsonObj.get("costTypeId").toString());
                 JSONObject my = (JSONObject) jsonObj.get("costType");
                 Vector<String> data = new Vector<>();
 
@@ -809,5 +892,76 @@ public class GUI_Group_Tour_Details extends JPanel{
         }
 
         tableGroupCostType.setModel(modelTableCostType);
+    }
+    public void selectedComboBoxStatusGroup(){
+        Map<Integer, String> map = new HashMap<>();
+        map.put(1, "Mới");
+        map.put(2, "Đang Xử Lý");
+        map.put(3, "Hoàn Thành");
+        map.put(4, "Huỷ Đoàn");
+        Set<Integer> set = map.keySet();
+        int i = 0;
+        for (Integer key : set){
+            comboBoxStatusGroup.addItem(map.get(key));
+            System.out.println("aaa"+tour_group_dto.getStatus());
+            int status = Integer.parseInt(tour_group_dto.getStatus());
+            if(status == key){
+                comboBoxStatusGroup.setSelectedIndex(i);
+            }
+            i++;
+        }
+    }
+    public void getGroupTourId(String id){
+        User_DTO user = new User_DTO();
+        Handle_API_Tour_Group.API_Get_Tour_Group_Id("groups/"+id, user.getToken());
+    }
+    public static String formatDateTime(Date dateOrNull) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return (dateOrNull == null ? null : dateFormat.format(dateOrNull));
+    }
+    public static boolean empty( final String s ) {
+        // Null-safe, short-circuit evaluation.
+        return s == null || s.trim().isEmpty();
+    }
+    public static boolean checkDifferentGroup(String name, String startDate, String endDate, String status){
+        if(name.equals(tour_group_dto.getGroupName())== true &&
+                startDate.equals(tour_group_dto.getStartDate())== true &&
+                endDate.equals(tour_group_dto.getEndDate())== true&&
+                status.equals(Tour_Group_DTO.getStatus())==true){
+            return true;
+        }
+        return false;
+    }
+
+//    public void updateGroup(){
+//        txtGroupName.setText(tour_group_dto.getGroupName());
+//    }
+
+    public void checkStatusGroup(){
+        if(Tour_Group_DTO.getStatus().equals("3")==true||Tour_Group_DTO.getStatus().equals("4")==true){
+            btnSaveGroup.setVisible(false);
+            txtGroupName.setEditable(false);
+            dateChooserEndDate.setEnabled(false);
+            dateChooserStartDate.setEnabled(false);
+            btnAddCustomer.setVisible(false);
+            btnRemoveCustomer.setVisible(false);
+            btnAddCostType.setVisible(false);
+            btnRemoveCostType.setVisible(false);
+            btnAddEmployeeGroup.setVisible(false);
+            btnRemoveEmployeeGroup.setVisible(false);
+            btnRemoveRoleEmployee.setVisible(false);
+
+            txtGroupPrice.setBounds(155,98,120,30);
+            labelGroupPrice.setBounds(75,100,80,30);
+            sptGroupPrice.setBounds(155,128,120,10);
+
+            dateChooserStartDate.setBounds(402, 98, 130, 30);
+            labelStartDate.setBounds(295,100,120,30);
+            sptStartDate.setBounds(402,128,130,10);
+
+            dateChooserEndDate.setBounds(698, 98, 129, 30);
+            labelEndDate.setBounds(590,100,120,30);
+            sptEndDate.setBounds(698,128,130,10);
+        }
     }
 }

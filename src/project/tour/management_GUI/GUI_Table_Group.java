@@ -70,15 +70,15 @@ public class GUI_Table_Group extends JPanel {
         //**************TEXTFIELD NAME GROUP*******************//
         labelNameGroup = new JLabel("TÊN ĐOÀN :",JLabel.CENTER);
         labelNameGroup.setFont(new Font("Segoe",Font.BOLD,12));
-        labelNameGroup.setBounds(30,45,80,30);
+        labelNameGroup.setBounds(0,45,80,30);
 
         txtNameGroup = new JTextField();
-        txtNameGroup.setBounds(135,43,180,30);
+        txtNameGroup.setBounds(100,43,180,30);
         txtNameGroup.setBorder(null);
         txtNameGroup.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
 
         sptNameGroup = new JSeparator();
-        sptNameGroup.setBounds(135,73,180,10);
+        sptNameGroup.setBounds(100,73,180,10);
         sptNameGroup.setBackground(new Color(0,0,0));
         //**************END TEXTFIELD NAME GROUP*******************//
 
@@ -87,16 +87,16 @@ public class GUI_Table_Group extends JPanel {
         //**************TEXTFIELD START DATE*******************//
         labelStartDate = new JLabel("NGÀY BẮT ĐẦU :",JLabel.CENTER);
         labelStartDate.setFont(new Font("Segoe",Font.BOLD,12));
-        labelStartDate.setBounds(45,110,120,30);
+        labelStartDate.setBounds(15,110,120,30);
 
         dateChooserStartDate = new JDateChooser();
-        dateChooserStartDate.setBounds(152, 108, 130, 30);
+        dateChooserStartDate.setBounds(122, 108, 130, 30);
         dateChooserStartDate.setBorder(null);
         dateChooserStartDate.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
         dateChooserStartDate.setDateFormatString("yyyy-MM-dd");
 
         sptStartDate = new JSeparator();
-        sptStartDate.setBounds(152,138,130,10);
+        sptStartDate.setBounds(122,138,130,10);
         sptStartDate.setBackground(new Color(0,0,0));
 
         //**************END TEXTFIELD START DATE*******************//
@@ -104,16 +104,16 @@ public class GUI_Table_Group extends JPanel {
         //**************TEXTFIELD END DATE*******************//
         labelEndDate = new JLabel("NGÀY KẾT THÚC :",JLabel.CENTER);
         labelEndDate.setFont(new Font("Segoe",Font.BOLD,12));
-        labelEndDate.setBounds(45,200,120,30);
+        labelEndDate.setBounds(15,200,120,30);
 
         dateChooserEndDate = new JDateChooser();
-        dateChooserEndDate.setBounds(153, 198, 129, 30);
+        dateChooserEndDate.setBounds(123, 198, 129, 30);
         dateChooserEndDate.setBorder(null);
         dateChooserEndDate.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
         dateChooserEndDate.setDateFormatString("yyyy-MM-dd");
 
         sptEndDate = new JSeparator();
-        sptEndDate.setBounds(152,228,130,10);
+        sptEndDate.setBounds(122,228,130,10);
         sptEndDate.setBackground(new Color(0,0,0));
 
         //**************END TEXTFIELD END DATE*******************//
@@ -123,28 +123,28 @@ public class GUI_Table_Group extends JPanel {
         buttonAddGroup.setBackground(new Color(41, 149, 85));
         buttonAddGroup.setFont(new Font("Segoe",Font.BOLD,13));
         buttonAddGroup.setForeground(Color.WHITE);
-        buttonAddGroup.setBounds(30,280,150,30);
+        buttonAddGroup.setBounds(10,280,145,30);
         buttonAddGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        buttonClearFieldGroup = new JButton("Xoá");
-        buttonClearFieldGroup.setBackground(new Color(239, 198, 74));
+        buttonClearFieldGroup = new JButton("Làm mới");
+        buttonClearFieldGroup.setBackground(new Color(255, 255, 255));
         buttonClearFieldGroup.setFont(new Font("Segoe",Font.BOLD,13));
-        buttonClearFieldGroup.setForeground(Color.WHITE);
-        buttonClearFieldGroup.setBounds(230,280,105,30);
+        buttonClearFieldGroup.setForeground(Color.BLACK);
+        buttonClearFieldGroup.setBounds(190,280,105,30);
         buttonClearFieldGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         buttonSaveGroup = new JButton("Lưu");
-        buttonSaveGroup.setBackground(new Color(41, 149, 85));
+        buttonSaveGroup.setBackground(new Color(32, 171, 214));
         buttonSaveGroup.setFont(new Font("Segoe",Font.BOLD,13));
         buttonSaveGroup.setForeground(Color.WHITE);
-        buttonSaveGroup.setBounds(30,280,105,30);
+        buttonSaveGroup.setBounds(10,280,105,30);
         buttonSaveGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         buttonCancelGroup = new JButton("Huỷ Bỏ");
-        buttonCancelGroup.setBackground(new Color(239, 198, 74));
+        buttonCancelGroup.setBackground(new Color(219, 50, 54));
         buttonCancelGroup.setFont(new Font("Segoe",Font.BOLD,13));
         buttonCancelGroup.setForeground(Color.WHITE);
-        buttonCancelGroup.setBounds(230,280,105,30);
+        buttonCancelGroup.setBounds(190,280,105,30);
         buttonCancelGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
         /*===================END PANEL FIELD GROUP TOUR========================*/
 
@@ -155,7 +155,8 @@ public class GUI_Table_Group extends JPanel {
         columnNames.add("Mã Đoàn");
         columnNames.add("Tên Đoàn");
         columnNames.add("Mã Tour");
-        columnNames.add("Giá");
+        columnNames.add("Giá(VND)");
+        columnNames.add("Tình Trạng");
         columnNames.add("Ngày Bắt Đầu");
         columnNames.add("Ngày Kết Thúc");
 
@@ -188,28 +189,28 @@ public class GUI_Table_Group extends JPanel {
                 this.thumbColor = new Color(19, 113, 106);
             }
         });
-        scrollPaneTableGroup.setBounds(370,10,600,340);
+        scrollPaneTableGroup.setBounds(305,10,660,340);
 
 
         buttonEditGroup = new JButton("Sửa Đoàn Tour");
-        buttonEditGroup.setBackground(new Color(255,165, 0));
+        buttonEditGroup.setBackground(new Color(194, 98, 14));
         buttonEditGroup.setFont(new Font("Segoe",Font.BOLD,13));
         buttonEditGroup.setForeground(Color.WHITE);
-        buttonEditGroup.setBounds(435,360,140,30);
+        buttonEditGroup.setBounds(415,360,140,30);
         buttonEditGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         buttonDetailGroup = new JButton("Chi Tiết Đoàn ");
         buttonDetailGroup.setBackground(new Color(38, 210, 159));
         buttonDetailGroup.setFont(new Font("Segoe",Font.BOLD,13));
         buttonDetailGroup.setForeground(Color.WHITE);
-        buttonDetailGroup.setBounds(605,360,140,30);
+        buttonDetailGroup.setBounds(585,360,140,30);
         buttonDetailGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         buttonDeleteGroup = new JButton("Xoá Đoàn Tour");
-        buttonDeleteGroup.setBackground(new Color(214, 38, 53));
+        buttonDeleteGroup.setBackground(new Color(219, 50, 54));
         buttonDeleteGroup.setFont(new Font("Segoe",Font.BOLD,13));
         buttonDeleteGroup.setForeground(Color.WHITE);
-        buttonDeleteGroup.setBounds(775,360,140,30);
+        buttonDeleteGroup.setBounds(755,360,140,30);
         buttonDeleteGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         /*------------------------END PANEL TABLE GROUP TOUR------------------------------*/
@@ -253,14 +254,29 @@ public class GUI_Table_Group extends JPanel {
                     System.out.println("id group:"+id);
                     String name = (tableGroup.getModel().getValueAt(row, 1).toString());
                     String price = (tableGroup.getModel().getValueAt(row, 3).toString());
-                    String startDate = (tableGroup.getModel().getValueAt(row, 4).toString());
-                    String endDate = (tableGroup.getModel().getValueAt(row, 5).toString());
+                    String status = (tableGroup.getModel().getValueAt(row, 4).toString());
+                    String statusGroup = "";
+                    if(status.equals("Mới")==true){
+                        statusGroup +=1;
+                    }
+                    if(status.equals("Đang Xử Lý")==true){
+                        statusGroup +=2;
+                    }
+                    if(status.equals("Hoàn Thành")==true){
+                        statusGroup +=3;
+                    }
+                    if(status.equals("Đã Huỷ")==true){
+                        statusGroup +=4;
+                    }
+                    String startDate = (tableGroup.getModel().getValueAt(row, 5).toString());
+                    String endDate = (tableGroup.getModel().getValueAt(row, 6).toString());
 
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     String substringStartDate = startDate.substring(0,10);
                     String substringEndtDate = endDate.substring(0,10);
 
-                    Tour_Group_DTO group_dto = new Tour_Group_DTO(id, name, price, substringStartDate, substringEndtDate);
+                    tour_group_dto = new Tour_Group_DTO(id, name, price, substringStartDate, substringEndtDate, statusGroup);
+                    Tour_Group_DTO.setStatus(statusGroup);
                     removeAllAndAddNewPanel(new GUI_Group_Tour_Details(id, name, price, substringStartDate, substringEndtDate));
                 }
             }
@@ -324,10 +340,10 @@ public class GUI_Table_Group extends JPanel {
                     JOptionPane.showMessageDialog(null, "Vui lòng chọn đoàn tour cần sửa");
                 }else {
                     String id = (tableGroup.getModel().getValueAt(row, 0).toString());
-                    System.out.println("id group:"+id);
                     String name = (tableGroup.getModel().getValueAt(row, 1).toString());
-                    String startDate = (tableGroup.getModel().getValueAt(row, 4).toString());
-                    String endDate = (tableGroup.getModel().getValueAt(row, 5).toString());
+                    String price = (tableGroup.getModel().getValueAt(row, 3).toString().replace(",",""));
+                    String startDate = (tableGroup.getModel().getValueAt(row, 5).toString());
+                    String endDate = (tableGroup.getModel().getValueAt(row, 6).toString());
 
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     String substringStartDate = startDate.substring(0,10);
@@ -343,7 +359,21 @@ public class GUI_Table_Group extends JPanel {
                         txtNameGroup.setText(name);
                         dateChooserStartDate.setDate(startDateFormat);
                         dateChooserEndDate.setDate(endDateFormat);
-                        tour_group_dto = new Tour_Group_DTO(id, name, substringStartDate, substringEndtDate);
+                        String status = (tableGroup.getModel().getValueAt(row, 4).toString());
+                        String statusGroup = "";
+                        if(status.equals("Mới")==true){
+                            statusGroup +=1;
+                        }
+                        if(status.equals("Đang Xử Lý")==true){
+                            statusGroup +=2;
+                        }
+                        if(status.equals("Hoàn Thành")==true){
+                            statusGroup +=3;
+                        }
+                        if(status.equals("Đã Huỷ")==true){
+                            statusGroup +=4;
+                        }
+                        tour_group_dto = new Tour_Group_DTO(id, name,price, substringStartDate, substringEndtDate, statusGroup);
 
                     } catch (java.text.ParseException parseException) {
                         parseException.printStackTrace();
@@ -372,7 +402,7 @@ public class GUI_Table_Group extends JPanel {
                 if( !empty( name ) && !empty( startDate ) && !empty(endDate)) {
                     if(checkDifferentGroup(name, startDate, endDate, tour_group_dto)==false){
                         User_DTO user = new User_DTO();
-                        String parameter = "{\"id\":"+tour_group_dto.getGroupId()+",\"name\":\""+name+"\",\"price\":1233,\"startDate\":\""+startDate+"\",\"endDate\":\""+endDate+"\"}";
+                        String parameter = "{\"id\":"+tour_group_dto.getGroupId()+",\"name\":\""+name+"\",\"price\":"+tour_group_dto.getPrice()+",\"status\":"+Tour_Group_DTO.getStatus()+",\"startDate\":\""+startDate+"\",\"endDate\":\""+endDate+"\"}";
                         System.out.println(parameter);
                         String response = Handle_API_Tour_Group.sendPut_Tour_Group(parameter, "groups/"+tour_group_dto.getGroupId(), user.getToken());
                         if(response.equals("success")){
@@ -410,7 +440,24 @@ public class GUI_Table_Group extends JPanel {
                 data.add(jsonObj.get("id").toString());
                 data.add(jsonObj.get("name").toString());
                 data.add(jsonObj.get("tourId").toString());
-                data.add(jsonObj.get("price").toString());
+                int price = Integer.parseInt(jsonObj.get("price").toString());
+                String priceTour = java.text.NumberFormat.getIntegerInstance().format(price);
+                data.add(priceTour);
+                int status = Integer.parseInt(jsonObj.get("status").toString());
+                String statusGroup="";
+                if(status == 1){
+                    statusGroup += "Mới";
+                }
+                if(status == 2){
+                    statusGroup += "Đang Xử Lý";
+                }
+                if(status == 3){
+                    statusGroup += "Hoàn Thành";
+                }
+                if(status == 4){
+                    statusGroup += "Đã Huỷ";
+                }
+                data.add(statusGroup);
                 data.add(jsonObj.get("startDate").toString());
                 data.add(jsonObj.get("endDate").toString());
 

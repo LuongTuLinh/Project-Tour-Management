@@ -8,17 +8,28 @@ public class Tour_Group_DTO {
     private String endDate;
     private String createdAt;
     private String lastModifiedAt;
+    private static String status;
 
     public Tour_Group_DTO() {
     }
 
     public Tour_Group_DTO(String groupId, String groupName, String price, String startDate,
-                          String endDate) {
+                          String endDate, String status) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.price = price;
         this.startDate = startDate;
         this.endDate = endDate;
+        Tour_Group_DTO.status = status;
+    }
+
+    public Tour_Group_DTO(String groupId, String groupName, String startDate,
+                          String endDate, String status) {
+        this.groupId = groupId;
+        this.groupName = groupName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        Tour_Group_DTO.status = status;
     }
 
     public Tour_Group_DTO(String groupId, String groupName, String startDate,
@@ -27,6 +38,14 @@ public class Tour_Group_DTO {
         this.groupName = groupName;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public static String getStatus() {
+        return status;
+    }
+
+    public static void setStatus(String status) {
+        Tour_Group_DTO.status = status;
     }
 
     public Tour_Group_DTO(String groupId) {

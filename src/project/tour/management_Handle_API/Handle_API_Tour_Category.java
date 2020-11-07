@@ -6,6 +6,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import project.tour.management_API.APIRequester;
 
+import javax.swing.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,5 +32,23 @@ public class Handle_API_Tour_Category {
         }
         return null;
 
+    }
+    public static String sendDeleteCategoryTour(String parameter, String endpoint, String token){
+        JSONParser parser = new JSONParser();
+        JSONObject myObject;
+        try {
+            myObject = (JSONObject) parser.parse(APIRequester.sendDelete(parameter, endpoint, token));
+
+            if(myObject.get("ApiErr") == null) {
+                System.out.println("TourDetail Delete Success");
+                return "success";
+            } else {
+                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+                return "error";
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

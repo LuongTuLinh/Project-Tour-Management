@@ -127,22 +127,22 @@ public class GUI_Category_Management extends JPanel{
         buttonAddCategory.setBounds(50,305,150,30);
         buttonAddCategory.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        buttonClearFieldCategory = new JButton("Xoá");
-        buttonClearFieldCategory.setBackground(new Color(239, 198, 74));
+        buttonClearFieldCategory = new JButton("Làm Mới");
+        buttonClearFieldCategory.setBackground(new Color(255, 255, 255));
         buttonClearFieldCategory.setFont(new Font("Segoe",Font.BOLD,13));
-        buttonClearFieldCategory.setForeground(Color.WHITE);
+        buttonClearFieldCategory.setForeground(Color.BLACK);
         buttonClearFieldCategory.setBounds(250,305,105,30);
         buttonClearFieldCategory.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         buttonSaveCategory = new JButton("Lưu");
-        buttonSaveCategory.setBackground(new Color(41, 149, 85));
+        buttonSaveCategory.setBackground(new Color(32, 171, 214));
         buttonSaveCategory.setFont(new Font("Segoe",Font.BOLD,13));
         buttonSaveCategory.setForeground(Color.WHITE);
         buttonSaveCategory.setBounds(50,305,105,30);
         buttonSaveCategory.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         buttonCancelCategory = new JButton("Huỷ Bỏ");
-        buttonCancelCategory.setBackground(new Color(239, 198, 74));
+        buttonCancelCategory.setBackground(new Color(219, 50, 54));
         buttonCancelCategory.setFont(new Font("Segoe",Font.BOLD,13));
         buttonCancelCategory.setForeground(Color.WHITE);
         buttonCancelCategory.setBounds(250,305,105,30);
@@ -221,14 +221,14 @@ public class GUI_Category_Management extends JPanel{
 
 
         buttonEditCategory = new JButton("Sửa Thể Loại");
-        buttonEditCategory.setBackground(new Color(255,165, 0));
+        buttonEditCategory.setBackground(new Color(194, 98, 14));
         buttonEditCategory.setFont(new Font("Segoe",Font.BOLD,13));
         buttonEditCategory.setForeground(Color.WHITE);
         buttonEditCategory.setBounds(100,485,150,30);
         buttonEditCategory.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         buttonDeleteCategory = new JButton("Xoá Thể Loại");
-        buttonDeleteCategory.setBackground(new Color(214, 38, 53));
+        buttonDeleteCategory.setBackground(new Color(219, 50, 54));
         buttonDeleteCategory.setFont(new Font("Segoe",Font.BOLD,13));
         buttonDeleteCategory.setForeground(Color.WHITE);
         buttonDeleteCategory.setBounds(300,485,150,30);
@@ -314,9 +314,13 @@ public class GUI_Category_Management extends JPanel{
                 } else {
                     User_DTO user = new User_DTO();
                     String tourId = (tableCategoryTour.getModel().getValueAt(row, 0).toString());
-                    APIRequester.sendDelete("","tourCategories/"+tourId, user.getToken());
-                    LoadDataTableCategory();
-                    JOptionPane.showMessageDialog(null, "Xoá thể loại thành công");
+                    //APIRequester.sendDelete("","tourCategories/"+tourId, user.getToken());
+                    String response = Handle_API_Tour_Category.sendDeleteCategoryTour("","tourCategories/"+tourId, user.getToken());
+                    if(response.equals("success") == true){
+                        LoadDataTableCategory();
+                        JOptionPane.showMessageDialog(null, "Xoá thể loại thành công");
+                    }
+
                 }
 
             }

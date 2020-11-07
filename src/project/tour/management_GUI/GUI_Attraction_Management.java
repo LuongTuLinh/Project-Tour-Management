@@ -143,22 +143,22 @@ public class GUI_Attraction_Management extends JPanel{
                             buttonAddAttraction.setBounds(50,405,150,30); 
                             buttonAddAttraction.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                            buttonClearFieldAttraction = new JButton("Xoá");
-                            buttonClearFieldAttraction.setBackground(new Color(239, 198, 74));
+                            buttonClearFieldAttraction = new JButton("Làm Mới");
+                            buttonClearFieldAttraction.setBackground(new Color(255, 255, 255));
                             buttonClearFieldAttraction.setFont(new Font("Segoe",Font.BOLD,13));
-                            buttonClearFieldAttraction.setForeground(Color.WHITE);
+                            buttonClearFieldAttraction.setForeground(Color.BLACK);
                             buttonClearFieldAttraction.setBounds(250,405,105,30);
                             buttonClearFieldAttraction.setCursor(new Cursor(Cursor.HAND_CURSOR));
                             
                             buttonSaveAttraction = new JButton("Lưu");
-                            buttonSaveAttraction.setBackground(new Color(41, 149, 85));
+                            buttonSaveAttraction.setBackground(new Color(32, 171, 214));
                             buttonSaveAttraction.setFont(new Font("Segoe",Font.BOLD,13));
                             buttonSaveAttraction.setForeground(Color.WHITE);
                             buttonSaveAttraction.setBounds(50,405,105,30); 
                             buttonSaveAttraction.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                             buttonCancelAttraction = new JButton("Huỷ Bỏ");
-                            buttonCancelAttraction.setBackground(new Color(239, 198, 74));
+                            buttonCancelAttraction.setBackground(new Color(219, 50, 54));
                             buttonCancelAttraction.setFont(new Font("Segoe",Font.BOLD,13));
                             buttonCancelAttraction.setForeground(Color.WHITE);
                             buttonCancelAttraction.setBounds(250,405,105,30);
@@ -243,14 +243,14 @@ public class GUI_Attraction_Management extends JPanel{
                             
                             
                             buttonEditAttraction = new JButton("Sửa Địa Điểm");
-                            buttonEditAttraction.setBackground(new Color(255,165, 0));
+                            buttonEditAttraction.setBackground(new Color(194, 98, 14));
                             buttonEditAttraction.setFont(new Font("Segoe",Font.BOLD,13));
                             buttonEditAttraction.setForeground(Color.WHITE);
                             buttonEditAttraction.setBounds(100,485,150,30); 
                             buttonEditAttraction.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                             buttonDeleteAttraction = new JButton("Xoá Địa Điểm");
-                            buttonDeleteAttraction.setBackground(new Color(214, 38, 53));
+                            buttonDeleteAttraction.setBackground(new Color(219, 50, 54));
                             buttonDeleteAttraction.setFont(new Font("Segoe",Font.BOLD,13));
                             buttonDeleteAttraction.setForeground(Color.WHITE);
                             buttonDeleteAttraction.setBounds(300,485,150,30); 

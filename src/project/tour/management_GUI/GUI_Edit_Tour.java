@@ -74,6 +74,7 @@ public class GUI_Edit_Tour extends JPanel{
         private JLabel labelPriceTour;
         private JTextField txtPriceTour;
         private JSeparator sptPriceTour;
+        private JLabel labelVND;
 
         private JLabel labelStatusTour;
         private JComboBox<String> comboBoxStatusTour;
@@ -205,10 +206,17 @@ public class GUI_Edit_Tour extends JPanel{
                     labelPriceTour.setBounds(600,56,80,30);
 
                     txtPriceTour = new JTextField();
-                    txtPriceTour.setBounds(680,54,125,30);
+                    txtPriceTour.setBounds(680,54,90,30);
                     txtPriceTour.setBorder(null);
                     txtPriceTour.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
-                    txtPriceTour.setText(tour_dto.getPrice());
+
+                    long price = Long.parseLong(tour_dto.getPrice());
+                    String priceTour = java.text.NumberFormat.getIntegerInstance().format(price);
+                    txtPriceTour.setText(priceTour);
+
+                    labelVND = new JLabel("VND",JLabel.CENTER);
+                    labelVND.setFont(new Font("Segoe",Font.BOLD,12));
+                    labelVND.setBounds(770,54,30,30);
 
                     sptPriceTour = new JSeparator();
                     sptPriceTour.setBounds(680,84,125,10);
@@ -253,7 +261,7 @@ public class GUI_Edit_Tour extends JPanel{
                     btnSaveTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                     btnBack = new JButton("Trờ lại");
-                    btnBack.setBackground(new Color(239, 198, 74));
+                    btnBack.setBackground(new Color(149, 148, 142));
                     btnBack.setFont(new Font("Segoe",Font.BOLD,13));
                     btnBack.setForeground(Color.WHITE);
                     btnBack.setBounds(850,100,115,30);
@@ -266,6 +274,7 @@ public class GUI_Edit_Tour extends JPanel{
                     panelHeader.add(labelNameTour);
                     panelHeader.add(txtNameTour);
                     panelHeader.add(sptNameTour);
+                    panelHeader.add(labelVND);
 
                     panelHeader.add(labelPriceTour);
                     panelHeader.add(txtPriceTour);
@@ -369,22 +378,22 @@ public class GUI_Edit_Tour extends JPanel{
                                 buttonAddPrice.setBounds(50,230,150,30);
                                 buttonAddPrice.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                                buttonClearFieldPrice = new JButton("Xoá");
-                                buttonClearFieldPrice.setBackground(new Color(239, 198, 74));
+                                buttonClearFieldPrice = new JButton("Làm Mới");
+                                buttonClearFieldPrice.setBackground(new Color(255, 255, 255));
                                 buttonClearFieldPrice.setFont(new Font("Segoe",Font.BOLD,13));
-                                buttonClearFieldPrice.setForeground(Color.WHITE);
+                                buttonClearFieldPrice.setForeground(Color.BLACK);
                                 buttonClearFieldPrice.setBounds(250,230,105,30);
                                 buttonClearFieldPrice.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                                 buttonSavePrice = new JButton("Lưu");
-                                buttonSavePrice.setBackground(new Color(41, 149, 85));
+                                buttonSavePrice.setBackground(new Color(32, 171, 214));
                                 buttonSavePrice.setFont(new Font("Segoe",Font.BOLD,13));
                                 buttonSavePrice.setForeground(Color.WHITE);
                                 buttonSavePrice.setBounds(50,230,105,30);
                                 buttonSavePrice.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                                 buttonCancelPrice = new JButton("Huỷ Bỏ");
-                                buttonCancelPrice.setBackground(new Color(239, 198, 74));
+                                buttonCancelPrice.setBackground(new Color(219, 50, 54));
                                 buttonCancelPrice.setFont(new Font("Segoe",Font.BOLD,13));
                                 buttonCancelPrice.setForeground(Color.WHITE);
                                 buttonCancelPrice.setBounds(250,230,105,30);
@@ -398,7 +407,7 @@ public class GUI_Edit_Tour extends JPanel{
                                 Vector<String> columnNames = new Vector<>();
                                 columnNames.add("Mã Giá");
                                 columnNames.add("Mã Tour");
-                                columnNames.add("Giá");
+                                columnNames.add("Giá(VND)");
                                 columnNames.add("Ngày Bắt Đầu");
                                 columnNames.add("Ngày Kết Thúc");
                                 modelTablePriceTour = new DefaultTableModel(columnNames,0);
@@ -433,14 +442,14 @@ public class GUI_Edit_Tour extends JPanel{
 
 
                                 buttonEditPrice = new JButton("Sửa Giá Tour");
-                                buttonEditPrice.setBackground(new Color(255,165, 0));
+                                buttonEditPrice.setBackground(new Color(194, 98, 14));
                                 buttonEditPrice.setFont(new Font("Segoe",Font.BOLD,13));
                                 buttonEditPrice.setForeground(Color.WHITE);
                                 buttonEditPrice.setBounds(550,360,150,30);
                                 buttonEditPrice.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                                 buttonDeletePrice = new JButton("Xoá Giá Tour");
-                                buttonDeletePrice.setBackground(new Color(214, 38, 53));
+                                buttonDeletePrice.setBackground(new Color(219, 50, 54));
                                 buttonDeletePrice.setFont(new Font("Segoe",Font.BOLD,13));
                                 buttonDeletePrice.setForeground(Color.WHITE);
                                 buttonDeletePrice.setBounds(750,360,150,30);
@@ -534,14 +543,14 @@ public class GUI_Edit_Tour extends JPanel{
                             btnAddPlaceTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                             btnSavePlaceTour = new JButton("Lưu Địa Điểm");
-                            btnSavePlaceTour.setBackground(new Color(6, 82, 236));
+                            btnSavePlaceTour.setBackground(new Color(32, 171, 214));
                             btnSavePlaceTour.setFont(new Font("Segoe",Font.BOLD,13));
                             btnSavePlaceTour.setForeground(Color.WHITE);
                             btnSavePlaceTour.setBounds(630,373,130,30);
                             btnSavePlaceTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                             btnRemovePlaceTour = new JButton(" Loại Bỏ");
-                            btnRemovePlaceTour.setBackground(new Color(241, 52, 45));
+                            btnRemovePlaceTour.setBackground(new Color(219, 50, 54));
                             btnRemovePlaceTour.setFont(new Font("Segoe",Font.BOLD,13));
                             btnRemovePlaceTour.setForeground(Color.WHITE);
                             btnRemovePlaceTour.setBounds(800,373,115,30);
@@ -611,13 +620,31 @@ public class GUI_Edit_Tour extends JPanel{
         /***************END ADD COMPONENT FOR PANEL MAIN********************/
 
         /*------------------------HANDLE CLICK BUTTON------------------------------*/
+            txtPriceTour.addKeyListener(new KeyAdapter() {
+                public void keyReleased(KeyEvent e) {
+                    String price = txtPriceTour.getText();
+                    long priceTour = Long.parseLong(price.replace(",",""));
+                    String priceNewTour = java.text.NumberFormat.getIntegerInstance().format(priceTour);
+                    txtPriceTour.setText(priceNewTour);
+                }
+            });
+
+            txtPrice.addKeyListener(new KeyAdapter() {
+                public void keyReleased(KeyEvent e) {
+                    String price = txtPrice.getText();
+                    long priceTour = Long.parseLong(price.replace(",",""));
+                    String priceNewTour = java.text.NumberFormat.getIntegerInstance().format(priceTour);
+                    txtPrice.setText(priceNewTour);
+                }
+            });
+
             btnSaveTour.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     User_DTO user = new User_DTO();
                     String name = txtNameTour.getText();
                     String specification = txtSpecification.getText();
-                    String price = txtPriceTour.getText();
+                    String price = txtPriceTour.getText().replace(",","");
                     String price_PATTERN = "^[0-9]+$";
                     String staus = statusTour != "" ? statusTour : Tour_DTO.getStatus();
                     Tour_Category_DTO category_dto = (Tour_Category_DTO) (comboBoxCategoryTour.getSelectedItem());
@@ -656,7 +683,7 @@ public class GUI_Edit_Tour extends JPanel{
             buttonAddPrice.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    String price = txtPrice.getText();
+                    String price = txtPrice.getText().replace(",","");
 
                     String startDate = formatDateTime(dateChooserStartDate.getDate());
                     String  endDate = formatDateTime(dateChooserEndDate.getDate());
@@ -853,10 +880,18 @@ public class GUI_Edit_Tour extends JPanel{
                 String idAttraction ="";
                 for(Tour_Attraction_DTO attraction_dto : dataAttractionisSelected){
                     int index = listPlaceTourisSelected.getSelectedIndex();
-                    System.out.println(index +" va "+ attraction_dto.getIndex());
-                    if(listPlaceTourisSelected.getSelectedValue().equals(attraction_dto.getAttractionsName())==true
-                            &&(index+1)==attraction_dto.getIndex()){
-                        idAttraction = attraction_dto.getAttractionsId();
+
+                    System.out.println(index+1 +" va "+ attraction_dto.getIndex());
+                    System.out.println(listPlaceTourisSelected.getSelectedValue().equals(attraction_dto.getAttractionsName()));
+                    System.out.println(listPlaceTourisSelected.getSelectedValue()+" va "+ attraction_dto.getAttractionsName());
+
+                    int indexAttraction = attraction_dto.getIndex();
+
+                    String name = listPlaceTourisSelected.getSelectedValue().toString();
+                    String nameAttraction = attraction_dto.getAttractionsName();
+
+                    if(name.equals(nameAttraction)==true&&(index+1)==indexAttraction){
+                        idAttraction += attraction_dto.getAttractionsId();
 
                     }
                 }
@@ -1160,7 +1195,9 @@ public class GUI_Edit_Tour extends JPanel{
 
                 data.add(jsonObj.get("id").toString());
                 data.add(jsonObj.get("tourId").toString());
-                data.add(jsonObj.get("price").toString());
+                int price = Integer.parseInt(jsonObj.get("price").toString());
+                String priceTour = java.text.NumberFormat.getIntegerInstance().format(price);
+                data.add(priceTour);
                 data.add(jsonObj.get("startDate").toString());
                 data.add(jsonObj.get("endDate").toString());
 

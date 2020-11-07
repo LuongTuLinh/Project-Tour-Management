@@ -94,22 +94,22 @@ public class GUI_RoleGroup_Management extends JPanel {
         buttonAddRole.setBounds(50,305,170,30);
         buttonAddRole.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        buttonClearFieldRole = new JButton("Xoá");
-        buttonClearFieldRole.setBackground(new Color(239, 198, 74));
+        buttonClearFieldRole = new JButton("Làm Mới");
+        buttonClearFieldRole.setBackground(new Color(255, 255, 255));
         buttonClearFieldRole.setFont(new Font("Segoe",Font.BOLD,13));
-        buttonClearFieldRole.setForeground(Color.WHITE);
+        buttonClearFieldRole.setForeground(Color.BLACK);
         buttonClearFieldRole.setBounds(250,305,105,30);
         buttonClearFieldRole.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         buttonSaveRole = new JButton("Lưu");
-        buttonSaveRole.setBackground(new Color(41, 149, 85));
+        buttonSaveRole.setBackground(new Color(32, 171, 214));
         buttonSaveRole.setFont(new Font("Segoe",Font.BOLD,13));
         buttonSaveRole.setForeground(Color.WHITE);
         buttonSaveRole.setBounds(50,305,105,30);
         buttonSaveRole.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         buttonCancelRole = new JButton("Huỷ Bỏ");
-        buttonCancelRole.setBackground(new Color(239, 198, 74));
+        buttonCancelRole.setBackground(new Color(219, 50, 54));
         buttonCancelRole.setFont(new Font("Segoe",Font.BOLD,13));
         buttonCancelRole.setForeground(Color.WHITE);
         buttonCancelRole.setBounds(250,305,105,30);
@@ -188,14 +188,14 @@ public class GUI_RoleGroup_Management extends JPanel {
 
 
         buttonEditRole = new JButton("Sửa Nhiệm Vụ");
-        buttonEditRole.setBackground(new Color(147, 123, 14));
+        buttonEditRole.setBackground(new Color(194, 98, 14));
         buttonEditRole.setFont(new Font("Segoe",Font.BOLD,13));
         buttonEditRole.setForeground(Color.WHITE);
         buttonEditRole.setBounds(100,485,150,30);
         buttonEditRole.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         buttonDeleteRole = new JButton("Xoá Nhiệm Vụ");
-        buttonDeleteRole.setBackground(new Color(158, 18, 31));
+        buttonDeleteRole.setBackground(new Color(219, 50, 54));
         buttonDeleteRole.setFont(new Font("Segoe",Font.BOLD,13));
         buttonDeleteRole.setForeground(Color.WHITE);
         buttonDeleteRole.setBounds(300,485,150,30);

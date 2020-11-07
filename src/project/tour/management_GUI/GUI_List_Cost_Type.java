@@ -12,6 +12,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ public class GUI_List_Cost_Type extends JFrame {
     private JPanel panelListCostType;
 
     private JLabel labelTitle;
+    private JLabel labelVND;
 
     public static HashMap<String, String> dataListCostType ;
     public static DefaultListModel<String> modelListCostType;
@@ -56,7 +59,7 @@ public class GUI_List_Cost_Type extends JFrame {
         panelListCostType.setBackground(Color.white);
         panelListCostType.setBounds(0,1, 450, 549);
 
-        labelTitle = new JLabel("- - - DANH SÁCH CHI PHÍ - - - ",JLabel.CENTER);
+        labelTitle = new JLabel("- - - DANH SÁCH LOẠI CHI PHÍ - - - ",JLabel.CENTER);
         labelTitle.setFont(new Font("Segoe",Font.BOLD,14));
         labelTitle.setBounds(0,10,450,30);
 
@@ -88,9 +91,13 @@ public class GUI_List_Cost_Type extends JFrame {
         labelPriceCostType.setBounds(0,287,120,30);
 
         txtPriceCostType = new JTextField();
-        txtPriceCostType.setBounds(105,285,150,30);
+        txtPriceCostType.setBounds(105,285,120,30);
         txtPriceCostType.setBorder(null);
         txtPriceCostType.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
+
+        labelVND = new JLabel(" VND",JLabel.CENTER);
+        labelVND.setFont(new Font("Segoe",Font.BOLD,12));
+        labelVND.setBounds(225,286,30,30);
 
         sptPriceCostType = new JSeparator();
         sptPriceCostType.setBounds(105,315,150,10);
@@ -127,6 +134,7 @@ public class GUI_List_Cost_Type extends JFrame {
         panelListCostType.add(labelPriceCostType);
         panelListCostType.add(txtPriceCostType);
         panelListCostType.add(sptPriceCostType);
+        panelListCostType.add(labelVND);
 
         panelListCostType.add(labelDescriptionCostType);
         panelListCostType.add(scrollPaneCostType);
@@ -134,6 +142,15 @@ public class GUI_List_Cost_Type extends JFrame {
         add(panelListCostType);
         setVisible(true);
 
+
+        txtPriceCostType.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                String price = txtPriceCostType.getText();
+                long priceTour = Long.parseLong(price.replace(",",""));
+                String priceNewTour = java.text.NumberFormat.getIntegerInstance().format(priceTour);
+                txtPriceCostType.setText(priceNewTour);
+            }
+        });
 
         btnAddCostTypeToGroup.addMouseListener(new MouseAdapter() {
             User_DTO user_dto = new User_DTO();
@@ -150,7 +167,7 @@ public class GUI_List_Cost_Type extends JFrame {
                             idCostType = dataListCostType.get(x);
                         }
                     }
-                    String price = txtPriceCostType.getText();
+                    String price = txtPriceCostType.getText().replace(",","");
                     String note = textAreaDescription.getText();
                     String price_PATTERN = "^[0-9]+$";
                     if(Pattern.matches(price_PATTERN, price) == false) {
@@ -172,7 +189,6 @@ public class GUI_List_Cost_Type extends JFrame {
         });
     }
     public static HashMap<String, String> hashMapCostTypeInGroup(){
-        if(idCostTypeInGroup.isEmpty()){
             User_DTO user = new User_DTO();
             dataListCostType = new HashMap<String, String>();
             JSONArray result = new JSONArray(Handle_API_Cost_Type.Fetch_API_All_Cost_Type("costTypes?Page=1&Limit=100", user.getToken()));
@@ -190,33 +206,7 @@ public class GUI_List_Cost_Type extends JFrame {
                 }
             }
             return dataListCostType;
-        }else {
-            String idCostType = "";
-            for (String idCostTypeNotIn : idCostTypeInGroup
-                 ) {
-                idCostType += idCostTypeNotIn+",";
-            }
 
-            StringBuilder costTypeNotIn = new StringBuilder(idCostType);
-            System.out.println(costTypeNotIn.deleteCharAt(costTypeNotIn.length()-1));
-            User_DTO user = new User_DTO();
-            dataListCostType = new HashMap<String, String>();
-            JSONArray result = new JSONArray(Handle_API_Cost_Type.Fetch_API_All_Cost_Type("costTypes?Page=1&Limit=100&Filters[Id]="+costTypeNotIn+"&FilterConditions[Id]=notin", user.getToken()));
-            for(int i = 0; i < result.length(); i++){
-                JSONObject jsonObj;
-                try {
-                    jsonObj = result.getJSONObject(i);
-                    String name = jsonObj.get("name").toString();
-                    String id = jsonObj.get("id").toString();
-
-                    dataListCostType.put(name,id);
-
-                } catch (JSONException ex) {
-                    Logger.getLogger(GUI_Edit_Tour.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            return dataListCostType;
-        }
     }
     public void ListCostTypeGroup(){
         hashMapCostTypeInGroup();

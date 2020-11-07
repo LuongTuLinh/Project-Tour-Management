@@ -198,7 +198,7 @@ public class GUI_List_Roles {
                 }
             }
         });
-        t.setInitialDelay(50);
+        t.setInitialDelay(25);
         t.start();
     }
 }

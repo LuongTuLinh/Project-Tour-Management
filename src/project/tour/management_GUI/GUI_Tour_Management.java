@@ -264,7 +264,7 @@ public class GUI_Tour_Management extends JFrame{
                 btnRoleManagement.setFocusPainted(false);
                 btnRoleManagement.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                btnThongKe = new JButton("  Thống Kê ");
+                btnThongKe = new JButton("  Thống Kê              ");
                 btnThongKe.setBackground(new Color(12, 109, 102));
                 btnThongKe.setBounds(5,350,190,30);
                 btnThongKe.setForeground(new Color(255,255,255));
@@ -490,10 +490,10 @@ public class GUI_Tour_Management extends JFrame{
             btnThongKe.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e){
-//                panelProcessFunction.removeAll();
-//                panelProcessFunction.add(new GUI_RoleGroup_Management());
-//                validate();
-//                repaint();
+                panelProcessFunction.removeAll();
+                panelProcessFunction.add(new GUI_Statistical_Tour());
+                validate();
+                repaint();
             }
             @Override
             public void mouseEntered(MouseEvent e){

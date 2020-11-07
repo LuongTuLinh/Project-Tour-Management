@@ -11,7 +11,11 @@ import project.tour.management_Handle_API.Handle_API_Get_Tour;
 import project.tour.management_Handle_API.Handle_API_Tour_Category;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.regex.Pattern;
@@ -32,6 +36,7 @@ public class GUI_Add_New_Tour extends JFrame {
     private JLabel labelNameTour;
     private JTextField txtNameTour;
     private JSeparator sptNameTour;
+    private JLabel labelVND;
 
     private JLabel labelPriceTour;
     private JTextField txtPriceTour;
@@ -103,9 +108,13 @@ public class GUI_Add_New_Tour extends JFrame {
                     labelPriceTour.setBounds(5,100,80,30);
 
                     txtPriceTour = new JTextField();
-                    txtPriceTour.setBounds(90,98,120,30);
-                    txtPriceTour.setBorder(null);
+                    txtPriceTour.setBounds(90,98,90,30);
+                    //txtPriceTour.setBorder(null);
                     txtPriceTour.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
+
+                    labelVND = new JLabel(" VND",JLabel.CENTER);
+                    labelVND.setFont(new Font("Segoe",Font.BOLD,12));
+                    labelVND.setBounds(180,100,30,30);
 
                     sptPriceTour = new JSeparator();
                     sptPriceTour.setBounds(90,128,120,10);
@@ -137,17 +146,17 @@ public class GUI_Add_New_Tour extends JFrame {
                     scrollPaneDescription = new JScrollPane(textAreaDescription);
                     scrollPaneDescription.setBounds(45,245,360,150);
 
-                    buttonSaveNewTour = new JButton("Lưu Tour");
-                    buttonSaveNewTour.setBackground(new Color(9, 66, 179));
+                    buttonSaveNewTour = new JButton("Tạo Mới");
+                    buttonSaveNewTour.setBackground(new Color(41, 149, 85));
                     buttonSaveNewTour.setFont(new Font("Segoe",Font.BOLD,13));
                     buttonSaveNewTour.setForeground(Color.WHITE);
                     buttonSaveNewTour.setBounds(65,420,100,30);
                     buttonSaveNewTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                    buttonClearField = new JButton(" Xoá ");
-                    buttonClearField.setBackground(new Color(193, 49, 42));
+                    buttonClearField = new JButton(" Làm Mới ");
+                    buttonClearField.setBackground(new Color(255, 255, 255));
                     buttonClearField.setFont(new Font("Segoe",Font.BOLD,13));
-                    buttonClearField.setForeground(Color.WHITE);
+                    buttonClearField.setForeground(Color.BLACK);
                     buttonClearField.setBounds(270,420,100,30);
                     buttonClearField.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -165,6 +174,7 @@ public class GUI_Add_New_Tour extends JFrame {
                     panelAddNewTour.add(labelPriceTour);
                     panelAddNewTour.add(txtPriceTour);
                     panelAddNewTour.add(sptPriceTour);
+                    panelAddNewTour.add(labelVND);
 
                     panelAddNewTour.add(labelCategoryTour);
                     panelAddNewTour.add(comboBoxCategoryTour);
@@ -194,7 +204,7 @@ public class GUI_Add_New_Tour extends JFrame {
                     Tour_Category_DTO category_dto = (Tour_Category_DTO) (comboBoxCategoryTour.getSelectedItem());
                     String categoryId = category_dto.getCategoryId();
                     String nameTour = txtNameTour.getText();
-                    String priceTour = txtPriceTour.getText();
+                    String priceTour = txtPriceTour.getText().replace(",","");
                     String specification = textAreaDescription.getText();
                     String price_PATTERN = "^[0-9]+$";
                     if( !empty( nameTour ) && !empty( priceTour ) && !empty( specification ) ) {
@@ -217,6 +227,15 @@ public class GUI_Add_New_Tour extends JFrame {
                     }
                 }
             });
+
+        txtPriceTour.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                String price = txtPriceTour.getText();
+                    long priceTour = Long.parseLong(price.replace(",",""));
+                    String priceNewTour = java.text.NumberFormat.getIntegerInstance().format(priceTour);
+                    txtPriceTour.setText(priceNewTour);
+            }
+        });
         /*********************************END HANDLE BUTTON ADD NEW TOUR *****************************************/
     }
     public static void loadCategoryTourComboBox(){

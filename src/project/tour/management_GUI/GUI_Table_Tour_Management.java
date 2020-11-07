@@ -53,7 +53,7 @@ public class GUI_Table_Tour_Management extends JPanel{
 
     /*************DECLARE ELEMENT JPANEL HEADER********************/
         private JLabel labelSearch;
-        private JLabel lbIconSearch;
+        //private JLabel lbIconSearch;
         private JTextField txtSearch;
         private static JComboBox<Tour_Category_DTO> comboBoxCategoryTour;
         private JComboBox<String> comboBoxStatusTour;
@@ -103,9 +103,9 @@ public class GUI_Table_Tour_Management extends JPanel{
                 txtSearch = new JTextField();
                 txtSearch.setBounds(95,19,250,25);
 
-                lbIconSearch = new JLabel();
-                lbIconSearch.setBounds(360,18,25,25);
-                lbIconSearch.setIcon(new ImageIcon(getClass().getResource("/image/icons8_Search_in_Browser_25px.png")));
+//                lbIconSearch = new JLabel();
+//                lbIconSearch.setBounds(360,18,25,25);
+//                lbIconSearch.setIcon(new ImageIcon(getClass().getResource("/image/icons8_Search_in_Browser_25px.png")));
 
                 listRenderer = new DefaultListCellRenderer();
                 listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER); // center-aligned items
@@ -123,7 +123,7 @@ public class GUI_Table_Tour_Management extends JPanel{
                     comboBoxStatusTour.setRenderer(listRenderer);
 
                 buttonSearchTour = new JButton("Tìm kiếm");
-                buttonSearchTour.setBackground(new Color(26, 26, 26));
+                buttonSearchTour.setBackground(new Color(32, 171, 214));
                 buttonSearchTour.setFont(new Font("Segoe",Font.BOLD,13));
                 buttonSearchTour.setForeground(Color.WHITE);
                 buttonSearchTour.setBounds(810,16,130,30);
@@ -132,7 +132,7 @@ public class GUI_Table_Tour_Management extends JPanel{
             /****************ADD ELEMENT FOR PANEL HEADER***********************/
                 panelHeader.add(labelSearch);
                 panelHeader.add(txtSearch);
-                panelHeader.add(lbIconSearch);
+                //panelHeader.add(lbIconSearch);
                 panelHeader.add(comboBoxCategoryTour);
                 panelHeader.add(comboBoxCategoryTour);
                 panelHeader.add(comboBoxStatusTour);
@@ -143,7 +143,7 @@ public class GUI_Table_Tour_Management extends JPanel{
 
             panelSearchPrice = new JPanel();
             panelSearchPrice.setLayout(null);
-            panelSearchPrice.setBounds(5, 80, 340, 70);
+            panelSearchPrice.setBounds(5, 90, 340, 70);
             panelSearchPrice.setBackground(Color.white);
             Border borderOfPanelSearchPrice = BorderFactory.createTitledBorder("Tìm kiếm theo giá");
             panelSearchPrice.setBorder(borderOfPanelSearchPrice);
@@ -169,7 +169,7 @@ public class GUI_Table_Tour_Management extends JPanel{
             
             
                 btnEditTour = new JButton("Chi Tiết Tour");
-                btnEditTour.setBackground(new Color(239, 198, 74));
+                btnEditTour.setBackground(new Color(236, 155, 53));
                 btnEditTour.setFont(new Font("Segoe",Font.BOLD,13));
                 btnEditTour.setForeground(Color.WHITE);
                 btnEditTour.setBounds(160,20,125,30);
@@ -191,9 +191,9 @@ public class GUI_Table_Tour_Management extends JPanel{
                 btnAddTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                 btnSaveTour = new JButton("Làm mới");
-                btnSaveTour.setBackground(new Color(32, 171, 214));
+                btnSaveTour.setBackground(new Color(255, 255, 255));
                 btnSaveTour.setFont(new Font("Segoe",Font.BOLD,13));
-                btnSaveTour.setForeground(Color.WHITE);
+                btnSaveTour.setForeground(Color.BLACK);
                 btnSaveTour.setBounds(450,20,115,30); 
                 btnSaveTour.setCursor(new Cursor(Cursor.HAND_CURSOR));
             /****************ADD ELEMENT FOR PANEL BUTTON HANDLE TOUR***********************/
@@ -661,9 +661,21 @@ public class GUI_Table_Tour_Management extends JPanel{
                             myObject = (org.json.simple.JSONObject) parser.parse(jsonObj.get("tourCategory").toString());
                         data.add(myObject.get("name").toString());
                         int status = Integer.parseInt(jsonObj.get("status").toString());
-                        EnumStatusTour statusTour = EnumStatusTour.getWeekDayByValue(status);
-                        data.add(statusTour.toString());
-                        data.add(jsonObj.get("price").toString());
+                        //EnumStatusTour statusTour = EnumStatusTour.getWeekDayByValue(status);
+                        String statusTour = "";
+                        if(status ==1 ){
+                            statusTour += "Đang Mở";
+                        }
+                        if(status ==2 ){
+                            statusTour += "Đang Đóng";
+                        }
+                        if(status ==3 ){
+                            statusTour += "Tạm Hoãn";
+                        }
+                        data.add(statusTour);
+                        long price = Long.parseLong(jsonObj.get("price").toString());
+                        String priceTour = java.text.NumberFormat.getIntegerInstance().format(price);
+                        data.add(priceTour);
 
                         modelTableTour.addRow(data);
                     } catch (JSONException | ParseException ex) {
@@ -697,9 +709,21 @@ public class GUI_Table_Tour_Management extends JPanel{
                           myObject = (org.json.simple.JSONObject) parser.parse(jsonObj.get("tourCategory").toString());
                           data.add(myObject.get("name").toString());
                           int status = Integer.parseInt(jsonObj.get("status").toString());
-                          EnumStatusTour statusTour = EnumStatusTour.getWeekDayByValue(status);
-                          data.add(statusTour.toString());
-                          data.add(jsonObj.get("price").toString());
+                          //EnumStatusTour statusTour = EnumStatusTour.getWeekDayByValue(status);
+                          String statusTour = "";
+                          if(status ==1 ){
+                              statusTour += "Đang Mở";
+                          }
+                          if(status ==2 ){
+                              statusTour += "Đang Đóng";
+                          }
+                          if(status ==3 ){
+                              statusTour += "Tạm Hoãn";
+                          }
+                          data.add(statusTour);
+                          int price = Integer.parseInt(jsonObj.get("price").toString());
+                          String priceTour = java.text.NumberFormat.getIntegerInstance().format(price);
+                          data.add(priceTour);
 
                           modelTableTour.addRow(data);
                       } catch (JSONException | ParseException ex) {

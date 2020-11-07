@@ -243,13 +243,12 @@ public class GUI_Login_Tour_Management extends JFrame {
                 String password = txtPassword.getText();
 
                 String input = "{\"email\": \"" + email + "\",\"password\":\"" + password + "\"} ";
-                //String input = "{\"email\":\"luongtulinh@gmail.com\",\"password\":\"12345678\"}";
+
                 Handle_API_Login login = new Handle_API_Login();
                 Handle_API_Login.Login(input, "auth/login", "");
                 User_DTO user = new User_DTO();
                 if (user.getToken() != null) {
                     JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
-                    JOptionPane.showMessageDialog(null, "Xin chào " + user.getFirstName() + " " + user.getLastName());
 
                     GUI_Tour_Management tour_Management = new GUI_Tour_Management();
                     dispose();
@@ -273,7 +272,6 @@ public class GUI_Login_Tour_Management extends JFrame {
                     User_DTO user = new User_DTO();
                     if (user.getToken() != null) {
                         JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
-                        JOptionPane.showMessageDialog(null, "Xin chào " + user.getFirstName() + " " + user.getLastName());
 
                         GUI_Tour_Management tour_Management = new GUI_Tour_Management();
                         dispose();
