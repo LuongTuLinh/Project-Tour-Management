@@ -63,7 +63,7 @@ public class GUI_Pie_Chart extends JFrame{
     public static ArrayList<Tour_Statistical> statisticalTour(String startDate, String endDate){
         User_DTO user = new User_DTO();
         statisticalArrayList = new ArrayList<>();
-        JSONArray json = new JSONArray(Handle_API_Statistical.API_Statistical_Tour("tours/tourArrival?FromDate="+startDate+"&ToDate="+endDate+"", user.getToken()));
+        JSONArray json = new JSONArray(Handle_API_Statistical.API_Statistical_Tour("tours/tourArrivalStatistic?FromDate="+startDate+"&ToDate="+endDate+"", user.getToken()));
         for (int i = 0; i < json.length(); i++) {
 
             JSONObject jsonObj;
