@@ -154,7 +154,7 @@ public class GUI_Table_Group extends JPanel {
 
         columnNames.add("Mã Đoàn");
         columnNames.add("Tên Đoàn");
-        columnNames.add("Mã Tour");
+//        columnNames.add("Mã Tour");
         columnNames.add("Giá(VND)");
         columnNames.add("Tình Trạng");
         columnNames.add("Ngày Bắt Đầu");
@@ -176,7 +176,7 @@ public class GUI_Table_Group extends JPanel {
 
         /****************SET SIZE COLUMN OF TABLE***********************/
         tableGroup.getColumnModel().getColumn(0).setPreferredWidth(40);
-        tableGroup.getColumnModel().getColumn(2).setPreferredWidth(40);
+//        tableGroup.getColumnModel().getColumn(2).setPreferredWidth(40);
         /****************SET SIZE COLUMN OF TABLE***********************/
 
 
@@ -439,7 +439,7 @@ public class GUI_Table_Group extends JPanel {
 
                 data.add(jsonObj.get("id").toString());
                 data.add(jsonObj.get("name").toString());
-                data.add(jsonObj.get("tourId").toString());
+//                data.add(jsonObj.get("tourId").toString());
                 int price = Integer.parseInt(jsonObj.get("price").toString());
                 String priceTour = java.text.NumberFormat.getIntegerInstance().format(price);
                 data.add(priceTour);

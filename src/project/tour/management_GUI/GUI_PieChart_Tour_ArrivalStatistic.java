@@ -24,9 +24,9 @@ import java.util.logging.Logger;
  *
  * @author TVD
  */
-public class GUI_Pie_Chart extends JFrame{
+public class GUI_PieChart_Tour_ArrivalStatistic extends JFrame{
     public static ArrayList<Tour_Statistical> statisticalArrayList;
-    public GUI_Pie_Chart(String startDate, String endDate){
+    public GUI_PieChart_Tour_ArrivalStatistic(String startDate, String endDate){
         GUI(startDate, endDate);
     }
     public void GUI(String startDate, String endDate){
@@ -37,7 +37,7 @@ public class GUI_Pie_Chart extends JFrame{
         setTitle("Biểu đồ JFreeChart trong Java Swing");
         setSize(600, 400);
         //setLocationRelativeTo(null);
-        setLocation(700,295);
+        setLocation(700,245);
         setResizable(false);
         setVisible(true);
     }

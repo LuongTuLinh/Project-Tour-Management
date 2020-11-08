@@ -634,7 +634,22 @@ public class GUI_Table_Tour_Management extends JPanel{
             btnDeleteTour.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    JOptionPane.showMessageDialog(null, "Chức năng sắp hoàn thành");
+                    int row = tableTour.getSelectedRow();
+
+                    if(row == -1)
+                    {
+                        JOptionPane.showMessageDialog(null, "Vui lòng chọn Tour cần xoá");
+                    }
+                    else
+                    {
+                        String tourId = (tableTour.getModel().getValueAt(row, 0).toString());
+
+                        User_DTO user = new User_DTO();
+                        String response = Handle_API_Get_Tour.send_Delete_Tour("","tours/"+tourId,user.getToken());
+                        if(response.equals("success")){
+                            LoadDataTable();
+                        }
+                    }
                 }
             });
         /*------------------------END HANDLE EVENT ONCLICK MOUSE BUTTON-----------------------------*/

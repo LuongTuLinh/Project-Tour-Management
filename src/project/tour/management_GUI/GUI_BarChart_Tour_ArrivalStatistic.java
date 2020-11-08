@@ -11,12 +11,12 @@ import project.tour.management_DTO.Tour_Statistical;
 
 import javax.swing.*;
 
-import static project.tour.management_GUI.GUI_Pie_Chart.statisticalArrayList;
-import static project.tour.management_GUI.GUI_Pie_Chart.statisticalTour;
+import static project.tour.management_GUI.GUI_PieChart_Tour_ArrivalStatistic.statisticalArrayList;
+import static project.tour.management_GUI.GUI_PieChart_Tour_ArrivalStatistic.statisticalTour;
 
-public class GUI_Bar_Chart extends JFrame {
+public class GUI_BarChart_Tour_ArrivalStatistic extends JFrame {
 
-    public GUI_Bar_Chart(String startDate, String endDate) {
+    public GUI_BarChart_Tour_ArrivalStatistic(String startDate, String endDate) {
         GUI(startDate, endDate);
     }
     public void GUI(String startDate, String endDate){
@@ -33,7 +33,7 @@ public class GUI_Bar_Chart extends JFrame {
         chartPanel.setPreferredSize(new java.awt.Dimension( 600 , 367 ) );
         setContentPane( chartPanel );
         setTitle("Biểu đồ JFreeChart trong Java Swing");
-        setLocation(70,295);
+        setLocation(70,245);
         pack( );
         setVisible( true );
     }
