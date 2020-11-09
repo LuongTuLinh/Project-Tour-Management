@@ -16,31 +16,33 @@ import project.tour.management_Handle_API.Handle_API_Statistical;
 
 import javax.swing.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class GUI_BarChart_Tour_PriceStatistic extends JFrame {
-    public static ArrayList<Tour_Statistical> statisticalPriceArrayList;
-    public GUI_BarChart_Tour_PriceStatistic(String startDate, String endDate) {
+public class GUI_BarChart_Tour_Category_Statistic extends JFrame {
+    public static ArrayList<Tour_Statistical> statisticalCategoryArrayList;
+    public GUI_BarChart_Tour_Category_Statistic(String startDate, String endDate) {
         GUI(startDate, endDate);
     }
     public void GUI(String startDate, String endDate){
         setLocation(300,180);
-        statisticalPriceTour(startDate, endDate);
+        statisticalCategoryTour(startDate, endDate);
         JFreeChart barChart = ChartFactory.createBarChart(
-                "Biểu Đồ Doanh Thu Của Tour",
-                "Tên Tour",
-                "Doanh Thu (VND)",
+                "Biểu Đồ Thể Loại Được Chọn Nhiều Nhất",
+                "Tên Thể Loại",
+                "Số Lần Chọn",
                 createDataset(),
                 PlotOrientation.VERTICAL,
                 true, true, false);
 
         ChartPanel chartPanel = new ChartPanel( barChart );
-        chartPanel.setPreferredSize(new java.awt.Dimension( 600 , 367 ) );
+        chartPanel.setPreferredSize(new Dimension( 600 , 367 ) );
         setContentPane( chartPanel );
         setTitle("Biểu đồ thống kê");
+
         pack( );
         setVisible( true );
     }
@@ -48,33 +50,33 @@ public class GUI_BarChart_Tour_PriceStatistic extends JFrame {
     private CategoryDataset createDataset( ) {
         final DefaultCategoryDataset dataset =
                 new DefaultCategoryDataset( );
-        for(Tour_Statistical tour_statistical : statisticalPriceArrayList){
-            if(tour_statistical.getTotalPrice()>0){
-                dataset.addValue( tour_statistical.getTotalPrice() , tour_statistical.getNameTour() , tour_statistical.getNameTour() );
-            }
+        for(Tour_Statistical tour_statistical : statisticalCategoryArrayList){
+            System.out.println(tour_statistical.getTotalArrivalCategoroy());
+                dataset.addValue( tour_statistical.getTotalArrivalCategoroy() , tour_statistical.getNameCategory() , tour_statistical.getNameCategory() );
         }
 
         return dataset;
     }
-    public static ArrayList<Tour_Statistical> statisticalPriceTour(String startDate, String endDate){
+
+    public static ArrayList<Tour_Statistical> statisticalCategoryTour(String startDate, String endDate){
         User_DTO user = new User_DTO();
-        statisticalPriceArrayList = new ArrayList<>();
-        JSONArray json = new JSONArray(Handle_API_Statistical.API_Statistical_Price_Tour("tours/tourPriceStatistic?FromDate="+startDate+"&ToDate="+endDate+"", user.getToken()));
+        statisticalCategoryArrayList = new ArrayList<>();
+        JSONArray json = new JSONArray(Handle_API_Statistical.API_Category_Tour_Statistical("tours/tourCategoryArrivalStatistic?FromDate="+startDate+"&ToDate="+endDate+"", user.getToken()));
         for (int i = 0; i < json.length(); i++) {
 
             JSONObject jsonObj;
             try {
                 jsonObj = json.getJSONObject(i);
                 String name = jsonObj.get("name").toString();
-                double price  = Double.parseDouble(jsonObj.get("totalPrice").toString());
-                Tour_Statistical tour_statistical = new Tour_Statistical(name, price);
-                statisticalPriceArrayList.add(tour_statistical);
+                int totalArrival  = Integer.parseInt(jsonObj.get("totalArrival").toString());
+                Tour_Statistical tour_statistical = new Tour_Statistical(name, totalArrival);
+                statisticalCategoryArrayList.add(tour_statistical);
             } catch (JSONException ex) {
                 Logger.getLogger(GUI_Table_Tour_Management.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
-        return statisticalPriceArrayList;
+        return statisticalCategoryArrayList;
 
     }
 

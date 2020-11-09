@@ -32,7 +32,7 @@ public class GUI_BarChart_Tour_ArrivalStatistic extends JFrame {
         ChartPanel chartPanel = new ChartPanel( barChart );
         chartPanel.setPreferredSize(new java.awt.Dimension( 600 , 367 ) );
         setContentPane( chartPanel );
-        setTitle("Biểu đồ JFreeChart trong Java Swing");
+        setTitle("Biểu đồ thống kê");
         setLocation(70,245);
         pack( );
         setVisible( true );
@@ -65,7 +65,7 @@ public class GUI_BarChart_Tour_ArrivalStatistic extends JFrame {
 //        dataset.addValue( 6.0 , ford , safety );
         for(Tour_Statistical tour_statistical : statisticalArrayList){
             if(tour_statistical.getTourArrival()>0){
-                dataset.addValue( tour_statistical.getTourArrival() , tour_statistical.getName() , tour_statistical.getName() );
+                dataset.addValue( tour_statistical.getTourArrival() , tour_statistical.getNameTour() , tour_statistical.getNameTour() );
             }
         }
 

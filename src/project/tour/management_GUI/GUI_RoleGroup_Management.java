@@ -143,10 +143,12 @@ public class GUI_RoleGroup_Management extends JPanel {
 
         labelIconSearchRole = new JLabel();
         labelIconSearchRole.setBounds(410,20,25,25);
+        labelIconSearchRole.setCursor(new Cursor(Cursor.HAND_CURSOR));
         labelIconSearchRole.setIcon(new ImageIcon(getClass().getResource("/image/icons8_search_property_25px.png")));
 
         labelIconRefreshRole = new JLabel();
         labelIconRefreshRole.setBounds(443,20,25,25);
+        labelIconRefreshRole.setCursor(new Cursor(Cursor.HAND_CURSOR));
         labelIconRefreshRole.setIcon(new ImageIcon(getClass().getResource("/image/icons8_repeat_25px_1.png")));
 
         Vector<String> columnName = new Vector<>();
@@ -165,6 +167,7 @@ public class GUI_RoleGroup_Management extends JPanel {
         tableRoleGroup.getTableHeader().setBackground(new Color(0,77,64));
         tableRoleGroup.getTableHeader().setForeground(new Color(255,255,255));
         tableRoleGroup.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tableRoleGroup.setDefaultEditor(Object.class, null);
 
         //                            DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         //                            rightRenderer.setHorizontalAlignment(JLabel.CENTER);

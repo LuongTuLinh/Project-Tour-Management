@@ -196,10 +196,12 @@ public class GUI_Attraction_Management extends JPanel{
 
                             labelIconSearch = new JLabel();
                             labelIconSearch.setBounds(410,20,25,25);
+                            labelIconSearch.setCursor(new Cursor(Cursor.HAND_CURSOR));
                             labelIconSearch.setIcon(new ImageIcon(getClass().getResource("/image/icons8_search_property_25px.png")));
 
                             labelIconRefreshAttraction = new JLabel();
                             labelIconRefreshAttraction.setBounds(443,20,25,25);
+                            labelIconRefreshAttraction.setCursor(new Cursor(Cursor.HAND_CURSOR));
                             labelIconRefreshAttraction.setIcon(new ImageIcon(getClass().getResource("/image/icons8_repeat_25px_1.png")));
 
                             Vector<String> columnNames = new Vector<>();
@@ -219,6 +221,7 @@ public class GUI_Attraction_Management extends JPanel{
                             tableAttractionTour.getTableHeader().setBackground(new Color(0,77,64));
                             tableAttractionTour.getTableHeader().setForeground(new Color(255,255,255));
                             tableAttractionTour.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                            tableAttractionTour.setDefaultEditor(Object.class, null);
 
 //                            DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 //                            rightRenderer.setHorizontalAlignment(JLabel.CENTER);

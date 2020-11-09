@@ -176,10 +176,12 @@ public class GUI_Category_Management extends JPanel{
 
         labelIconSearchCategory = new JLabel();
         labelIconSearchCategory.setBounds(410,20,25,25);
+        labelIconSearchCategory.setCursor(new Cursor(Cursor.HAND_CURSOR));
         labelIconSearchCategory.setIcon(new ImageIcon(getClass().getResource("/image/icons8_search_property_25px.png")));
 
         labelIconRefreshCategory = new JLabel();
         labelIconRefreshCategory.setBounds(443,20,25,25);
+        labelIconRefreshCategory.setCursor(new Cursor(Cursor.HAND_CURSOR));
         labelIconRefreshCategory.setIcon(new ImageIcon(getClass().getResource("/image/icons8_repeat_25px_1.png")));
 
         Vector<String> columnName = new Vector<>();
@@ -198,6 +200,7 @@ public class GUI_Category_Management extends JPanel{
         tableCategoryTour.getTableHeader().setBackground(new Color(0,77,64));
         tableCategoryTour.getTableHeader().setForeground(new Color(255,255,255));
         tableCategoryTour.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tableCategoryTour.setDefaultEditor(Object.class, null);
 
 //                            DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 //                            rightRenderer.setHorizontalAlignment(JLabel.CENTER);

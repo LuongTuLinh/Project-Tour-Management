@@ -221,7 +221,7 @@ public class GUI_Statistical_Tour extends JPanel {
         panelTourArrivalStatistic1.setLayout(null);
         panelTourArrivalStatistic1.setBounds(25, 470, 940, 100);
         panelTourArrivalStatistic1.setBackground(Color.white);
-        Border border = BorderFactory.createTitledBorder("Thống Kê Chi Phí Đoàn");
+        Border border = BorderFactory.createTitledBorder("Thống Kê Thể Loại Tour");
         panelTourArrivalStatistic1.setBorder(border);
 
 
@@ -326,7 +326,14 @@ public class GUI_Statistical_Tour extends JPanel {
         buttonSearchTour1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(null,"Chức năng sắp hoàn thành");
+                String startDate = formatDateTime(dateChooserStartDate1.getDate());
+                String  endDate = formatDateTime(dateChooserEndDate1.getDate());
+                if(!empty(startDate)&&!empty(endDate)){
+                    GUI_BarChart_Tour_Category_Statistic gui_barChart_tour_category_statistic = new GUI_BarChart_Tour_Category_Statistic(startDate, endDate);
+                }else {
+                    JOptionPane.showMessageDialog(null,"Vui lòng nhập đầy đủ ngày bắt đầu và ngày kết thúc");
+                }
+
             }
         });
         /*****************************************************************************************/

@@ -362,6 +362,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                     tableGroupCustomer.getTableHeader().setBackground(new Color(0,77,64));
                     tableGroupCustomer.getTableHeader().setForeground(new Color(255,255,255));
                     tableGroupCustomer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                    tableGroupCustomer.setDefaultEditor(Object.class, null);
 
 
                     /****************SET SIZE COLUMN OF TABLE***********************/
@@ -427,6 +428,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                     tableGroupCostType.getTableHeader().setBackground(new Color(0,77,64));
                     tableGroupCostType.getTableHeader().setForeground(new Color(255,255,255));
                     tableGroupCostType.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                    tableGroupCostType.setDefaultEditor(Object.class, null);
 
 
                     /****************SET SIZE COLUMN OF TABLE***********************/
@@ -496,6 +498,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                 tableEmployeeGroup.getTableHeader().setBackground(new Color(0,77,64));
                 tableEmployeeGroup.getTableHeader().setForeground(new Color(255,255,255));
                 tableEmployeeGroup.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tableEmployeeGroup.setDefaultEditor(Object.class, null);
 
 
                 /****************SET SIZE COLUMN OF TABLE***********************/
@@ -554,6 +557,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                 tableRoleEmployee.getTableHeader().setBackground(new Color(0,77,64));
                 tableRoleEmployee.getTableHeader().setForeground(new Color(255,255,255));
                 tableRoleEmployee.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tableRoleEmployee.setDefaultEditor(Object.class, null);
 
 
                 /****************SET SIZE COLUMN OF TABLE***********************/

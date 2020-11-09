@@ -34,7 +34,7 @@ public class GUI_PieChart_Tour_StaffStatistic extends JFrame{
         JFreeChart pieChart = createChart(createDataset());
         ChartPanel chartPanel = new ChartPanel(pieChart);
         add(chartPanel);
-        setTitle("Biểu đồ JFreeChart trong Java Swing");
+        setTitle("Biểu đồ thống kê");
         setSize(600, 400);
         //setLocationRelativeTo(null);
         setLocationRelativeTo(null);
@@ -52,7 +52,7 @@ public class GUI_PieChart_Tour_StaffStatistic extends JFrame{
         DefaultPieDataset dataset = new DefaultPieDataset();
         System.out.println(staffStatisticalArrayList);
         for(Tour_Statistical tour_statistical : staffStatisticalArrayList){
-            if(tour_statistical.getTotalStaffArrival() > 10){
+            if(tour_statistical.getTotalStaffArrival() > 0){
                 dataset.setValue(tour_statistical.getStaffFirstName()+" "+tour_statistical.getStaffLastName(),
                         new Double(tour_statistical.getTotalStaffArrival()));
             }

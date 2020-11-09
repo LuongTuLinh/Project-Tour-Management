@@ -50,7 +50,6 @@ public class GUI_Edit_Tour extends JPanel{
     public JList<String> listPlaceTour;
 
     public static HashMap<String, String> dataAttractionSearch ;
-    public static DefaultListModel<String> modelAttractionTourSearch;
 
     //public static HashMap<String, String> dataAttractionisSelected ;
     public static ArrayList<Tour_Attraction_DTO> dataAttractionisSelected;
@@ -421,6 +420,8 @@ public class GUI_Edit_Tour extends JPanel{
                                 tableTourPrice.getTableHeader().setBackground(new Color(0,77,64));
                                 tableTourPrice.getTableHeader().setForeground(new Color(255,255,255));
                                 tableTourPrice.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                                tableTourPrice.setDefaultEditor(Object.class, null);
+
 
 
                                 /****************SET SIZE COLUMN OF TABLE***********************/
@@ -505,6 +506,7 @@ public class GUI_Edit_Tour extends JPanel{
 
                             labelIconSearch = new JLabel();
                             labelIconSearch.setBounds(360,20,25,25);
+                            labelIconSearch.setCursor(new Cursor(Cursor.HAND_CURSOR));
                             labelIconSearch.setIcon(new ImageIcon(getClass().getResource("/image/icons8_search_property_25px.png")));
 
                             labelAllPlaceTour = new JLabel("Tất Cả Địa Điểm Tour");
@@ -776,7 +778,7 @@ public class GUI_Edit_Tour extends JPanel{
             buttonSavePrice.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    String price = txtPrice.getText();
+                    String price = txtPrice.getText().replace(",","");
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     String startDate = dateFormat.format(dateChooserStartDate.getDate());
                     String  endDate = dateFormat.format(dateChooserEndDate.getDate());
@@ -970,11 +972,11 @@ public class GUI_Edit_Tour extends JPanel{
             @Override
             public void mouseClicked(MouseEvent e) {
                 String nameAttraction = txtSearch.getText();
-                if(!empty(nameAttraction)){
+//                if(!empty(nameAttraction)){
                     nameAttraction = encodeValue(nameAttraction);
-                }
+//                }
                 String parameter = "&Filters[Name]=\""+nameAttraction+"\"&FilterConditions[Name]=like";
-
+                modelAttractionTour.removeAllElements();
                 UpdateListAttractionTourAfterSearch(parameter);
             }
         });
@@ -1052,6 +1054,7 @@ public class GUI_Edit_Tour extends JPanel{
             modelAttractionTour.addElement(String.valueOf(object));
         }
         listPlaceTour.setModel(modelAttractionTour);
+        System.out.println(listPlaceTour.getModel());
         listPlaceTour.setFont(new Font("Arial",Font.ITALIC,14));
 
     }
@@ -1082,12 +1085,11 @@ public class GUI_Edit_Tour extends JPanel{
     }
     public void UpdateListAttractionTourAfterSearch(String parameter){
         hashMapTourAttractionAfterSearch(parameter);
-        modelAttractionTourSearch = new  DefaultListModel<String>();
-        listPlaceTour = new JList<String>(modelAttractionTourSearch);
+        modelAttractionTour = new  DefaultListModel<String>();
         for(Object object : dataAttractionSearch.keySet()){
-            modelAttractionTourSearch.addElement(String.valueOf(object));
+            modelAttractionTour.addElement(String.valueOf(object));
         }
-        listPlaceTour.setModel(modelAttractionTourSearch);
+        listPlaceTour.setModel(modelAttractionTour);
         listPlaceTour.setFont(new Font("Arial",Font.ITALIC,14));
 
     }
@@ -1198,8 +1200,12 @@ public class GUI_Edit_Tour extends JPanel{
                 int price = Integer.parseInt(jsonObj.get("price").toString());
                 String priceTour = java.text.NumberFormat.getIntegerInstance().format(price);
                 data.add(priceTour);
-                data.add(jsonObj.get("startDate").toString());
-                data.add(jsonObj.get("endDate").toString());
+                String substringStartDate = jsonObj.get("startDate").toString().substring(0,10);
+                String substringEndtDate = jsonObj.get("endDate").toString().substring(0,10);
+                data.add(substringStartDate);
+                data.add(substringEndtDate);
+                data.add(substringStartDate);
+                data.add(substringEndtDate);
 
                 modelTablePriceTour.addRow(data);
             } catch (JSONException ex) {

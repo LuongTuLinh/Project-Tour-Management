@@ -55,4 +55,19 @@ public class Handle_API_Statistical {
         return null;
 
     }
+    public static JSONArray API_Category_Tour_Statistical(String endpoint, String token) {
+        JSONParser parser = new JSONParser();
+        JSONObject myObject;
+        try {
+            myObject = (JSONObject) parser.parse(APIRequester.fetchAPI(endpoint, token));
+
+            JSONArray categoryTour = (JSONArray) myObject.get("data");
+
+            return categoryTour;
+        } catch (ParseException ex) {
+            Logger.getLogger(Handle_API_Get_Tour.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
+    }
 }

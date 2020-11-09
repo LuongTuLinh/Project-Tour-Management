@@ -210,5 +210,34 @@ public class Handle_API_Tour_Group {
         return null;
 
     }
+    public static String send_Delete_Group_In_Tour(String parameter, String endpoint, String token) {
+        JSONParser parser = new JSONParser();
+        JSONObject myObject;
+        try {
+            myObject = (JSONObject) parser.parse(APIRequester.sendDelete(parameter,endpoint, token));
+
+            if(myObject.get("ApiErr") == null) {
+                //JOptionPane.showMessageDialog(null, "Xoá thành công");
+                return "success";
+            } else {
+                String apierror = myObject.get("ApiErr") == null ? "" : myObject.get("ApiErr").toString();
+
+                String error = "Error:"+ apierror+"\n";
+
+                String[] arrayError = error.split("\\.");
+                String messError = "";
+                for(String s : arrayError){
+                    messError+= s +"\n";
+                }
+
+                JOptionPane.showMessageDialog(null,messError, "My Message", JOptionPane.ERROR_MESSAGE);
+                return "error";
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(Handle_API_Get_Tour.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
+    }
 
 }

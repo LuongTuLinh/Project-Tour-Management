@@ -143,10 +143,12 @@ public class GUI_Cost_Type_Management extends JPanel {
 
             labelIconSearchCostType = new JLabel();
             labelIconSearchCostType.setBounds(410,20,25,25);
+            labelIconSearchCostType.setCursor(new Cursor(Cursor.HAND_CURSOR));
             labelIconSearchCostType.setIcon(new ImageIcon(getClass().getResource("/image/icons8_search_property_25px.png")));
 
             labelIconRefreshCostType = new JLabel();
             labelIconRefreshCostType.setBounds(443,20,25,25);
+            labelIconRefreshCostType.setCursor(new Cursor(Cursor.HAND_CURSOR));
             labelIconRefreshCostType.setIcon(new ImageIcon(getClass().getResource("/image/icons8_repeat_25px_1.png")));
 
             Vector<String> columnName = new Vector<>();
@@ -165,6 +167,7 @@ public class GUI_Cost_Type_Management extends JPanel {
             tableCostType.getTableHeader().setBackground(new Color(0,77,64));
             tableCostType.getTableHeader().setForeground(new Color(255,255,255));
             tableCostType.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            tableCostType.setDefaultEditor(Object.class, null);
 
     //                            DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
     //                            rightRenderer.setHorizontalAlignment(JLabel.CENTER);

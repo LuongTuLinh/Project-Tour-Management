@@ -34,7 +34,7 @@ public class GUI_PieChart_Tour_ArrivalStatistic extends JFrame{
         JFreeChart pieChart = createChart(createDataset());
         ChartPanel chartPanel = new ChartPanel(pieChart);
         add(chartPanel);
-        setTitle("Biểu đồ JFreeChart trong Java Swing");
+        setTitle("Biểu đồ thống kê");
         setSize(600, 400);
         //setLocationRelativeTo(null);
         setLocation(700,245);
@@ -53,7 +53,7 @@ public class GUI_PieChart_Tour_ArrivalStatistic extends JFrame{
         System.out.println(statisticalArrayList);
         for(Tour_Statistical tour_statistical : statisticalArrayList){
             if(tour_statistical.getTourCancel() > 0){
-                dataset.setValue(tour_statistical.getName(), new Double(tour_statistical.getTourCancel()));
+                dataset.setValue(tour_statistical.getNameTour(), new Double(tour_statistical.getTourCancel()));
             }
         }
 //        dataset.setValue("Nhóm 0 - 14", new Double(25.0));

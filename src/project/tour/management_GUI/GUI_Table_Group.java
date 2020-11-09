@@ -119,7 +119,7 @@ public class GUI_Table_Group extends JPanel {
         //**************END TEXTFIELD END DATE*******************//
 
 
-        buttonAddGroup = new JButton("Thêm Đoàn Tour");
+        buttonAddGroup = new JButton("Thêm Đoàn");
         buttonAddGroup.setBackground(new Color(41, 149, 85));
         buttonAddGroup.setFont(new Font("Segoe",Font.BOLD,13));
         buttonAddGroup.setForeground(Color.WHITE);
@@ -172,7 +172,7 @@ public class GUI_Table_Group extends JPanel {
         tableGroup.getTableHeader().setBackground(new Color(0,77,64));
         tableGroup.getTableHeader().setForeground(new Color(255,255,255));
         tableGroup.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
+        tableGroup.setDefaultEditor(Object.class, null);
 
         /****************SET SIZE COLUMN OF TABLE***********************/
         tableGroup.getColumnModel().getColumn(0).setPreferredWidth(40);
@@ -192,7 +192,7 @@ public class GUI_Table_Group extends JPanel {
         scrollPaneTableGroup.setBounds(305,10,660,340);
 
 
-        buttonEditGroup = new JButton("Sửa Đoàn Tour");
+        buttonEditGroup = new JButton("Sửa Đoàn");
         buttonEditGroup.setBackground(new Color(194, 98, 14));
         buttonEditGroup.setFont(new Font("Segoe",Font.BOLD,13));
         buttonEditGroup.setForeground(Color.WHITE);
@@ -206,7 +206,7 @@ public class GUI_Table_Group extends JPanel {
         buttonDetailGroup.setBounds(585,360,140,30);
         buttonDetailGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        buttonDeleteGroup = new JButton("Xoá Đoàn Tour");
+        buttonDeleteGroup = new JButton("Xoá Đoàn");
         buttonDeleteGroup.setBackground(new Color(219, 50, 54));
         buttonDeleteGroup.setFont(new Font("Segoe",Font.BOLD,13));
         buttonDeleteGroup.setForeground(Color.WHITE);
@@ -253,8 +253,8 @@ public class GUI_Table_Group extends JPanel {
                     String id = (tableGroup.getModel().getValueAt(row, 0).toString());
                     System.out.println("id group:"+id);
                     String name = (tableGroup.getModel().getValueAt(row, 1).toString());
-                    String price = (tableGroup.getModel().getValueAt(row, 3).toString());
-                    String status = (tableGroup.getModel().getValueAt(row, 4).toString());
+                    String price = (tableGroup.getModel().getValueAt(row, 2).toString());
+                    String status = (tableGroup.getModel().getValueAt(row, 3).toString());
                     String statusGroup = "";
                     if(status.equals("Mới")==true){
                         statusGroup +=1;
@@ -268,8 +268,8 @@ public class GUI_Table_Group extends JPanel {
                     if(status.equals("Đã Huỷ")==true){
                         statusGroup +=4;
                     }
-                    String startDate = (tableGroup.getModel().getValueAt(row, 5).toString());
-                    String endDate = (tableGroup.getModel().getValueAt(row, 6).toString());
+                    String startDate = (tableGroup.getModel().getValueAt(row, 4).toString());
+                    String endDate = (tableGroup.getModel().getValueAt(row, 5).toString());
 
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     String substringStartDate = startDate.substring(0,10);
@@ -324,9 +324,12 @@ public class GUI_Table_Group extends JPanel {
                 } else {
                     User_DTO user = new User_DTO();
                     String id = (tableGroup.getModel().getValueAt(row, 0).toString());
-                    APIRequester.sendDelete("","groups/"+id, user.getToken());
-                    LoadDataTableTourGroup();
-                    JOptionPane.showMessageDialog(null, "Xoá đoàn tour thành công");
+                    //APIRequester.sendDelete("","groups/"+id, user.getToken());
+                    String response = Handle_API_Tour_Group.send_Delete_Group_In_Tour("","groups/"+id, user.getToken());
+                    if(response.equals("success")==true){
+                        LoadDataTableTourGroup();
+                        JOptionPane.showMessageDialog(null, "Xoá đoàn tour thành công");
+                    }
                 }
 
             }
@@ -341,9 +344,9 @@ public class GUI_Table_Group extends JPanel {
                 }else {
                     String id = (tableGroup.getModel().getValueAt(row, 0).toString());
                     String name = (tableGroup.getModel().getValueAt(row, 1).toString());
-                    String price = (tableGroup.getModel().getValueAt(row, 3).toString().replace(",",""));
-                    String startDate = (tableGroup.getModel().getValueAt(row, 5).toString());
-                    String endDate = (tableGroup.getModel().getValueAt(row, 6).toString());
+                    String price = (tableGroup.getModel().getValueAt(row, 2).toString().replace(",",""));
+                    String startDate = (tableGroup.getModel().getValueAt(row, 4).toString());
+                    String endDate = (tableGroup.getModel().getValueAt(row, 5).toString());
 
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     String substringStartDate = startDate.substring(0,10);
@@ -359,7 +362,7 @@ public class GUI_Table_Group extends JPanel {
                         txtNameGroup.setText(name);
                         dateChooserStartDate.setDate(startDateFormat);
                         dateChooserEndDate.setDate(endDateFormat);
-                        String status = (tableGroup.getModel().getValueAt(row, 4).toString());
+                        String status = (tableGroup.getModel().getValueAt(row, 3).toString());
                         String statusGroup = "";
                         if(status.equals("Mới")==true){
                             statusGroup +=1;
@@ -458,8 +461,11 @@ public class GUI_Table_Group extends JPanel {
                     statusGroup += "Đã Huỷ";
                 }
                 data.add(statusGroup);
-                data.add(jsonObj.get("startDate").toString());
-                data.add(jsonObj.get("endDate").toString());
+//                String startDate =
+                String substringStartDate = jsonObj.get("startDate").toString().substring(0,10);
+                String substringEndtDate = jsonObj.get("endDate").toString().substring(0,10);
+                data.add(substringStartDate);
+                data.add(substringEndtDate);
 
                 modelTableGroup.addRow(data);
             } catch (JSONException ex) {

@@ -220,6 +220,7 @@ public class GUI_Table_Tour_Management extends JPanel{
             tableTour = new JTable(modelTableTour);
 
             LoadDataTable();
+
             
                 tableTour.setRowHeight(25);
                 tableTour.setSelectionBackground(new java.awt.Color(0,105,92, 180));
@@ -229,6 +230,7 @@ public class GUI_Table_Tour_Management extends JPanel{
                 tableTour.getTableHeader().setBackground(new Color(0,77,64));
                 tableTour.getTableHeader().setForeground(new Color(255,255,255));
                 tableTour.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tableTour.setDefaultEditor(Object.class, null);
                 
                 DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
                 rightRenderer.setHorizontalAlignment(JLabel.CENTER);
