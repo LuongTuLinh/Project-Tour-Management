@@ -319,10 +319,13 @@ public class GUI_Attraction_Management extends JPanel{
 
                             User_DTO user = new User_DTO();
                             String parameter = "{\"name\":\""+nameAttraction+"\",\"description\":\""+description+"\"}";
-                            APIRequester.sendPOST(parameter, "touristAttractions", user.getToken());
-                            LoadDataTableAttraction();
-                            JOptionPane.showMessageDialog(null, "Thêm thành công");
-                            clearTextFieldAttraction();
+                            //APIRequester.sendPOST(parameter, "touristAttractions", user.getToken());
+                            String response = Handle_API_Tour_Attractions.sendPost_Add_AttractionTour(parameter, "touristAttractions", user.getToken());
+                            if(response.equals("success")==true){
+                                LoadDataTableAttraction();
+                                JOptionPane.showMessageDialog(null, "Thêm thành công");
+                                clearTextFieldAttraction();
+                            }
 
                     }else {
                         JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng nhập đầy đủ thông tin");

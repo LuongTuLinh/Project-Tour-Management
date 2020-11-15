@@ -51,4 +51,21 @@ public class Handle_API_Tour_Category {
         }
         return null;
     }
+    public static String sendPost_Add_CategoryTour(String parameter, String endpoint, String token){
+        JSONParser parser = new JSONParser();
+        JSONObject myObject;
+        try {
+            myObject = (JSONObject) parser.parse(APIRequester.sendPOST(parameter, endpoint, token));
+
+            if(myObject.get("ApiErr") == null) {
+                return "success";
+            } else {
+                JOptionPane.showMessageDialog(null,"Lỗi: "+ myObject.get("ApiErr").toString());
+                return "error";
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

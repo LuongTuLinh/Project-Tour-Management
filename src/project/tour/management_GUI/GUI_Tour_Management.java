@@ -8,6 +8,7 @@ package project.tour.management_GUI;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -308,18 +309,22 @@ public class GUI_Tour_Management {
 
                 lbFacebook = new JLabel();
                 lbFacebook.setBounds(45,580,20,20);
+                lbFacebook.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 lbFacebook.setIcon(new ImageIcon(getClass().getResource("/image/icons8_Facebook_Old_20px.png")));
 
                 lbInstagram = new JLabel();
                 lbInstagram.setBounds(75,580,20,20);
+                lbInstagram.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 lbInstagram.setIcon(new ImageIcon(getClass().getResource("/image/icons8_instagram_new_20px.png")));
 
                 lbMessenger = new JLabel();
                 lbMessenger.setBounds(105,580,20,20);
+                lbMessenger.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 lbMessenger.setIcon(new ImageIcon(getClass().getResource("/image/icons8_facebook_messenger_20px.png")));
 
                 lbGmail = new JLabel();
                 lbGmail.setBounds(135,580,20,20);
+                lbGmail.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 lbGmail.setIcon(new ImageIcon(getClass().getResource("/image/icons8_google_plus_20px.png")));
 
                 lbDesign = new JLabel("---Design by Banana Team---",JLabel.CENTER);
@@ -524,6 +529,111 @@ public class GUI_Tour_Management {
             @Override
             public void mouseExited(MouseEvent e){
                 btnSetUp.setBackground(new Color(12, 109, 102));
+            }
+        });
+        lbFacebook.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                openWebPage("https://www.facebook.com/linh.tu.923724");
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+        lbInstagram.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                openWebPage("https://www.instagram.com/linh.lee.20/");
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+        lbMessenger.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                openWebPage("https://www.facebook.com/linh.tu.923724");
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+        lbGmail.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                openWebPage("https://accounts.google.com/signin/v2/identifier?service=mail&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&flowNam" +
+                        "e=GlifWebSignIn&flowEntry=AddSession");
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
             }
         });
             

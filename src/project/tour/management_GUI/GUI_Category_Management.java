@@ -298,10 +298,13 @@ public class GUI_Category_Management extends JPanel{
                     User_DTO user = new User_DTO();
 
                     String parameter = "{\"name\":\""+nameCategory+"\"}";
-                    APIRequester.sendPOST(parameter, "tourCategories", user.getToken());
-                    LoadDataTableCategory();
-                    JOptionPane.showMessageDialog(null, "Thêm thành công");
-                    clearTextFieldCategory();
+                    //APIRequester.sendPOST(parameter, "tourCategories", user.getToken());
+                    String response = Handle_API_Tour_Category.sendPost_Add_CategoryTour(parameter, "tourCategories", user.getToken());
+                    if(response.equals("success")==true){
+                        LoadDataTableCategory();
+                        JOptionPane.showMessageDialog(null, "Thêm thành công");
+                        clearTextFieldCategory();
+                    }
 
                 }else {
                     JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng nhập đầy đủ thông tin");
