@@ -39,6 +39,7 @@ import project.tour.management_API.APIRequester;
 import project.tour.management_DTO.Tour_Attraction_DTO;
 import project.tour.management_DTO.Tour_Category_DTO;
 import project.tour.management_DTO.User_DTO;
+import project.tour.management_Handle_API.Handle_API_Get_Tour;
 import project.tour.management_Handle_API.Handle_API_Tour_Attractions;
 import project.tour.management_Handle_API.Handle_API_Tour_Category;
 
@@ -337,11 +338,21 @@ public class GUI_Attraction_Management extends JPanel{
                     if( row == -1 ){
                         JOptionPane.showMessageDialog(null, "Vui lòng chọn địa điểm cần xoá");
                     } else {
-                        User_DTO user = new User_DTO();
-                        String tourId = (tableAttractionTour.getModel().getValueAt(row, 0).toString());
-                        APIRequester.sendDelete("","touristAttractions/"+tourId, user.getToken());
-                        LoadDataTableAttraction();
-                        JOptionPane.showMessageDialog(null, "Xoá địa điểm thành công");
+                        int result = JOptionPane.showConfirmDialog(null,"Bạn có chắc muốn xoá địa điểm này này?", "Thông báo",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.QUESTION_MESSAGE);
+                        if(result == JOptionPane.YES_OPTION){
+                            User_DTO user = new User_DTO();
+                            String tourId = (tableAttractionTour.getModel().getValueAt(row, 0).toString());
+                            APIRequester.sendDelete("","touristAttractions/"+tourId, user.getToken());
+                            LoadDataTableAttraction();
+                            JOptionPane.showMessageDialog(null, "Xoá địa điểm thành công");
+                        }else if (result == JOptionPane.NO_OPTION){
+
+                        }else {
+
+                        }
+
                     }
                     
                 }

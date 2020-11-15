@@ -67,7 +67,7 @@ public class Handle_API_Employee_And_Role {
                 System.out.println("TourDetail Add Success");
                 return "success";
             } else {
-                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+                JOptionPane.showMessageDialog(null,"Lỗi: "+ myObject.get("ApiErr").toString());
                 return "error";
             }
         } catch (ParseException e) {
@@ -85,7 +85,7 @@ public class Handle_API_Employee_And_Role {
                 System.out.println("TourDetail Delete Success");
                 return "success";
             } else {
-                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+                JOptionPane.showMessageDialog(null,"Lỗi: "+ myObject.get("ApiErr").toString());
                 return "error";
             }
         } catch (ParseException e) {
@@ -103,7 +103,7 @@ public class Handle_API_Employee_And_Role {
                 System.out.println("TourDetail Add Success");
                 return "success";
             } else {
-                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+                JOptionPane.showMessageDialog(null,"Lỗi: "+ myObject.get("ApiErr").toString());
                 return "error";
             }
         } catch (ParseException e) {

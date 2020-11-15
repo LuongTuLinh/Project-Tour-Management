@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import project.tour.management_DTO.Tour_Group_CostType;
 import project.tour.management_DTO.User_DTO;
 import project.tour.management_Handle_API.Handle_API_Cost_Type;
+import project.tour.management_Handle_API.Handle_API_Employee_And_Role;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -277,16 +278,26 @@ public class GUI_Cost_Type_Management extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int row = tableCostType.getSelectedRow();
                 if( row == -1 ){
-                    JOptionPane.showMessageDialog(null, "Vui lòng chọn thể loại cần xoá");
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn loại chi phí cần xoá");
                 } else {
-                    User_DTO user = new User_DTO();
-                    String idCostType = (tableCostType.getModel().getValueAt(row, 0).toString());
-                    //APIRequester.sendDelete("","tourCategories/"+tourId, user.getToken());
-                    String response = Handle_API_Cost_Type.sendDeleteCostType("","costTypes/"+idCostType, user.getToken());
-                    if(response.equals("success") == true){
-                        LoadDataTableCostType();
-                        JOptionPane.showMessageDialog(null, "Xoá chi phí thành công");
+                    int result = JOptionPane.showConfirmDialog(null,"Bạn có chắc muốn xoá loại chi phí này?", "Thông báo",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    if(result == JOptionPane.YES_OPTION){
+                        User_DTO user = new User_DTO();
+                        String idCostType = (tableCostType.getModel().getValueAt(row, 0).toString());
+                        //APIRequester.sendDelete("","tourCategories/"+tourId, user.getToken());
+                        String response = Handle_API_Cost_Type.sendDeleteCostType("","costTypes/"+idCostType, user.getToken());
+                        if(response.equals("success") == true){
+                            LoadDataTableCostType();
+                            JOptionPane.showMessageDialog(null, "Xoá chi phí thành công");
+                        }
+                    }else if (result == JOptionPane.NO_OPTION){
+
+                    }else {
+
                     }
+
                 }
 
             }

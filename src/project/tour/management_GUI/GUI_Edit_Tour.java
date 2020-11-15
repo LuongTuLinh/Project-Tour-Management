@@ -21,6 +21,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -421,6 +422,9 @@ public class GUI_Edit_Tour extends JPanel{
                                 tableTourPrice.getTableHeader().setForeground(new Color(255,255,255));
                                 tableTourPrice.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                                 tableTourPrice.setDefaultEditor(Object.class, null);
+                                DefaultTableCellRenderer rightRendererPrice = new DefaultTableCellRenderer();
+                                rightRendererPrice.setHorizontalAlignment(JLabel.CENTER);
+                                tableTourPrice.getColumnModel().getColumn(2).setCellRenderer(rightRendererPrice);
 
 
 
@@ -612,7 +616,7 @@ public class GUI_Edit_Tour extends JPanel{
                 /**********ADD COMPONENT FOR PANEL CONTENT*****************/
                     tabbedPaneContent.addTab("--Địa Điểm Tour--", panelPlaceTour);
                     tabbedPaneContent.addTab("--Giá Tour--", panelPriceTour);
-                    tabbedPaneContent.addTab("--Đoàn Tour--", panelGroupTour);
+                    tabbedPaneContent.addTab("--Đoàn--", panelGroupTour);
                 /**********END ADD COMPONENT FOR PANEL CONTENT*****************/
             /*------------------------END PANEL CONTENT------------------------------*/
 
@@ -647,13 +651,13 @@ public class GUI_Edit_Tour extends JPanel{
                     String name = txtNameTour.getText();
                     String specification = txtSpecification.getText();
                     String price = txtPriceTour.getText().replace(",","");
-                    String price_PATTERN = "^[0-9]+$";
+                    String price_PATTERN = "^[1-9]([0-9])*$";
                     String staus = statusTour != "" ? statusTour : Tour_DTO.getStatus();
                     Tour_Category_DTO category_dto = (Tour_Category_DTO) (comboBoxCategoryTour.getSelectedItem());
                     String category = category_dto.getCategoryId();
                     if(checkDifferentTour(name, specification, price, staus, category)==false){
                         if(Pattern.matches(price_PATTERN, price)==false){
-                        JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng kiểm giá tour");
+                        JOptionPane.showMessageDialog(null, "Lỗi! Giá tour không hợp lệ, và giá tour phải lớn hơn 0.");
                         } else {
                             String parameter = "{\"id\":"+Tour_DTO.getTourId()+",\"name\":\""+name+"\",\"specification\":\""+specification+"\",\"tourCategoryId\":"+category+",\"price\":"+price+",\"status\":"+staus+"}";
                             System.out.println(parameter);
@@ -692,9 +696,9 @@ public class GUI_Edit_Tour extends JPanel{
 
                     String  idTour = txtTourID.getText();
                     if( !empty( price ) && !empty( startDate ) && !empty(endDate)) {
-                        String price_PATTERN = "^[0-9]+$";
+                        String price_PATTERN = "^[1-9]([0-9])*$";
                         if(Pattern.matches(price_PATTERN, price) == false) {
-                            JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng kiểm giá tour");
+                            JOptionPane.showMessageDialog(null, "Lỗi! Giá tour không hợp lệ, và giá tour phải lớn hơn 0.");
                         }else {
 
                                 User_DTO user = new User_DTO();
@@ -721,11 +725,21 @@ public class GUI_Edit_Tour extends JPanel{
                     if( row == -1 ){
                         JOptionPane.showMessageDialog(null, "Vui lòng chọn giá tour cần xoá");
                     } else {
-                        User_DTO user = new User_DTO();
-                        String id = (tableTourPrice.getModel().getValueAt(row, 0).toString());
-                        APIRequester.sendDelete("","tourPrices/"+id, user.getToken());
-                        LoadDataTableTourPrice();
-                        JOptionPane.showMessageDialog(null, "Xoá giá tour thành công");
+                        int result = JOptionPane.showConfirmDialog(null,"Bạn có chắc muốn xoá giá tour này?", "Thông báo",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.QUESTION_MESSAGE);
+                        if(result == JOptionPane.YES_OPTION){
+                            User_DTO user = new User_DTO();
+                            String id = (tableTourPrice.getModel().getValueAt(row, 0).toString());
+                            APIRequester.sendDelete("","tourPrices/"+id, user.getToken());
+                            LoadDataTableTourPrice();
+                            JOptionPane.showMessageDialog(null, "Xoá giá tour thành công");
+                        }else if (result == JOptionPane.NO_OPTION){
+
+                        }else {
+
+                        }
+
                     }
 
                 }
@@ -784,9 +798,9 @@ public class GUI_Edit_Tour extends JPanel{
                     String  endDate = dateFormat.format(dateChooserEndDate.getDate());
                     if( !empty( price ) && !empty( startDate ) && !empty(endDate)) {
                         if(checkDifferentPrice(price, startDate, endDate, tour_price_dto)==false){
-                            String price_PATTERN = "^[0-9]+$";
+                            String price_PATTERN = "^[1-9]([0-9])*$";
                             if(Pattern.matches(price_PATTERN, price) == false) {
-                                JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng kiểm giá tour");
+                                JOptionPane.showMessageDialog(null, "Lỗi! Giá tour không hợp lệ, và giá tour phải lớn hơn 0.");
                             }else {
                                 User_DTO user = new User_DTO();
                                 String parameter = "{\"id\":"+tour_price_dto.getPriceId()+",\"price\":"+price+",\"startDate\":\""+startDate+"\",\"endDate\":\""+endDate+"\"}";

@@ -51,7 +51,7 @@ public class Handle_API_Get_Tour {
                 JSONObject data = (JSONObject) myObject.get("data");
                 return "success";
             } else {
-                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+                JOptionPane.showMessageDialog(null,"Lỗi: "+ myObject.get("ApiErr").toString());
                 return null;
             }
         } catch (ParseException e) {
@@ -71,7 +71,7 @@ public class Handle_API_Get_Tour {
             } else {
                 String apierror = myObject.get("ApiErr") == null ? "" : myObject.get("ApiErr").toString();
 
-                String error = "Error:"+ apierror+"\n";
+                String error = "Lỗi:"+ apierror+"\n";
 
                 String[] arrayError = error.split("\\.");
                 String messError = "";

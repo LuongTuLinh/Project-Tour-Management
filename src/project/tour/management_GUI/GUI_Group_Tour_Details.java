@@ -13,6 +13,7 @@ import project.tour.management_DTO.Tour_DTO;
 import project.tour.management_DTO.Tour_Group_DTO;
 import project.tour.management_DTO.User_DTO;
 import project.tour.management_Handle_API.Handle_API_Employee_And_Role;
+import project.tour.management_Handle_API.Handle_API_Get_Tour;
 import project.tour.management_Handle_API.Handle_API_Tour_Group;
 
 import java.awt.*;
@@ -268,7 +269,7 @@ public class GUI_Group_Tour_Details extends JPanel{
             dateChooserStartDate.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
             dateChooserStartDate.setDateFormatString("yyyy-MM-dd");
             dateChooserStartDate.setDate(startDateFormat);
-            dateChooserStartDate.setEnabled(true);
+            dateChooserStartDate.setEnabled(false);
 
             sptStartDate = new JSeparator();
             sptStartDate.setBounds(362,128,130,10);
@@ -287,7 +288,7 @@ public class GUI_Group_Tour_Details extends JPanel{
             dateChooserEndDate.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
             dateChooserEndDate.setDateFormatString("yyyy-MM-dd");
             dateChooserEndDate.setDate(endDateFormat);
-            dateChooserEndDate.setEnabled(true);
+            dateChooserEndDate.setEnabled(false);
 
             sptEndDate = new JSeparator();
             sptEndDate.setBounds(657,128,130,10);
@@ -484,8 +485,9 @@ public class GUI_Group_Tour_Details extends JPanel{
 
                 Vector<String> columnNamesEmployeeGroup = new Vector<>();
                 columnNamesEmployeeGroup.add("Mã NV");
-                columnNamesEmployeeGroup.add("Họ");
-                columnNamesEmployeeGroup.add("Tên");
+                columnNamesEmployeeGroup.add("Họ và Tên");
+                //columnNamesEmployeeGroup.add("Tên");
+                columnNamesEmployeeGroup.add("Số Điên Thoại");
                 columnNamesEmployeeGroup.add("Email");
                 modelTableEmployeeGroup = new DefaultTableModel(columnNamesEmployeeGroup,0);
                 tableEmployeeGroup = new JTable(modelTableEmployeeGroup);
@@ -517,7 +519,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                         this.thumbColor = new Color(19, 113, 106);
                     }
                 });
-                    scrollPaneTableEmployeeGroup.setBounds(10,35,530,330);
+                    scrollPaneTableEmployeeGroup.setBounds(10,35,550,330);
 
 
                 btnAddEmployeeGroup = new JButton("Thêm nhân viên");
@@ -542,8 +544,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                 labelTitleRoleEmployee.setFont(new Font("Times New Roman",1,18));
 
                 Vector<String> columnNamesRoleEmployee = new Vector<>();
-                columnNamesRoleEmployee.add("Họ");
-                columnNamesRoleEmployee.add("Tên");
+                columnNamesRoleEmployee.add("Họ và Tên");
                 columnNamesRoleEmployee.add("Mã CV");
                 columnNamesRoleEmployee.add("Công Việc");
                 modelTableRoleEmployee = new DefaultTableModel(columnNamesRoleEmployee,0);
@@ -561,9 +562,7 @@ public class GUI_Group_Tour_Details extends JPanel{
 
 
                 /****************SET SIZE COLUMN OF TABLE***********************/
-                tableRoleEmployee.getColumnModel().getColumn(0).setPreferredWidth(50);
-                tableRoleEmployee.getColumnModel().getColumn(1).setPreferredWidth(40);
-                tableRoleEmployee.getColumnModel().getColumn(2).setPreferredWidth(30);
+                tableRoleEmployee.getColumnModel().getColumn(1).setPreferredWidth(20);
                 /****************SET SIZE COLUMN OF TABLE***********************/
 
 
@@ -576,7 +575,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                         this.thumbColor = new Color(19, 113, 106);
                     }
                 });
-                scrollPaneTableRoleEmployee.setBounds(600,35,400,330);
+                scrollPaneTableRoleEmployee.setBounds(610,35,400,330);
 
                 btnRemoveRoleEmployee = new JButton("Xoá nhiệm vụ");
                 btnRemoveRoleEmployee.setBackground(new Color(219, 50, 54));
@@ -599,7 +598,7 @@ public class GUI_Group_Tour_Details extends JPanel{
             /**********ADD COMPONENT FOR PANEL CONTENT*****************/
             tabbedPaneContent.addTab("--Khách Hàng Đoàn--", panelCustomerGroup);
             tabbedPaneContent.addTab("--Nhân Viên--", panelEmployeeGroup);
-            tabbedPaneContent.addTab("--Loại Chi Phí--", panelCostTypeGroup);
+            tabbedPaneContent.addTab("--Chi Phí Đoàn--", panelCostTypeGroup);
             /**********END ADD COMPONENT FOR PANEL CONTENT*****************/
 
         /**==================================*END PANEL CONTENT*===================================*/
@@ -618,14 +617,14 @@ public class GUI_Group_Tour_Details extends JPanel{
                 if(comboBoxStatusGroup.getSelectedItem().equals("Mới")){
                     statusGroup = "1";
                 }
-                if(comboBoxStatusGroup.getSelectedItem().equals("Đang Xử Lý")){
+//                if(comboBoxStatusGroup.getSelectedItem().equals("Đang Xử Lý")){
+//                    statusGroup = "2";
+//                }
+                if(comboBoxStatusGroup.getSelectedItem().equals("Hoàn Thành")){
                     statusGroup = "2";
                 }
-                if(comboBoxStatusGroup.getSelectedItem().equals("Hoàn Thành")){
-                    statusGroup = "3";
-                }
                 if(comboBoxStatusGroup.getSelectedItem().equals("Huỷ Đoàn")){
-                    statusGroup = "4";
+                    statusGroup = "3";
                 }
             }
         });
@@ -682,13 +681,23 @@ public class GUI_Group_Tour_Details extends JPanel{
                     if( row == -1 ){
                         JOptionPane.showMessageDialog(null, "Vui lòng chọn khách hàng cần xoá");
                     }else {
-                        User_DTO user_dto = new User_DTO();
-                        String idCustomer = (tableGroupCustomer.getModel().getValueAt(row, 0).toString());
-                        String response = Handle_API_Tour_Group.send_Delete_Customer_In_Group("", "groupDetails/"+idCustomer, user_dto.getToken());
-                        if(response.equals("success") == true){
-                            JOptionPane.showMessageDialog(null, "Xoá thành công");
-                            LoadDataTableCustomerInGroup(id);
+                        int result = JOptionPane.showConfirmDialog(null,"Bạn có chắc muốn xoá khách hàng này?", "Thông báo",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.QUESTION_MESSAGE);
+                        if(result == JOptionPane.YES_OPTION){
+                            User_DTO user_dto = new User_DTO();
+                            String idCustomer = (tableGroupCustomer.getModel().getValueAt(row, 0).toString());
+                            String response = Handle_API_Tour_Group.send_Delete_Customer_In_Group("", "groupDetails/"+idCustomer, user_dto.getToken());
+                            if(response.equals("success") == true){
+                                JOptionPane.showMessageDialog(null, "Xoá thành công");
+                                LoadDataTableCustomerInGroup(id);
+                            }
+                        }else if (result == JOptionPane.NO_OPTION){
+
+                        }else {
+
                         }
+
                     }
                 }
             });
@@ -710,13 +719,24 @@ public class GUI_Group_Tour_Details extends JPanel{
                 if( row == -1 ){
                     JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên cần xoá");
                 }else {
-                    User_DTO user_dto = new User_DTO();
-                    String idEmp = (tableEmployeeGroup.getModel().getValueAt(row, 0).toString());
-                    String parameter ="{\"groupId\":"+id+",\"staffId\":\""+idEmp+"\"}";
-                    String response = Handle_API_Tour_Group.send_Delete_Customer_In_Group(parameter, "groups/staff", user_dto.getToken());
-                    if(response.equals("success") == true){
-                        LoadDataEmployeeInGroup(id);
+                    int result = JOptionPane.showConfirmDialog(null,"Bạn có chắc muốn xoá nhân viên này?", "Thông báo",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    if(result == JOptionPane.YES_OPTION){
+                        User_DTO user_dto = new User_DTO();
+                        String idEmp = (tableEmployeeGroup.getModel().getValueAt(row, 0).toString());
+                        String parameter ="{\"groupId\":"+id+",\"staffId\":\""+idEmp+"\"}";
+                        String response = Handle_API_Tour_Group.send_Delete_Customer_In_Group(parameter, "groups/staff", user_dto.getToken());
+                        if(response.equals("success") == true){
+                            LoadDataEmployeeInGroup(id);
+                            LoadDataRoleEmployee(id);
+                        }
+                    }else if (result == JOptionPane.NO_OPTION){
+
+                    }else {
+
                     }
+
                 }
             }
         });
@@ -727,13 +747,23 @@ public class GUI_Group_Tour_Details extends JPanel{
                 if( row == -1 ){
                     JOptionPane.showMessageDialog(null, "Vui lòng chọn công việc cần xoá");
                 }else {
-                    User_DTO user_dto = new User_DTO();
-                    String idRole = (tableRoleEmployee.getModel().getValueAt(row, 2).toString());
-                    String response = Handle_API_Employee_And_Role.sendDeleteRole("", "staffGroupRoles/"+idRole, user_dto.getToken());
-                    if(response.equals("success") == true){
-                        JOptionPane.showMessageDialog(null, "Xoá thành công");
-                        LoadDataRoleEmployee(id);
+                    int result = JOptionPane.showConfirmDialog(null,"Bạn có chắc muốn xoá nhiệm vụ này?", "Thông báo",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    if(result == JOptionPane.YES_OPTION){
+                        User_DTO user_dto = new User_DTO();
+                        String idRole = (tableRoleEmployee.getModel().getValueAt(row, 1).toString());
+                        String response = Handle_API_Employee_And_Role.sendDeleteRole("", "staffGroupRoles/"+idRole, user_dto.getToken());
+                        if(response.equals("success") == true){
+                            JOptionPane.showMessageDialog(null, "Xoá thành công");
+                            LoadDataRoleEmployee(id);
+                        }
+                    }else if (result == JOptionPane.NO_OPTION){
+
+                    }else {
+
                     }
+
                 }
             }
         });
@@ -754,13 +784,23 @@ public class GUI_Group_Tour_Details extends JPanel{
                 if( row == -1 ){
                     JOptionPane.showMessageDialog(null, "Vui lòng chọn chi phí cần xoá");
                 }else {
-                    User_DTO user_dto = new User_DTO();
-                    String idCostType = (tableGroupCostType.getModel().getValueAt(row, 0).toString());
-                    String response = Handle_API_Tour_Group.send_Delete_Customer_In_Group("", "groupCosts/"+idCostType, user_dto.getToken());
-                    if(response.equals("success") == true){
-                        JOptionPane.showMessageDialog(null, "Xoá thành công");
-                        LoadDataTableCostTypeInGroup(id);
+                    int result = JOptionPane.showConfirmDialog(null,"Bạn có chắc muốn xoá chi phí này?", "Thông báo",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    if(result == JOptionPane.YES_OPTION){
+                        User_DTO user_dto = new User_DTO();
+                        String idCostType = (tableGroupCostType.getModel().getValueAt(row, 0).toString());
+                        String response = Handle_API_Tour_Group.send_Delete_Customer_In_Group("", "groupCosts/"+idCostType, user_dto.getToken());
+                        if(response.equals("success") == true){
+                            JOptionPane.showMessageDialog(null, "Xoá thành công");
+                            LoadDataTableCostTypeInGroup(id);
+                        }
+                    }else if (result == JOptionPane.NO_OPTION){
+
+                    }else {
+
                     }
+
                 }
             }
         });
@@ -819,8 +859,8 @@ public class GUI_Group_Tour_Details extends JPanel{
                 Vector<String> data = new Vector<>();
 
                 data.add(jsonObj.get("id").toString());
-                data.add(jsonObj.get("lastName").toString());
-                data.add(jsonObj.get("firstName").toString());
+                data.add(jsonObj.get("lastName").toString()+" "+jsonObj.get("firstName").toString());
+                data.add(jsonObj.get("phoneNumber").toString());
                 data.add(jsonObj.get("email").toString());
 
                 modelTableEmployeeGroup.addRow(data);
@@ -851,8 +891,7 @@ public class GUI_Group_Tour_Details extends JPanel{
                 JSONObject obj = (JSONObject) jsonObj.get("groupRole");
                 Vector<String> data = new Vector<>();
 
-                data.add(my.get("lastName").toString());
-                data.add(my.get("firstName").toString());
+                data.add(my.get("lastName").toString()+" "+my.get("firstName").toString());
                 data.add(jsonObj.get("id").toString());
                 data.add(obj.get("name").toString());
 
@@ -884,8 +923,12 @@ public class GUI_Group_Tour_Details extends JPanel{
 
                 data.add(jsonObj.get("id").toString());
                 data.add(my.get("name").toString());
-                data.add(jsonObj.get("price").toString());
-                data.add(jsonObj.get("createdAt").toString());
+                int price = Integer.parseInt(jsonObj.get("price").toString());
+                String priceTour = java.text.NumberFormat.getIntegerInstance().format(price);
+                data.add(priceTour);
+                //data.add(jsonObj.get("price").toString());
+                String createdAt = jsonObj.get("createdAt").toString().substring(0,10);
+                data.add(createdAt);
                 data.add(jsonObj.get("note").toString());
 
                 modelTableCostType.addRow(data);
@@ -900,9 +943,9 @@ public class GUI_Group_Tour_Details extends JPanel{
     public void selectedComboBoxStatusGroup(){
         Map<Integer, String> map = new HashMap<>();
         map.put(1, "Mới");
-        map.put(2, "Đang Xử Lý");
-        map.put(3, "Hoàn Thành");
-        map.put(4, "Huỷ Đoàn");
+//        map.put(2, "Đang Xử Lý");
+        map.put(2, "Hoàn Thành");
+        map.put(3, "Huỷ Đoàn");
         Set<Integer> set = map.keySet();
         int i = 0;
         for (Integer key : set){
@@ -942,7 +985,7 @@ public class GUI_Group_Tour_Details extends JPanel{
 //    }
 
     public void checkStatusGroup(){
-        if(Tour_Group_DTO.getStatus().equals("3")==true||Tour_Group_DTO.getStatus().equals("4")==true){
+        if(Tour_Group_DTO.getStatus().equals("2")==true||Tour_Group_DTO.getStatus().equals("4")==true){
             btnSaveGroup.setVisible(false);
             txtGroupName.setEditable(false);
             dateChooserEndDate.setEnabled(false);

@@ -9,10 +9,12 @@ import project.tour.management_API.APIRequester;
 import project.tour.management_DTO.Tour_DTO;
 import project.tour.management_DTO.Tour_Group_DTO;
 import project.tour.management_DTO.User_DTO;
+import project.tour.management_Handle_API.Handle_API_Get_Tour;
 import project.tour.management_Handle_API.Handle_API_Tour_Group;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -173,6 +175,9 @@ public class GUI_Table_Group extends JPanel {
         tableGroup.getTableHeader().setForeground(new Color(255,255,255));
         tableGroup.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tableGroup.setDefaultEditor(Object.class, null);
+        DefaultTableCellRenderer rightRendererPrice = new DefaultTableCellRenderer();
+        rightRendererPrice.setHorizontalAlignment(JLabel.CENTER);
+        tableGroup.getColumnModel().getColumn(2).setCellRenderer(rightRendererPrice);
 
         /****************SET SIZE COLUMN OF TABLE***********************/
         tableGroup.getColumnModel().getColumn(0).setPreferredWidth(40);
@@ -259,14 +264,14 @@ public class GUI_Table_Group extends JPanel {
                     if(status.equals("Mới")==true){
                         statusGroup +=1;
                     }
-                    if(status.equals("Đang Xử Lý")==true){
+//                    if(status.equals("Đang Xử Lý")==true){
+//                        statusGroup +=2;
+//                    }
+                    if(status.equals("Hoàn Thành")==true){
                         statusGroup +=2;
                     }
-                    if(status.equals("Hoàn Thành")==true){
-                        statusGroup +=3;
-                    }
                     if(status.equals("Đã Huỷ")==true){
-                        statusGroup +=4;
+                        statusGroup +=3;
                     }
                     String startDate = (tableGroup.getModel().getValueAt(row, 4).toString());
                     String endDate = (tableGroup.getModel().getValueAt(row, 5).toString());
@@ -320,16 +325,26 @@ public class GUI_Table_Group extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int row = tableGroup.getSelectedRow();
                 if( row == -1 ){
-                    JOptionPane.showMessageDialog(null, "Vui lòng chọn đoàn tour cần xoá");
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn đoàn cần xoá");
                 } else {
-                    User_DTO user = new User_DTO();
-                    String id = (tableGroup.getModel().getValueAt(row, 0).toString());
-                    //APIRequester.sendDelete("","groups/"+id, user.getToken());
-                    String response = Handle_API_Tour_Group.send_Delete_Group_In_Tour("","groups/"+id, user.getToken());
-                    if(response.equals("success")==true){
-                        LoadDataTableTourGroup();
-                        JOptionPane.showMessageDialog(null, "Xoá đoàn tour thành công");
+                    int result = JOptionPane.showConfirmDialog(null,"Bạn có chắc muốn xoá đoàn này?", "Thông báo",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    if(result == JOptionPane.YES_OPTION){
+                        User_DTO user = new User_DTO();
+                        String id = (tableGroup.getModel().getValueAt(row, 0).toString());
+                        //APIRequester.sendDelete("","groups/"+id, user.getToken());
+                        String response = Handle_API_Tour_Group.send_Delete_Group_In_Tour("","groups/"+id, user.getToken());
+                        if(response.equals("success")==true){
+                            LoadDataTableTourGroup();
+                            JOptionPane.showMessageDialog(null, "Xoá đoàn tour thành công");
+                        }
+                    }else if (result == JOptionPane.NO_OPTION){
+
+                    }else {
+
                     }
+
                 }
 
             }
@@ -367,14 +382,14 @@ public class GUI_Table_Group extends JPanel {
                         if(status.equals("Mới")==true){
                             statusGroup +=1;
                         }
-                        if(status.equals("Đang Xử Lý")==true){
+//                        if(status.equals("Đang Xử Lý")==true){
+//                            statusGroup +=2;
+//                        }
+                        if(status.equals("Hoàn Thành")==true){
                             statusGroup +=2;
                         }
-                        if(status.equals("Hoàn Thành")==true){
-                            statusGroup +=3;
-                        }
                         if(status.equals("Đã Huỷ")==true){
-                            statusGroup +=4;
+                            statusGroup +=3;
                         }
                         tour_group_dto = new Tour_Group_DTO(id, name,price, substringStartDate, substringEndtDate, statusGroup);
 
@@ -451,13 +466,13 @@ public class GUI_Table_Group extends JPanel {
                 if(status == 1){
                     statusGroup += "Mới";
                 }
+//                if(status == 2){
+//                    statusGroup += "Đang Xử Lý";
+//                }
                 if(status == 2){
-                    statusGroup += "Đang Xử Lý";
-                }
-                if(status == 3){
                     statusGroup += "Hoàn Thành";
                 }
-                if(status == 4){
+                if(status == 3){
                     statusGroup += "Đã Huỷ";
                 }
                 data.add(statusGroup);

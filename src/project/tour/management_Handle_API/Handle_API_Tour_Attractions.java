@@ -51,7 +51,7 @@ public class Handle_API_Tour_Attractions {
             if(myObject.get("ApiErr") == null) {
                 System.out.println("TourDetail Add Success");
             } else {
-                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+                JOptionPane.showMessageDialog(null,"Lỗi: "+ myObject.get("ApiErr").toString());
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -67,7 +67,7 @@ public class Handle_API_Tour_Attractions {
             if(myObject.get("ApiErr") == null) {
                 System.out.println("TourDetail Delete Success");
             } else {
-                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+                JOptionPane.showMessageDialog(null,"Lỗi: "+ myObject.get("ApiErr").toString());
             }
         } catch (ParseException e) {
             e.printStackTrace();

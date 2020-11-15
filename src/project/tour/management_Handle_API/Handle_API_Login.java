@@ -37,8 +37,9 @@ public class Handle_API_Login {
                 user.setEmail(userRepsonse.get("email").toString());
                 user.setLastName(userRepsonse.get("lastName").toString());
                 user.setFirstName(userRepsonse.get("firstName").toString());
+                user.setPhoneNumber(userRepsonse.get("phoneNumber").toString());
             } else {
-                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+                JOptionPane.showMessageDialog(null,"Lỗi: "+ myObject.get("ApiErr").toString());
             }
         } catch (ParseException e) {
             e.printStackTrace();

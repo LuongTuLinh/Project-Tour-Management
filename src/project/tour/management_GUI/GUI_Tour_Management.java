@@ -5,37 +5,27 @@
  */
 package project.tour.management_GUI;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
+import javax.swing.*;
+
 import project.tour.management_DTO.User_DTO;
 
 /**
  *
  * @author BANANA_TEAM
  */
-public class GUI_Tour_Management extends JFrame{
+public class GUI_Tour_Management {
     private User_DTO user = new User_DTO();
     private JLabel labelImageLoading;
+
+    private static JFrame jframe ;
     /***********DECLARE JPANE*************/
         private JPanel panelMain;
         private JPanel panelHeader;
@@ -85,11 +75,12 @@ public class GUI_Tour_Management extends JFrame{
     }
     public void init(){
       /*------------------------SETUP JFRAME------------------------*/
-        setSize(1200, 650);
-        setLayout(null);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setUndecorated(true);
+        jframe = new JFrame();
+        jframe.setSize(1200, 650);
+        jframe.setLayout(null);
+        jframe.setLocationRelativeTo(null);
+        jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jframe.setUndecorated(true);
       /*-----------------------END SETUP JFRAME-----------------------*/
         
       /*------------------------PANEL MAIN OF JFRAME------------------------*/
@@ -295,7 +286,7 @@ public class GUI_Tour_Management extends JFrame{
                 btnUser.setFocusPainted(false);
                 btnUser.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                btnSetUp = new JButton("  Thiết Lập     ");
+                btnSetUp = new JButton("  Hỗ Trợ         ");
                 btnSetUp.setBackground(new Color(42, 127, 118));
                 btnSetUp.setBounds(5,510,190,30);
                 btnSetUp.setForeground(new Color(255,255,255));
@@ -382,9 +373,9 @@ public class GUI_Tour_Management extends JFrame{
       /*------------------------END PANEL MAIN OF JFRAME------------------------*/
         
       /********** ADD FOR JFRAME ************/
-        add(panelMain);
+        jframe.add(panelMain);
       /********** END ADD FOR JFRAME ************/
-        setVisible(true);
+        jframe.setVisible(true);
         
       /*------------------------HANDLE EVENT ONCLICK MOUSE------------------------*/
         /********** HANDLE SET COLOR FOR BUTTON ************/
@@ -401,7 +392,7 @@ public class GUI_Tour_Management extends JFrame{
                 public void mouseClicked(MouseEvent e){
                     panelProcessFunction.removeAll();
                     panelProcessFunction.add(new GUI_Table_Tour_Management());
-                    repaint();
+                    jframe.repaint();
 //                    try {
 //                        for(int i = 0; i <= 100; i++){
 //                            Thread.sleep(40);
@@ -422,7 +413,7 @@ public class GUI_Tour_Management extends JFrame{
                 public void mouseClicked(MouseEvent e){
                     panelProcessFunction.removeAll();
                     panelProcessFunction.add(new GUI_Attraction_Management());
-                    repaint();
+                    jframe.repaint();
                 }
                  @Override
                 public void mouseEntered(MouseEvent e){
@@ -439,7 +430,7 @@ public class GUI_Tour_Management extends JFrame{
                 public void mouseClicked(MouseEvent e){
                     panelProcessFunction.removeAll();
                     panelProcessFunction.add(new GUI_Category_Management());
-                    repaint();
+                    jframe.repaint();
                 }
                 @Override
                 public void mouseEntered(MouseEvent e){
@@ -456,8 +447,8 @@ public class GUI_Tour_Management extends JFrame{
                 public void mouseClicked(MouseEvent e){
                     panelProcessFunction.removeAll();
                     panelProcessFunction.add(new GUI_Cost_Type_Management());
-                    validate();
-                    repaint();
+                    jframe.validate();
+                    jframe.repaint();
                 }
                 @Override
                 public void mouseEntered(MouseEvent e){
@@ -474,8 +465,8 @@ public class GUI_Tour_Management extends JFrame{
                 public void mouseClicked(MouseEvent e){
                     panelProcessFunction.removeAll();
                     panelProcessFunction.add(new GUI_RoleGroup_Management());
-                    validate();
-                    repaint();
+                    jframe.validate();
+                    jframe.repaint();
                 }
                 @Override
                 public void mouseEntered(MouseEvent e){
@@ -492,8 +483,8 @@ public class GUI_Tour_Management extends JFrame{
             public void mouseClicked(MouseEvent e){
                 panelProcessFunction.removeAll();
                 panelProcessFunction.add(new GUI_Statistical_Tour());
-                validate();
-                repaint();
+                jframe.validate();
+                jframe.repaint();
             }
             @Override
             public void mouseEntered(MouseEvent e){
@@ -502,6 +493,37 @@ public class GUI_Tour_Management extends JFrame{
             @Override
             public void mouseExited(MouseEvent e){
                 btnThongKe.setBackground(new Color(12, 109, 102));
+            }
+        });
+        btnUser.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                panelProcessFunction.removeAll();
+                panelProcessFunction.add(new GUI_Profile_User());
+                jframe.validate();
+                jframe.repaint();
+            }
+            @Override
+            public void mouseEntered(MouseEvent e){
+                btnUser.setBackground(new Color(25, 167, 159));
+            }
+            @Override
+            public void mouseExited(MouseEvent e){
+                btnUser.setBackground(new Color(12, 109, 102));
+            }
+        });
+        btnSetUp.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                openWebPage("https://www.facebook.com/linh.tu.923724");
+            }
+            @Override
+            public void mouseEntered(MouseEvent e){
+                btnSetUp.setBackground(new Color(25, 167, 159));
+            }
+            @Override
+            public void mouseExited(MouseEvent e){
+                btnSetUp.setBackground(new Color(12, 109, 102));
             }
         });
             
@@ -518,7 +540,7 @@ public class GUI_Tour_Management extends JFrame{
             lbiconMinimize.addMouseListener(new MouseAdapter(){
                @Override
                public void mouseClicked(MouseEvent e) {
-                   setState(JFrame.ICONIFIED);
+                   jframe.setState(JFrame.ICONIFIED);
                } 
             });
         /********** END HANDLE ONCLICK CLOSE AND MINIMIZE PROGRAME ************/
@@ -529,5 +551,23 @@ public class GUI_Tour_Management extends JFrame{
         panelProcessFunction.add(panel);
         panelProcessFunction.validate();
         panelProcessFunction.repaint();
+    }
+    public static void openWebPage(String url) {
+        try {
+            Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+            if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+                desktop.browse(new URI(url));
+            }
+            throw new NullPointerException();
+        } catch (Exception e) {
+            //JOptionPane.showMessageDialog(null, url, "", JOptionPane.PLAIN_MESSAGE);
+        }
+    }
+    public static void signOutAccount(){
+        jframe.dispose();
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        GUI_Login_Tour_Management gui_login_tour_management  = new GUI_Login_Tour_Management();
+        //System.exit(0);
+
     }
 }

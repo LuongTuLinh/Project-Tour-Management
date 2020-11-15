@@ -8,6 +8,8 @@ package project.tour.management_GUI;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.UnsupportedEncodingException;
@@ -149,13 +151,30 @@ public class GUI_Table_Tour_Management extends JPanel{
             panelSearchPrice.setBorder(borderOfPanelSearchPrice);
                 txtSearchPriceLow = new JTextField();
                 txtSearchPriceLow.setBounds(25,25,120,25);
+        txtSearchPriceLow.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                String price = txtSearchPriceLow.getText();
+                long priceTour = Long.parseLong(price.replace(",",""));
+                String priceNewTour = java.text.NumberFormat.getIntegerInstance().format(priceTour);
+                txtSearchPriceLow.setText(priceNewTour);
+            }
+        });
 
                     labelPriceToPrice = new JLabel("đến");
                     labelPriceToPrice.setBounds(155,25,80,25);
 
                 txtSearchPriceExpensive = new JTextField();
                 txtSearchPriceExpensive.setBounds(190,25,120,25);
-            panelSearchPrice.add(txtSearchPriceLow);
+        txtSearchPriceExpensive.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                String price = txtSearchPriceExpensive.getText();
+                long priceTour = Long.parseLong(price.replace(",",""));
+                String priceNewTour = java.text.NumberFormat.getIntegerInstance().format(priceTour);
+                txtSearchPriceExpensive.setText(priceNewTour);
+            }
+        });
+
+        panelSearchPrice.add(txtSearchPriceLow);
             panelSearchPrice.add(labelPriceToPrice);
             panelSearchPrice.add(txtSearchPriceExpensive);
           
@@ -234,6 +253,8 @@ public class GUI_Table_Tour_Management extends JPanel{
                 
                 DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
                 rightRenderer.setHorizontalAlignment(JLabel.CENTER);
+                DefaultTableCellRenderer rightRendererPrice = new DefaultTableCellRenderer();
+                rightRendererPrice.setHorizontalAlignment(JLabel.CENTER);
                 
                 /****************SET SIZE COLUMN OF TABLE***********************/
                 tableTour.getColumnModel().getColumn(0).setPreferredWidth(100);
@@ -242,6 +263,7 @@ public class GUI_Table_Tour_Management extends JPanel{
                 tableTour.getColumnModel().getColumn(3).setPreferredWidth(80);
                 tableTour.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
                 tableTour.getColumnModel().getColumn(4).setPreferredWidth(95);
+                tableTour.getColumnModel().getColumn(4).setCellRenderer(rightRendererPrice);
                 /****************SET SIZE COLUMN OF TABLE***********************/
 
                 tableTour.setFont(new Font("Times New Roman",Font.PLAIN,15));
@@ -278,8 +300,8 @@ public class GUI_Table_Tour_Management extends JPanel{
                     if(categoryId.equals("0")){
                         categoryId = "";
                     }
-                    String priceLow = txtSearchPriceLow.getText();
-                    String priceExpensive = txtSearchPriceExpensive.getText();
+                    String priceLow = txtSearchPriceLow.getText().replace(",","");;
+                    String priceExpensive = txtSearchPriceExpensive.getText().replace(",","");;
 
                     String price_PATTERN = "^[0-9]+$";
 
@@ -644,13 +666,23 @@ public class GUI_Table_Tour_Management extends JPanel{
                     }
                     else
                     {
-                        String tourId = (tableTour.getModel().getValueAt(row, 0).toString());
+                        int result = JOptionPane.showConfirmDialog(null,"Bạn có chắc muốn xoá tour này?", "Thông báo",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.QUESTION_MESSAGE);
+                        if(result == JOptionPane.YES_OPTION){
+                            String tourId = (tableTour.getModel().getValueAt(row, 0).toString());
 
-                        User_DTO user = new User_DTO();
-                        String response = Handle_API_Get_Tour.send_Delete_Tour("","tours/"+tourId,user.getToken());
-                        if(response.equals("success")){
-                            LoadDataTable();
+                            User_DTO user = new User_DTO();
+                            String response = Handle_API_Get_Tour.send_Delete_Tour("","tours/"+tourId,user.getToken());
+                            if(response.equals("success")){
+                                LoadDataTable();
+                            }
+                        }else if (result == JOptionPane.NO_OPTION){
+
+                        }else {
+
                         }
+
                     }
                 }
             });

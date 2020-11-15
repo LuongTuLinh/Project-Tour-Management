@@ -206,10 +206,10 @@ public class GUI_Add_New_Tour extends JFrame {
                     String nameTour = txtNameTour.getText();
                     String priceTour = txtPriceTour.getText().replace(",","");
                     String specification = textAreaDescription.getText();
-                    String price_PATTERN = "^[0-9]+$";
+                    String price_PATTERN = "^[1-9]([0-9])*$";
                     if( !empty( nameTour ) && !empty( priceTour ) && !empty( specification ) ) {
                         if(Pattern.matches(price_PATTERN, priceTour)==false){
-                            JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng kiểm giá tour");
+                            JOptionPane.showMessageDialog(null, "Lỗi! Giá tour không hợp lệ, và giá tour phải lớn hơn 0. ");
                         } else {
                             String parameter = "{\"name\":\"" + nameTour + "\",\"specification\":\""+specification+"\",\"tourCategoryId\":"+categoryId+",\"price\":"+priceTour+"}";
                             System.out.println(parameter);

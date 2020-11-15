@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import project.tour.management_DTO.Tour_Group_Role;
 import project.tour.management_DTO.User_DTO;
 import project.tour.management_Handle_API.Handle_API_Employee_And_Role;
+import project.tour.management_Handle_API.Handle_API_Get_Tour;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -279,14 +280,24 @@ public class GUI_RoleGroup_Management extends JPanel {
                 if( row == -1 ){
                     JOptionPane.showMessageDialog(null, "Vui lòng chọn nhiệm vụ cần xoá");
                 } else {
-                    User_DTO user = new User_DTO();
-                    String idRole = (tableRoleGroup.getModel().getValueAt(row, 0).toString());
-                    //APIRequester.sendDelete("","tourCategories/"+tourId, user.getToken());
-                    String response = Handle_API_Employee_And_Role.sendDeleteRole("","groupRoles/"+idRole, user.getToken());
-                    if(response.equals("success") == true){
-                        LoadDataTableRole();
-                        JOptionPane.showMessageDialog(null, "Xoá nhiệm vụ thành công");
+                    int result = JOptionPane.showConfirmDialog(null,"Bạn có chắc muốn xoá nhiệm vụ này?", "Thông báo",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    if(result == JOptionPane.YES_OPTION){
+                        User_DTO user = new User_DTO();
+                        String idRole = (tableRoleGroup.getModel().getValueAt(row, 0).toString());
+                        //APIRequester.sendDelete("","tourCategories/"+tourId, user.getToken());
+                        String response = Handle_API_Employee_And_Role.sendDeleteRole("","groupRoles/"+idRole, user.getToken());
+                        if(response.equals("success") == true){
+                            LoadDataTableRole();
+                            JOptionPane.showMessageDialog(null, "Xoá nhiệm vụ thành công");
+                        }
+                    }else if (result == JOptionPane.NO_OPTION){
+
+                    }else {
+
                     }
+
                 }
 
             }

@@ -43,7 +43,7 @@ public class Handle_API_Cost_Type {
                 System.out.println("TourDetail Add Success");
                 return "success";
             } else {
-                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+                JOptionPane.showMessageDialog(null,"Lỗi: "+ myObject.get("ApiErr").toString());
                 return "error";
             }
         } catch (ParseException e) {
@@ -61,7 +61,7 @@ public class Handle_API_Cost_Type {
                 System.out.println("TourDetail Delete Success");
                 return "success";
             } else {
-                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+                JOptionPane.showMessageDialog(null,"Lỗi: "+ myObject.get("ApiErr").toString());
                 return "error";
             }
         } catch (ParseException e) {
@@ -79,7 +79,7 @@ public class Handle_API_Cost_Type {
                 System.out.println("TourDetail Add Success");
                 return "success";
             } else {
-                JOptionPane.showMessageDialog(null,"Error: "+ myObject.get("ApiErr").toString());
+                JOptionPane.showMessageDialog(null,"Lỗi: "+ myObject.get("ApiErr").toString());
                 return "error";
             }
         } catch (ParseException e) {

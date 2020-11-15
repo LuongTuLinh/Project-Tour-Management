@@ -92,7 +92,6 @@ public class GUI_List_Cost_Type extends JFrame {
 
         txtPriceCostType = new JTextField();
         txtPriceCostType.setBounds(105,285,120,30);
-        txtPriceCostType.setBorder(null);
         txtPriceCostType.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
 
         labelVND = new JLabel(" VND",JLabel.CENTER);
@@ -169,9 +168,9 @@ public class GUI_List_Cost_Type extends JFrame {
                     }
                     String price = txtPriceCostType.getText().replace(",","");
                     String note = textAreaDescription.getText();
-                    String price_PATTERN = "^[0-9]+$";
+                    String price_PATTERN = "^[1-9]([0-9])*$";
                     if(Pattern.matches(price_PATTERN, price) == false) {
-                        JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng kiểm giá tour");
+                        JOptionPane.showMessageDialog(null, "Lỗi! Giá chi phí không hợp lệ, và giá tour phải lớn hơn 0.");
                     }else {
                         String parameter="{\"id\":0,\"groupId\":"+id+",\"costTypeId\":"+idCostType+",\"price\":"+price+",\"note\":\""+note+"\"}";
 

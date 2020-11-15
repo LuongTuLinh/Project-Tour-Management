@@ -15,15 +15,17 @@ public class User_DTO {
     private static String firstName;
     private static String lastName;
     private static String token;
+    private static String phoneNumber;
     
     public User_DTO(){
         
     }
-    public User_DTO(String Email, String firstName, String lastName, String token){
+    public User_DTO(String Email, String firstName, String lastName, String token, String phoneNumber){
         User_DTO.email = Email;
         User_DTO.firstName = firstName;
         User_DTO.lastName = lastName;
         User_DTO.token = token;
+        User_DTO.phoneNumber = phoneNumber;
     }
     public User_DTO(String Email, String Password){
         User_DTO.email = Email;
@@ -32,6 +34,14 @@ public class User_DTO {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        User_DTO.phoneNumber = phoneNumber;
     }
 
     public void setEmail(String email) {

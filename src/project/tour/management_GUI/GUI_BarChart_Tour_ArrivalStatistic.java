@@ -24,10 +24,11 @@ public class GUI_BarChart_Tour_ArrivalStatistic extends JFrame {
         JFreeChart barChart = ChartFactory.createBarChart(
                 "Biểu Đồ Số Đoàn Đã Hoàn Thành Của Tour",
                 "Tên Tour",
-                "Số Đoàn",
+                "Số Lượng",
                 createDataset(),
                 PlotOrientation.VERTICAL,
                 true, true, false);
+
 
         ChartPanel chartPanel = new ChartPanel( barChart );
         chartPanel.setPreferredSize(new java.awt.Dimension( 600 , 367 ) );

@@ -68,7 +68,7 @@ public class Handle_API_Tour_Group {
 
                 String apierror = myObject.get("ApiErr") == null ? "" : myObject.get("ApiErr").toString();
 
-                String error = "Error:"+ apierror+"\n"+ startDate+ "\n "+ endDate;
+                String error = "Lỗi: "+ apierror+"\n"+ startDate+ "\n "+ endDate;
 
                 String[] arrayError = error.split("\\.");
                 String messError = "";
@@ -101,7 +101,7 @@ public class Handle_API_Tour_Group {
 
                 String apierror = myObject.get("ApiErr") == null ? "" : myObject.get("ApiErr").toString();
 
-                String error = "Error:"+ apierror+"\n"+ startDate+ "\n "+ endDate;
+                String error = "Lỗi: "+ apierror+"\n"+ startDate+ "\n "+ endDate;
 
                 String[] arrayError = error.split("\\.");
                 String messError = "";
@@ -164,7 +164,7 @@ public class Handle_API_Tour_Group {
             } else {
                 String apierror = myObject.get("ApiErr") == null ? "" : myObject.get("ApiErr").toString();
 
-                String error = "Error:"+ apierror+"\n";
+                String error = "Lỗi:"+ apierror+"\n";
 
                 String[] arrayError = error.split("\\.");
                 String messError = "";
@@ -193,7 +193,7 @@ public class Handle_API_Tour_Group {
             } else {
                 String apierror = myObject.get("ApiErr") == null ? "" : myObject.get("ApiErr").toString();
 
-                String error = "Error:"+ apierror+"\n";
+                String error = "Lỗi:"+ apierror+"\n";
 
                 String[] arrayError = error.split("\\.");
                 String messError = "";
@@ -222,7 +222,7 @@ public class Handle_API_Tour_Group {
             } else {
                 String apierror = myObject.get("ApiErr") == null ? "" : myObject.get("ApiErr").toString();
 
-                String error = "Error:"+ apierror+"\n";
+                String error = "Lỗi:"+ apierror+"\n";
 
                 String[] arrayError = error.split("\\.");
                 String messError = "";

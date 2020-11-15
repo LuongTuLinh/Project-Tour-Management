@@ -253,7 +253,7 @@ public class GUI_Login_Tour_Management extends JFrame {
                     GUI_Tour_Management tour_Management = new GUI_Tour_Management();
                     dispose();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Đăng nhập thất bại, vui lòng thử lại");
+                    //JOptionPane.showMessageDialog(null, "Đăng nhập thất bại, vui lòng thử lại");
                 }
 
             }

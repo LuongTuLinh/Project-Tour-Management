@@ -133,7 +133,7 @@ public class GUI_Statistical_Tour extends JPanel {
             panelTourPriceStatistic.setLayout(null);
             panelTourPriceStatistic.setBounds(25, 180, 940, 100);
             panelTourPriceStatistic.setBackground(Color.white);
-            Border borderOfPanelPrice = BorderFactory.createTitledBorder("Thống Kê Doanh Thu Từ Ngày đến Ngày Của Tour");
+            Border borderOfPanelPrice = BorderFactory.createTitledBorder("Thống Kê Lợi Nhuận Từ Ngày đến Ngày Của Tour");
             panelTourPriceStatistic.setBorder(borderOfPanelPrice);
 
 
@@ -198,16 +198,16 @@ public class GUI_Statistical_Tour extends JPanel {
         Border borderOfPanel = BorderFactory.createTitledBorder("Thống Kê Nhân Viên");
         panelTourStaffStatistic.setBorder(borderOfPanel);
 
-        labelTitleStaffStatistic = new JLabel("Thống Kê Nhân Viên Có Nhiều Công Việc Nhất :",JLabel.CENTER);
+        labelTitleStaffStatistic = new JLabel("Thống Kê Nhân Viên Có Nhiều Công Việc Nhất ",JLabel.CENTER);
         labelTitleStaffStatistic.setFont(new Font("Segoe",Font.BOLD,12));
-        labelTitleStaffStatistic.setBounds(130,32,270,30);
+        labelTitleStaffStatistic.setBounds(190,32,270,30);
 
 
         buttonSearchStaffStatistic = new JButton("Thống kê");
         buttonSearchStaffStatistic.setBackground(new Color(32, 171, 214));
         buttonSearchStaffStatistic.setFont(new Font("Segoe",Font.BOLD,13));
         buttonSearchStaffStatistic.setForeground(Color.WHITE);
-        buttonSearchStaffStatistic.setBounds(470,28,130,30);
+        buttonSearchStaffStatistic.setBounds(700,28,130,30);
         buttonSearchStaffStatistic.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         panelTourStaffStatistic.add(labelTitleStaffStatistic);
@@ -221,7 +221,7 @@ public class GUI_Statistical_Tour extends JPanel {
         panelTourArrivalStatistic1.setLayout(null);
         panelTourArrivalStatistic1.setBounds(25, 470, 940, 100);
         panelTourArrivalStatistic1.setBackground(Color.white);
-        Border border = BorderFactory.createTitledBorder("Thống Kê Thể Loại Tour");
+        Border border = BorderFactory.createTitledBorder("Thống Kê Thể Loại Được Sử Dụng Nhiều Nhất");
         panelTourArrivalStatistic1.setBorder(border);
 
 
@@ -290,8 +290,15 @@ public class GUI_Statistical_Tour extends JPanel {
                 String startDate = formatDateTime(dateChooserStartDate.getDate());
                 String  endDate = formatDateTime(dateChooserEndDate.getDate());
                 if(!empty(startDate)&&!empty(endDate)){
-                    GUI_PieChart_Tour_ArrivalStatistic a = new GUI_PieChart_Tour_ArrivalStatistic(startDate, endDate);
-                    GUI_BarChart_Tour_ArrivalStatistic b = new GUI_BarChart_Tour_ArrivalStatistic(startDate, endDate);
+
+                    if(checkStartDateToEndDate(dateChooserStartDate.getDate(), dateChooserEndDate.getDate())==true){
+
+                        GUI_PieChart_Tour_ArrivalStatistic a = new GUI_PieChart_Tour_ArrivalStatistic(startDate, endDate);
+                        GUI_BarChart_Tour_ArrivalStatistic b = new GUI_BarChart_Tour_ArrivalStatistic(startDate, endDate);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Lỗi! Ngày bắt đầu phải nhỏ hơn Ngày kết thúc");
+                    }
                 }else {
                     JOptionPane.showMessageDialog(null,"Vui lòng nhập đầy đủ ngày bắt đầu và ngày kết thúc");
                 }
@@ -306,7 +313,15 @@ public class GUI_Statistical_Tour extends JPanel {
                 String startDate = formatDateTime(dateChooserStartDatePrice.getDate());
                 String  endDate = formatDateTime(dateChooserEndDatePrice.getDate());
                 if(!empty(startDate)&&!empty(endDate)){
-                    GUI_BarChart_Tour_PriceStatistic gui_barChart_tour_arrivalStatistic = new GUI_BarChart_Tour_PriceStatistic(startDate, endDate);
+
+                    if(checkStartDateToEndDate(dateChooserStartDatePrice.getDate(), dateChooserEndDatePrice.getDate())==true){
+
+                        GUI_BarChart_Tour_PriceStatistic gui_barChart_tour_arrivalStatistic = new GUI_BarChart_Tour_PriceStatistic(startDate, endDate);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Lỗi! Ngày bắt đầu phải nhỏ hơn Ngày kết thúc");
+                    }
+
                 }else {
                     JOptionPane.showMessageDialog(null,"Vui lòng nhập đầy đủ ngày bắt đầu và ngày kết thúc");
                 }
@@ -329,7 +344,14 @@ public class GUI_Statistical_Tour extends JPanel {
                 String startDate = formatDateTime(dateChooserStartDate1.getDate());
                 String  endDate = formatDateTime(dateChooserEndDate1.getDate());
                 if(!empty(startDate)&&!empty(endDate)){
-                    GUI_BarChart_Tour_Category_Statistic gui_barChart_tour_category_statistic = new GUI_BarChart_Tour_Category_Statistic(startDate, endDate);
+
+                    if(checkStartDateToEndDate(dateChooserStartDate1.getDate(), dateChooserEndDate1.getDate())==true){
+
+                        GUI_BarChart_Tour_Category_Statistic gui_barChart_tour_category_statistic = new GUI_BarChart_Tour_Category_Statistic(startDate, endDate);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Lỗi! Ngày bắt đầu phải nhỏ hơn Ngày kết thúc");
+                    }
                 }else {
                     JOptionPane.showMessageDialog(null,"Vui lòng nhập đầy đủ ngày bắt đầu và ngày kết thúc");
                 }
@@ -345,5 +367,13 @@ public class GUI_Statistical_Tour extends JPanel {
     public static String formatDateTime(Date dateOrNull) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return (dateOrNull == null ? null : dateFormat.format(dateOrNull));
+    }
+    public boolean checkStartDateToEndDate(Date start, Date end){
+        if(start.before(end)){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

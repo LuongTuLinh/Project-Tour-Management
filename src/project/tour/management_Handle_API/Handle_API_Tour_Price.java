@@ -47,7 +47,7 @@ public class Handle_API_Tour_Price {
                 String endDate = myObject.get("EndDate") == null ? "" : myObject.get("EndDate").toString();
 
                 String apierror = myObject.get("ApiErr") == null ? "" : myObject.get("ApiErr").toString();
-                String error = "Error:"+ apierror+"\n"+ startDate+ "\n "+ endDate;
+                String error = "Lỗi:"+ apierror+"\n"+ startDate+ "\n "+ endDate;
 
                 String[] arrayError = error.split("\\.");
                 String messError = "";
@@ -81,7 +81,7 @@ public class Handle_API_Tour_Price {
 
                 String apierror = myObject.get("ApiErr") == null ? "" : myObject.get("ApiErr").toString();
 
-                String error = "Error:"+ apierror+"\n"+ startDate+ "\n "+ endDate;
+                String error = "Lỗi:"+ apierror+"\n"+ startDate+ "\n "+ endDate;
 
                 String[] arrayError = error.split("\\.");
                 String messError = "";

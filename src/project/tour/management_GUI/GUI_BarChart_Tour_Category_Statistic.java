@@ -31,7 +31,7 @@ public class GUI_BarChart_Tour_Category_Statistic extends JFrame {
         setLocation(300,180);
         statisticalCategoryTour(startDate, endDate);
         JFreeChart barChart = ChartFactory.createBarChart(
-                "Biểu Đồ Thể Loại Được Chọn Nhiều Nhất",
+                "Biểu Đồ Thể Loại Được Sử Dụng Nhiều Nhất",
                 "Tên Thể Loại",
                 "Số Lần Chọn",
                 createDataset(),
