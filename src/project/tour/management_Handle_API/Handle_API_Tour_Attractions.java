@@ -91,4 +91,21 @@ public class Handle_API_Tour_Attractions {
         }
         return null;
     }
+    public static String sendDeleteAttractionTour(String parameter, String endpoint, String token){
+        JSONParser parser = new JSONParser();
+        JSONObject myObject;
+        try {
+            myObject = (JSONObject) parser.parse(APIRequester.sendDelete(parameter, endpoint, token));
+
+            if(myObject.get("ApiErr") == null) {
+                return "success";
+            } else {
+                JOptionPane.showMessageDialog(null,"Lỗi: "+ myObject.get("ApiErr").toString());
+                return "error";
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

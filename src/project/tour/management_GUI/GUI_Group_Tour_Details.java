@@ -596,9 +596,9 @@ public class GUI_Group_Tour_Details extends JPanel{
         /**==================================*END PANEL EMPLOYEE*===================================*/
 
             /**********ADD COMPONENT FOR PANEL CONTENT*****************/
-            tabbedPaneContent.addTab("--Khách Hàng Đoàn--", panelCustomerGroup);
-            tabbedPaneContent.addTab("--Nhân Viên--", panelEmployeeGroup);
-            tabbedPaneContent.addTab("--Chi Phí Đoàn--", panelCostTypeGroup);
+            tabbedPaneContent.addTab("Khách Hàng Đoàn", panelCustomerGroup);
+            tabbedPaneContent.addTab("Nhân Viên", panelEmployeeGroup);
+            tabbedPaneContent.addTab("Chi Phí Đoàn", panelCostTypeGroup);
             /**********END ADD COMPONENT FOR PANEL CONTENT*****************/
 
         /**==================================*END PANEL CONTENT*===================================*/
@@ -658,7 +658,7 @@ public class GUI_Group_Tour_Details extends JPanel{
 
 
                     }else {
-                        JOptionPane.showMessageDialog(null, "Đoàn tour không có thay đổi");
+                        JOptionPane.showMessageDialog(null, "Đoàn không có thay đổi");
                     }
                 }else {
                     JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng nhập đầy đủ thông tin");
@@ -985,7 +985,7 @@ public class GUI_Group_Tour_Details extends JPanel{
 //    }
 
     public void checkStatusGroup(){
-        if(Tour_Group_DTO.getStatus().equals("2")==true||Tour_Group_DTO.getStatus().equals("4")==true){
+        if(Tour_Group_DTO.getStatus().equals("2")==true||Tour_Group_DTO.getStatus().equals("3")==true){
             btnSaveGroup.setVisible(false);
             txtGroupName.setEditable(false);
             dateChooserEndDate.setEnabled(false);

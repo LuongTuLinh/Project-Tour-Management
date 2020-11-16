@@ -158,7 +158,7 @@ public class GUI_Table_Group extends JPanel {
         columnNames.add("Tên Đoàn");
 //        columnNames.add("Mã Tour");
         columnNames.add("Giá(VND)");
-        columnNames.add("Tình Trạng");
+        columnNames.add("Trạng Thái");
         columnNames.add("Ngày Bắt Đầu");
         columnNames.add("Ngày Kết Thúc");
 
@@ -253,7 +253,7 @@ public class GUI_Table_Group extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int row = tableGroup.getSelectedRow();
                 if( row == -1 ){
-                    JOptionPane.showMessageDialog(null, "Vui lòng chọn đoàn tour cần xem");
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn đoàn cần xem");
                 }else {
                     String id = (tableGroup.getModel().getValueAt(row, 0).toString());
                     System.out.println("id group:"+id);
@@ -337,7 +337,7 @@ public class GUI_Table_Group extends JPanel {
                         String response = Handle_API_Tour_Group.send_Delete_Group_In_Tour("","groups/"+id, user.getToken());
                         if(response.equals("success")==true){
                             LoadDataTableTourGroup();
-                            JOptionPane.showMessageDialog(null, "Xoá đoàn tour thành công");
+                            JOptionPane.showMessageDialog(null, "Xoá đoàn thành công");
                         }
                     }else if (result == JOptionPane.NO_OPTION){
 
@@ -355,7 +355,7 @@ public class GUI_Table_Group extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int row = tableGroup.getSelectedRow();
                 if( row == -1 ){
-                    JOptionPane.showMessageDialog(null, "Vui lòng chọn đoàn tour cần sửa");
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn đoàn cần sửa");
                 }else {
                     String id = (tableGroup.getModel().getValueAt(row, 0).toString());
                     String name = (tableGroup.getModel().getValueAt(row, 1).toString());
@@ -434,7 +434,7 @@ public class GUI_Table_Group extends JPanel {
 
 
                     }else {
-                        JOptionPane.showMessageDialog(null, "Đoàn tour không có thay đổi");
+                        JOptionPane.showMessageDialog(null, "Đoàn không có thay đổi");
                     }
                 }else {
                     JOptionPane.showMessageDialog(null, "Lỗi! Vui lòng nhập đầy đủ thông tin");

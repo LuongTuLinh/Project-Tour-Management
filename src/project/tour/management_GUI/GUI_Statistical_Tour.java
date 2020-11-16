@@ -73,7 +73,7 @@ public class GUI_Statistical_Tour extends JPanel {
             panelTourArrivalStatistic.setLayout(null);
             panelTourArrivalStatistic.setBounds(25, 30, 940, 100);
             panelTourArrivalStatistic.setBackground(Color.white);
-            Border borderOfPanelSearchPrice = BorderFactory.createTitledBorder("Thống Kê Số Đoàn Tour Hoàn Thành và Bị Huỷ");
+            Border borderOfPanelSearchPrice = BorderFactory.createTitledBorder("Thống Kê Số Đoàn Hoàn Thành và Bị Huỷ");
             panelTourArrivalStatistic.setBorder(borderOfPanelSearchPrice);
 
 

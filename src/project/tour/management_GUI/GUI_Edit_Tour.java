@@ -614,9 +614,9 @@ public class GUI_Edit_Tour extends JPanel{
                         panelGroupTour.setBounds(5,5,980,430);
                     /*------------------------END PANEL GROUP TOUR------------------------------*/
                 /**********ADD COMPONENT FOR PANEL CONTENT*****************/
-                    tabbedPaneContent.addTab("--Địa Điểm Tour--", panelPlaceTour);
-                    tabbedPaneContent.addTab("--Giá Tour--", panelPriceTour);
-                    tabbedPaneContent.addTab("--Đoàn--", panelGroupTour);
+                    tabbedPaneContent.addTab("Địa Điểm Tour", panelPlaceTour);
+                    tabbedPaneContent.addTab("Giá Tour", panelPriceTour);
+                    tabbedPaneContent.addTab("Đoàn", panelGroupTour);
                 /**********END ADD COMPONENT FOR PANEL CONTENT*****************/
             /*------------------------END PANEL CONTENT------------------------------*/
 

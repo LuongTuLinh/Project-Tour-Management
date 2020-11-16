@@ -347,9 +347,13 @@ public class GUI_Attraction_Management extends JPanel{
                         if(result == JOptionPane.YES_OPTION){
                             User_DTO user = new User_DTO();
                             String tourId = (tableAttractionTour.getModel().getValueAt(row, 0).toString());
-                            APIRequester.sendDelete("","touristAttractions/"+tourId, user.getToken());
-                            LoadDataTableAttraction();
-                            JOptionPane.showMessageDialog(null, "Xoá địa điểm thành công");
+                            //APIRequester.sendDelete("","touristAttractions/"+tourId, user.getToken());
+                            String response = Handle_API_Tour_Attractions.sendDeleteAttractionTour("","touristAttractions/"+tourId, user.getToken());
+
+                            if(response.equals("success")==true){
+                                LoadDataTableAttraction();
+                                JOptionPane.showMessageDialog(null, "Xoá địa điểm thành công");
+                            }
                         }else if (result == JOptionPane.NO_OPTION){
 
                         }else {

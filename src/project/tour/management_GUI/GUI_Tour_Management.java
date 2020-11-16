@@ -141,7 +141,7 @@ public class GUI_Tour_Management {
                 
             /********** ADD FOR JPANEL HEADER ************/
                 panelHeader.add(lbTitle);
-                panelHeader.add(lbiconSetting);
+//                panelHeader.add(lbiconSetting);
                 panelHeader.add(lbiconUser);
                 panelHeader.add(lbUserName);
                 panelHeader.add(lbiconClose);
