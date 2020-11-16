@@ -256,7 +256,7 @@ public class GUI_Category_Management extends JPanel{
         /*========================END PANEL CATEGORY TOUR====================================*/
 
         /**************ADD PANEL FOR TABBED PANEL*********************/
-        tabbedPane.addTab("--Thể Loại Tour--", panelCategoryTour);
+        tabbedPane.addTab("Thể Loại Tour", panelCategoryTour);
         /**************END ADD PANEL FOR TABBED PANEL*********************/
         /*======================================== END TABBED PANEL =================================================*/
         add(tabbedPane);

@@ -222,7 +222,7 @@ public class GUI_Cost_Type_Management extends JPanel {
             /**************END ADD PANEL FOR PANEL COST TYPE*********************/
             /*========================END PANEL CostType TOUR====================================*/
         /**************ADD PANEL FOR TABBED PANEL*********************/
-        tabbedPane.addTab("--Loại Chi Phí--", panelCostType);
+        tabbedPane.addTab("Loại Chi Phí", panelCostType);
         add(tabbedPane);
         /**************END ADD PANEL FOR TABBED PANEL*********************/
         /*========================END HANDLE CLICK BUTTON OF COST TYPE====================================*/

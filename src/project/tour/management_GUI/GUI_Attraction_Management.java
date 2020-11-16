@@ -279,7 +279,7 @@ public class GUI_Attraction_Management extends JPanel{
 
                 
             /**************ADD PANEL FOR TABBED PANEL*********************/
-                tabbedPane.addTab("--Địa Điểm Tour--", panelAttractionTour);
+                tabbedPane.addTab("Địa Điểm Tour", panelAttractionTour);
             /**************END ADD PANEL FOR TABBED PANEL*********************/
         /*======================================== END TABBED PANEL =================================================*/
         add(tabbedPane);

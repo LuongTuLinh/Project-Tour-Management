@@ -222,7 +222,7 @@ public class GUI_RoleGroup_Management extends JPanel {
         /**************END ADD PANEL FOR PANEL COST TYPE*********************/
         /*========================END PANEL CostType TOUR====================================*/
         /**************ADD PANEL FOR TABBED PANEL*********************/
-        tabbedPane.addTab("--Nhiệm Vụ Tour--", panelRoleManagement);
+        tabbedPane.addTab("Nhiệm Vụ Tour", panelRoleManagement);
         add(tabbedPane);
         /**************END ADD PANEL FOR TABBED PANEL*********************/
         /*========================END HANDLE CLICK BUTTON OF COST TYPE====================================*/
